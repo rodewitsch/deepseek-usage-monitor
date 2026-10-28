@@ -15,6 +15,10 @@ Format based on [Keep a Changelog](https://keepachangelog.com/), versioned with 
 - `Measure for` in the badge settings is now a multi-select; the selected keys' spend is summed. Settings left over from 1.0.0 (`badgeApiKey`, `focusApiKey`) are migrated automatically.
 - The account budget is evaluated against the current selection (whole account when nothing is selected).
 
+### Removed
+
+- The **Number format** setting (auto / money / tokens). The badge always shows money now.
+
 ## 1.0.0 (2026-10-28)
 
 ### Added
@@ -23,7 +27,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/), versioned with 
 - 30-day spend chart and a per-key spend list with filtering.
 - Configurable toolbar badge: today's spend, period spend, balance or tokens; optionally scoped to a single API key.
 - Daily budget with green / orange / red badge colours and desktop notifications at the warn ratio and when exceeded.
-- Settings page with metric, key scope, number format, refresh interval, aggregation window, low-balance warning and decimals.
+- Settings page with metric, key scope, refresh interval, aggregation window, low-balance warning and decimals.
 - One-click jump to the DeepSeek usage page.
 - Automatic refresh via `chrome.alarms`; badge repaints when the console page changes.
 

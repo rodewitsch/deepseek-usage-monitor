@@ -15,7 +15,7 @@ already present in your browser for `platform.deepseek.com`.
 | **Badge** | Shows one of: spend today, spend in the period, wallet balance, tokens today. Can be scoped to a single API key. |
 | **Daily budgets** | Account-wide and/or per-API-key budgets, green / orange / red badge, desktop notification on the warn and over thresholds. |
 | **Multi-key chart** | Plot the spend of several API keys at once as a stacked per-day chart with a legend. |
-| **Settings** | Metric, key scope, number format, auto-refresh interval, aggregation window, low-balance warning, daily budget, decimals. |
+| **Settings** | Metric, key scope, auto-refresh interval, aggregation window, low-balance warning, daily budgets, decimals. |
 | **Shortcut** | `Open usage page` button opens `https://platform.deepseek.com/usage`. |
 
 ## Install

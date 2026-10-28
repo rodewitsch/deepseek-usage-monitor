@@ -32,8 +32,6 @@ export const WAF_COOKIE_NAMES = ['aws-waf-token', 'smidV2'];
 export const DEFAULT_SETTINGS = {
   /** What the toolbar badge shows. */
   badgeMetric: 'todayCost',
-  /** auto | money | tokens */
-  badgeFormat: 'auto',
   /** API key ids the toolbar badge is measured for (empty = whole account). */
   badgeApiKeys: [],
   /** API key ids selected in the popup chart/budget (empty = whole account). */

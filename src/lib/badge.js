@@ -43,7 +43,7 @@ export function computeBadge(snapshot, settings) {
       break;
   }
 
-  const text = formatBadgeValue(metric, value, { currency, format: settings.badgeFormat });
+  const text = formatBadgeValue(value);
 
   let color = metric === 'balance' ? BUDGET_COLORS.balance : BUDGET_COLORS.neutral;
 

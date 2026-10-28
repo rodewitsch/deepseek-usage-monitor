@@ -25,19 +25,10 @@ export function formatTokens(value) {
   return Math.round(tokens).toLocaleString('en-US');
 }
 
-/** Text used on the toolbar badge — must stay really short. */
-export function formatBadgeValue(metric, value, { currency = 'USD', format = 'auto' } = {}) {
+/** Text used on the toolbar badge — always a money amount, and must stay really short. */
+export function formatBadgeValue(value) {
   const numeric = Number(value);
   if (!Number.isFinite(numeric)) return '—';
-
-  const wantsTokens = format === 'tokens' || (format === 'auto' && metric === 'todayTokens');
-
-  if (wantsTokens) {
-    if (numeric >= 1e6) return `${(numeric / 1e6).toFixed(1)}M`;
-    if (numeric >= 1e5) return `${Math.round(numeric / 1e3)}K`;
-    if (numeric >= 1e4) return `${(numeric / 1e3).toFixed(1)}K`;
-    return String(Math.round(numeric));
-  }
 
   const abs = Math.abs(numeric);
   if (abs >= 1000) return `${Math.round(numeric / 100) / 10}K`.replace('.0', '');

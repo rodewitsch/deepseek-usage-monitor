@@ -11,9 +11,6 @@ export function normaliseSettings(raw) {
   if (!['todayCost', 'monthCost', 'balance', 'todayTokens'].includes(settings.badgeMetric)) {
     settings.badgeMetric = DEFAULT_SETTINGS.badgeMetric;
   }
-  if (!['auto', 'money', 'tokens'].includes(settings.badgeFormat)) {
-    settings.badgeFormat = DEFAULT_SETTINGS.badgeFormat;
-  }
 
   settings.refreshMinutes = clampInt(settings.refreshMinutes, 0, 1440, DEFAULT_SETTINGS.refreshMinutes);
   settings.windowDays = clampInt(settings.windowDays, 1, 90, DEFAULT_SETTINGS.windowDays);

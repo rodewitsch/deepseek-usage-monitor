@@ -14,7 +14,6 @@ const el = (id) => document.getElementById(id);
  */
 const fields = {
   badgeMetric: { input: el('badge-metric'), setting: 'badgeMetric' },
-  badgeFormat: { input: el('badge-format'), setting: 'badgeFormat' },
   refreshMinutes: { input: el('refresh-minutes'), setting: 'refreshMinutes' },
   windowDays: { input: el('window-days'), setting: 'windowDays' },
   lowBalance: { input: el('low-balance'), setting: 'lowBalanceThreshold' },
@@ -120,7 +119,6 @@ async function toggleBadgeKey(id) {
 
 function applySettings(settings) {
   fields.badgeMetric.input.value = settings.badgeMetric;
-  fields.badgeFormat.input.value = settings.badgeFormat;
   fields.refreshMinutes.input.value = settings.refreshMinutes;
   fields.windowDays.input.value = settings.windowDays;
   fields.lowBalance.input.value = settings.lowBalanceThreshold;
