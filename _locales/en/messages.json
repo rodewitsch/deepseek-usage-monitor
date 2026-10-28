@@ -1,0 +1,445 @@
+{
+  "extName": {
+    "message": "DeepSeek Usage Monitor"
+  },
+  "extDescription": {
+    "message": "Balance, today's spend and per-key spend for DeepSeek Platform, right in the toolbar."
+  },
+  "actionTitle": {
+    "message": "DeepSeek Usage Monitor"
+  },
+
+  "popupTitle": {
+    "message": "DeepSeek Usage"
+  },
+  "popupLoading": {
+    "message": "Loading…"
+  },
+  "refreshNow": {
+    "message": "Refresh now"
+  },
+  "errorFix": {
+    "message": "Fix"
+  },
+  "walletBalance": {
+    "message": "Wallet balance"
+  },
+  "spentToday": {
+    "message": "Spent today"
+  },
+  "recentSpend": {
+    "message": "Recent spend"
+  },
+  "chartAria": {
+    "message": "Daily spend for the last days"
+  },
+  "apiKeys": {
+    "message": "API keys"
+  },
+  "allKeys": {
+    "message": "All keys"
+  },
+  "noPerKeyUsage": {
+    "message": "No per-key usage in this period."
+  },
+  "openUsagePage": {
+    "message": "Open usage page"
+  },
+  "settings": {
+    "message": "Settings"
+  },
+
+  "statusNoData": {
+    "message": "No data yet"
+  },
+  "statusUpdated": {
+    "message": "Updated $ago$",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
+  "statusUpdatedInteractive": {
+    "message": "Updated $ago$",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
+  "statusYesterday": {
+    "message": "$ago$ · yesterday",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
+  "signInPrompt": {
+    "message": "Sign in on platform.deepseek.com"
+  },
+  "balanceUnavailable": {
+    "message": "Balance unavailable"
+  },
+  "balancePaidBonus": {
+    "message": "paid $paid$ · bonus $bonus$",
+    "placeholders": {
+      "paid": { "content": "$1" },
+      "bonus": { "content": "$2" }
+    }
+  },
+  "tokensCount": {
+    "message": "$count$ tokens",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "tokensScope": {
+    "message": "$tokens$ · $scope$",
+    "placeholders": {
+      "tokens": { "content": "$1" },
+      "scope": { "content": "$2" }
+    }
+  },
+  "keysCount": {
+    "message": "$count$ keys",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "keysCountSelected": {
+    "message": "$count$ selected",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+
+  "budgetDailyScope": {
+    "message": "Daily budget · $scope$",
+    "placeholders": {
+      "scope": { "content": "$1" }
+    }
+  },
+  "budgetAccount": {
+    "message": "account"
+  },
+  "budgetForSelection": {
+    "message": "for $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "budgetForSelectionFallback": {
+    "message": "selection"
+  },
+  "budgetWarnMark": {
+    "message": "Warn threshold $percent$%",
+    "placeholders": {
+      "percent": { "content": "$1" }
+    }
+  },
+  "budgetSpentLeft": {
+    "message": "$spent$ spent · $left$ left of $budget$",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "left": { "content": "$2" },
+      "budget": { "content": "$3" }
+    }
+  },
+  "budgetSpentOver": {
+    "message": "$spent$ spent · over by $over$",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "over": { "content": "$2" }
+    }
+  },
+
+  "chartEmpty": {
+    "message": "No usage in this period"
+  },
+  "chartTotal": {
+    "message": "$amount$ in $days$d",
+    "placeholders": {
+      "amount": { "content": "$1" },
+      "days": { "content": "$2" }
+    }
+  },
+  "chartTooltipDay": {
+    "message": "$date$: $amount$",
+    "placeholders": {
+      "date": { "content": "$1" },
+      "amount": { "content": "$2" }
+    }
+  },
+  "chartSeriesAllKeys": {
+    "message": "All keys"
+  },
+
+  "keyRemoveFromChart": {
+    "message": "Click to remove from the chart"
+  },
+  "keyPlot": {
+    "message": "Click to plot this key"
+  },
+  "keyTodayMeta": {
+    "message": "today $today$",
+    "placeholders": {
+      "today": { "content": "$1" }
+    }
+  },
+  "keyTodayMetaBudget": {
+    "message": "today $today$ / $budget$",
+    "placeholders": {
+      "today": { "content": "$1" },
+      "budget": { "content": "$2" }
+    }
+  },
+
+  "optionsTitle": {
+    "message": "DeepSeek Usage Monitor — Settings"
+  },
+  "optionsSubtitle": {
+    "message": "Toolbar badge, refresh and thresholds."
+  },
+  "panelBadge": {
+    "message": "Toolbar badge"
+  },
+  "showOnIcon": {
+    "message": "Show on the icon"
+  },
+  "metricTodayCost": {
+    "message": "Spent today"
+  },
+  "metricMonthCost": {
+    "message": "Spent in the period (30 days)"
+  },
+  "metricBalance": {
+    "message": "Wallet balance"
+  },
+  "metricTodayTokens": {
+    "message": "Tokens today"
+  },
+  "measureFor": {
+    "message": "Measure for"
+  },
+  "measureForHint": {
+    "message": "Nothing selected = the whole account. Selected keys are summed."
+  },
+  "preview": {
+    "message": "Preview"
+  },
+  "noApiKeysYet": {
+    "message": "No API keys yet — open the popup once."
+  },
+  "panelRefresh": {
+    "message": "Refresh & thresholds"
+  },
+  "autoRefresh": {
+    "message": "Auto refresh (minutes, 0 = off)"
+  },
+  "aggregationWindow": {
+    "message": "Aggregation window (days)"
+  },
+  "lowBalanceWarning": {
+    "message": "Low balance warning"
+  },
+  "dailyBudget": {
+    "message": "Daily budget (0 = off)"
+  },
+  "warnAtPercent": {
+    "message": "Warn at (% of budget)"
+  },
+  "notifyBudget": {
+    "message": "Notify when a budget is nearly used up / exceeded"
+  },
+  "showDecimals": {
+    "message": "Show decimals in the popup"
+  },
+  "panelKeyBudgets": {
+    "message": "Per-key daily budgets"
+  },
+  "keyBudgetsHelp": {
+    "message": "A key budget is checked independently of the account budget: the badge uses the colour of whichever budget is closest to its limit. Leave a field empty to disable the budget for that key."
+  },
+  "keyBudgetsEmpty": {
+    "message": "No API keys yet — open the popup once so the usage data is loaded."
+  },
+  "keyBudgetAria": {
+    "message": "Daily budget for $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "keyBudgetOff": {
+    "message": "off"
+  },
+  "panelSession": {
+    "message": "Session"
+  },
+  "sessionChecking": {
+    "message": "Checking…"
+  },
+  "sessionDetecting": {
+    "message": "Detecting…"
+  },
+  "reDetect": {
+    "message": "Re-detect session"
+  },
+  "openPlatform": {
+    "message": "Open platform.deepseek.com"
+  },
+  "saved": {
+    "message": "Saved"
+  },
+  "chipRemoveFromBadge": {
+    "message": "Remove from the badge"
+  },
+  "chipMeasureForKey": {
+    "message": "Measure the badge for this key"
+  },
+  "previewNoData": {
+    "message": "No data yet — refresh the popup once."
+  },
+  "previewNoBudget": {
+    "message": "No budget set — the badge stays neutral."
+  },
+  "previewClosestBudget": {
+    "message": "$percent$% of the closest budget ($status$)",
+    "placeholders": {
+      "percent": { "content": "$1" },
+      "status": { "content": "$2" }
+    }
+  },
+  "sessionDetected": {
+    "message": "Session detected ($source$).",
+    "placeholders": {
+      "source": { "content": "$1" }
+    }
+  },
+  "sessionMissing": {
+    "message": "No session found. Open platform.deepseek.com, sign in, then press \"Re-detect session\"."
+  },
+  "sourceUnknown": {
+    "message": "unknown source"
+  },
+  "sourceCookie": {
+    "message": "cookie $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "sourcePage": {
+    "message": "page storage"
+  },
+
+  "badgeNoData": {
+    "message": "DeepSeek Usage — no data yet, click to refresh"
+  },
+  "badgeSessionExpired": {
+    "message": "DeepSeek Usage — session expired, sign in on platform.deepseek.com"
+  },
+  "badgeTitle": {
+    "message": "DeepSeek$scope$: $label$",
+    "placeholders": {
+      "scope": { "content": "$1" },
+      "label": { "content": "$2" }
+    }
+  },
+  "badgeLabelBalance": {
+    "message": "Balance $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "badgeLabelPeriod": {
+    "message": "$days$d spend $amount$",
+    "placeholders": {
+      "days": { "content": "$1" },
+      "amount": { "content": "$2" }
+    }
+  },
+  "badgeLabelTodayTokens": {
+    "message": "Today $count$ tokens",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "badgeLabelTodayCost": {
+    "message": "Today $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "badgeScopeKey": {
+    "message": " · $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "budgetLine": {
+    "message": "$scope$$percent$% of $amount$ daily budget ($state$, $left$)",
+    "placeholders": {
+      "scope": { "content": "$1" },
+      "percent": { "content": "$2" },
+      "amount": { "content": "$3" },
+      "state": { "content": "$4" },
+      "left": { "content": "$5" }
+    }
+  },
+  "budgetStateOver": {
+    "message": "over budget"
+  },
+  "budgetStateWarn": {
+    "message": "close to budget"
+  },
+  "budgetStateOk": {
+    "message": "within budget"
+  },
+  "budgetLeft": {
+    "message": "$amount$ left",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "budgetOverBy": {
+    "message": "$amount$ over",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+
+  "notifyTitleOver": {
+    "message": "Daily budget exceeded$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1" }
+    }
+  },
+  "notifyTitleWarn": {
+    "message": "Daily budget almost used up$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1" }
+    }
+  },
+  "notifyForKey": {
+    "message": " for $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "notifyMessageOver": {
+    "message": "Spent $spent$ of $budget$ today ($percent$%)",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "budget": { "content": "$2" },
+      "percent": { "content": "$3" }
+    }
+  },
+  "notifyMessageWarn": {
+    "message": "Spent $spent$ of $budget$ today ($percent$%), $left$ left",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "budget": { "content": "$2" },
+      "percent": { "content": "$3" },
+      "left": { "content": "$4" }
+    }
+  },
+
+  "errorNoSession": {
+    "message": "No DeepSeek session found. Open platform.deepseek.com and sign in."
+  }
+}

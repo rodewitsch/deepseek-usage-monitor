@@ -13,7 +13,7 @@ const { version } = require(path.join(ROOT_DIR, 'package.json'));
  * Only production files are shipped. Everything under `tools/`, `scripts/`
  * and any dev artefact stays out of the archive.
  */
-const SOURCE_FILES = ['icons', 'src', 'manifest.json'];
+const SOURCE_FILES = ['icons', 'src', 'manifest.json', '_locales'];
 
 const HTML_OPTIONS = {
   collapseWhitespace: true,

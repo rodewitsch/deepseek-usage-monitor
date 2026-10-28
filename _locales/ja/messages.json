@@ -1,0 +1,445 @@
+{
+  "extName": {
+    "message": "DeepSeek Usage Monitor"
+  },
+  "extDescription": {
+    "message": "DeepSeek Platform の残高、今日の利用額、キーごとの利用額をツールバーで確認できます。"
+  },
+  "actionTitle": {
+    "message": "DeepSeek Usage Monitor"
+  },
+
+  "popupTitle": {
+    "message": "DeepSeek の利用状況"
+  },
+  "popupLoading": {
+    "message": "読み込み中…"
+  },
+  "refreshNow": {
+    "message": "今すぐ更新"
+  },
+  "errorFix": {
+    "message": "修正"
+  },
+  "walletBalance": {
+    "message": "ウォレット残高"
+  },
+  "spentToday": {
+    "message": "今日の利用額"
+  },
+  "recentSpend": {
+    "message": "最近の利用額"
+  },
+  "chartAria": {
+    "message": "直近数日の日別利用額"
+  },
+  "apiKeys": {
+    "message": "API キー"
+  },
+  "allKeys": {
+    "message": "すべてのキー"
+  },
+  "noPerKeyUsage": {
+    "message": "この期間のキー別利用はありません。"
+  },
+  "openUsagePage": {
+    "message": "利用ページを開く"
+  },
+  "settings": {
+    "message": "設定"
+  },
+
+  "statusNoData": {
+    "message": "データがありません"
+  },
+  "statusUpdated": {
+    "message": "$ago$ に更新",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
+  "statusUpdatedInteractive": {
+    "message": "$ago$ に更新",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
+  "statusYesterday": {
+    "message": "$ago$ · 昨日",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
+  "signInPrompt": {
+    "message": "platform.deepseek.com にサインイン"
+  },
+  "balanceUnavailable": {
+    "message": "残高を取得できません"
+  },
+  "balancePaidBonus": {
+    "message": "支払 $paid$ · ボーナス $bonus$",
+    "placeholders": {
+      "paid": { "content": "$1" },
+      "bonus": { "content": "$2" }
+    }
+  },
+  "tokensCount": {
+    "message": "$count$ トークン",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "tokensScope": {
+    "message": "$tokens$ · $scope$",
+    "placeholders": {
+      "tokens": { "content": "$1" },
+      "scope": { "content": "$2" }
+    }
+  },
+  "keysCount": {
+    "message": "$count$ 個のキー",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "keysCountSelected": {
+    "message": "$count$ 個を選択中",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+
+  "budgetDailyScope": {
+    "message": "1日の予算 · $scope$",
+    "placeholders": {
+      "scope": { "content": "$1" }
+    }
+  },
+  "budgetAccount": {
+    "message": "アカウント"
+  },
+  "budgetForSelection": {
+    "message": "$name$ の場合",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "budgetForSelectionFallback": {
+    "message": "選択範囲"
+  },
+  "budgetWarnMark": {
+    "message": "警告しきい値 $percent$%",
+    "placeholders": {
+      "percent": { "content": "$1" }
+    }
+  },
+  "budgetSpentLeft": {
+    "message": "$spent$ 使用 · $budget$ のうち残り $left$",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "left": { "content": "$2" },
+      "budget": { "content": "$3" }
+    }
+  },
+  "budgetSpentOver": {
+    "message": "$spent$ 使用 · $over$ 超過",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "over": { "content": "$2" }
+    }
+  },
+
+  "chartEmpty": {
+    "message": "この期間の利用はありません"
+  },
+  "chartTotal": {
+    "message": "$days$ 日間で $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" },
+      "days": { "content": "$2" }
+    }
+  },
+  "chartTooltipDay": {
+    "message": "$date$: $amount$",
+    "placeholders": {
+      "date": { "content": "$1" },
+      "amount": { "content": "$2" }
+    }
+  },
+  "chartSeriesAllKeys": {
+    "message": "すべてのキー"
+  },
+
+  "keyRemoveFromChart": {
+    "message": "クリックでグラフから外す"
+  },
+  "keyPlot": {
+    "message": "クリックでこのキーを表示"
+  },
+  "keyTodayMeta": {
+    "message": "今日 $today$",
+    "placeholders": {
+      "today": { "content": "$1" }
+    }
+  },
+  "keyTodayMetaBudget": {
+    "message": "今日 $today$ / $budget$",
+    "placeholders": {
+      "today": { "content": "$1" },
+      "budget": { "content": "$2" }
+    }
+  },
+
+  "optionsTitle": {
+    "message": "DeepSeek Usage Monitor — 設定"
+  },
+  "optionsSubtitle": {
+    "message": "ツールバーのバッジ、更新、しきい値。"
+  },
+  "panelBadge": {
+    "message": "ツールバーのバッジ"
+  },
+  "showOnIcon": {
+    "message": "アイコンに表示"
+  },
+  "metricTodayCost": {
+    "message": "今日の利用額"
+  },
+  "metricMonthCost": {
+    "message": "期間内の利用額（30 日）"
+  },
+  "metricBalance": {
+    "message": "ウォレット残高"
+  },
+  "metricTodayTokens": {
+    "message": "今日のトークン"
+  },
+  "measureFor": {
+    "message": "計測対象"
+  },
+  "measureForHint": {
+    "message": "未選択ならアカウント全体。選択したキーは合算されます。"
+  },
+  "preview": {
+    "message": "プレビュー"
+  },
+  "noApiKeysYet": {
+    "message": "API キーがまだありません — ポップアップを一度開いてください。"
+  },
+  "panelRefresh": {
+    "message": "更新としきい値"
+  },
+  "autoRefresh": {
+    "message": "自動更新（分、0 = オフ）"
+  },
+  "aggregationWindow": {
+    "message": "集計期間（日）"
+  },
+  "lowBalanceWarning": {
+    "message": "残高不足の警告"
+  },
+  "dailyBudget": {
+    "message": "1日の予算（0 = オフ）"
+  },
+  "warnAtPercent": {
+    "message": "警告する割合（予算の %）"
+  },
+  "notifyBudget": {
+    "message": "予算がもうすぐ使い切る／超過したら通知"
+  },
+  "showDecimals": {
+    "message": "ポップアップで小数を表示"
+  },
+  "panelKeyBudgets": {
+    "message": "キーごとの1日の予算"
+  },
+  "keyBudgetsHelp": {
+    "message": "キーの予算はアカウントの予算とは別に判定されます。バッジは上限に最も近い予算の色になります。予算を無効にするには欄を空にしてください。"
+  },
+  "keyBudgetsEmpty": {
+    "message": "API キーがまだありません — ポップアップを一度開いて利用データを読み込んでください。"
+  },
+  "keyBudgetAria": {
+    "message": "$name$ の1日の予算",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "keyBudgetOff": {
+    "message": "オフ"
+  },
+  "panelSession": {
+    "message": "セッション"
+  },
+  "sessionChecking": {
+    "message": "確認中…"
+  },
+  "sessionDetecting": {
+    "message": "検出中…"
+  },
+  "reDetect": {
+    "message": "セッションを再検出"
+  },
+  "openPlatform": {
+    "message": "platform.deepseek.com を開く"
+  },
+  "saved": {
+    "message": "保存しました"
+  },
+  "chipRemoveFromBadge": {
+    "message": "バッジから外す"
+  },
+  "chipMeasureForKey": {
+    "message": "このキーでバッジを計測"
+  },
+  "previewNoData": {
+    "message": "データがありません — ポップアップを一度更新してください。"
+  },
+  "previewNoBudget": {
+    "message": "予算が未設定 — バッジは中立のままです。"
+  },
+  "previewClosestBudget": {
+    "message": "最も近い予算の $percent$%（$status$）",
+    "placeholders": {
+      "percent": { "content": "$1" },
+      "status": { "content": "$2" }
+    }
+  },
+  "sessionDetected": {
+    "message": "セッションを検出しました（$source$）。",
+    "placeholders": {
+      "source": { "content": "$1" }
+    }
+  },
+  "sessionMissing": {
+    "message": "セッションが見つかりません。platform.deepseek.com を開いてサインインし、「セッションを再検出」を押してください。"
+  },
+  "sourceUnknown": {
+    "message": "不明なソース"
+  },
+  "sourceCookie": {
+    "message": "cookie $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "sourcePage": {
+    "message": "ページストレージ"
+  },
+
+  "badgeNoData": {
+    "message": "DeepSeek 利用状況 — データなし、クリックで更新"
+  },
+  "badgeSessionExpired": {
+    "message": "DeepSeek 利用状況 — セッション切れ、platform.deepseek.com でサインイン"
+  },
+  "badgeTitle": {
+    "message": "DeepSeek$scope$: $label$",
+    "placeholders": {
+      "scope": { "content": "$1" },
+      "label": { "content": "$2" }
+    }
+  },
+  "badgeLabelBalance": {
+    "message": "残高 $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "badgeLabelPeriod": {
+    "message": "$days$ 日 $amount$",
+    "placeholders": {
+      "days": { "content": "$1" },
+      "amount": { "content": "$2" }
+    }
+  },
+  "badgeLabelTodayTokens": {
+    "message": "今日 $count$ トークン",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "badgeLabelTodayCost": {
+    "message": "今日 $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "badgeScopeKey": {
+    "message": " · $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "budgetLine": {
+    "message": "$scope$$percent$% · 1日の予算 $amount$（$state$、$left$）",
+    "placeholders": {
+      "scope": { "content": "$1" },
+      "percent": { "content": "$2" },
+      "amount": { "content": "$3" },
+      "state": { "content": "$4" },
+      "left": { "content": "$5" }
+    }
+  },
+  "budgetStateOver": {
+    "message": "予算超過"
+  },
+  "budgetStateWarn": {
+    "message": "予算に近い"
+  },
+  "budgetStateOk": {
+    "message": "予算内"
+  },
+  "budgetLeft": {
+    "message": "残り $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "budgetOverBy": {
+    "message": "$amount$ 超過",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+
+  "notifyTitleOver": {
+    "message": "1日の予算を超過しました$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1" }
+    }
+  },
+  "notifyTitleWarn": {
+    "message": "1日の予算がもうすぐ使い切ります$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1" }
+    }
+  },
+  "notifyForKey": {
+    "message": "（$name$）",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "notifyMessageOver": {
+    "message": "今日 $budget$ のうち $spent$ 使用（$percent$%）",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "budget": { "content": "$2" },
+      "percent": { "content": "$3" }
+    }
+  },
+  "notifyMessageWarn": {
+    "message": "今日 $budget$ のうち $spent$ 使用（$percent$%）、残り $left$",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "budget": { "content": "$2" },
+      "percent": { "content": "$3" },
+      "left": { "content": "$4" }
+    }
+  },
+
+  "errorNoSession": {
+    "message": "DeepSeek のセッションが見つかりません。platform.deepseek.com を開いてサインインしてください。"
+  }
+}

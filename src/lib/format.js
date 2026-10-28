@@ -22,7 +22,16 @@ export function formatTokens(value) {
   if (tokens >= 1e9) return `${(tokens / 1e9).toFixed(2)}B`;
   if (tokens >= 1e6) return `${(tokens / 1e6).toFixed(2)}M`;
   if (tokens >= 1e4) return `${(tokens / 1e3).toFixed(1)}K`;
-  return Math.round(tokens).toLocaleString('en-US');
+  return Math.round(tokens).toLocaleString(uiLanguage());
+}
+
+/** UI language for number formatting, with a safe fallback outside Chrome. */
+function uiLanguage() {
+  try {
+    return chrome?.i18n?.getUILanguage?.() || 'en'; 
+  } catch {
+    return 'en';
+  }
 }
 
 /** Text used on the toolbar badge — always a money amount, and must stay really short. */

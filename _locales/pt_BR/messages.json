@@ -1,0 +1,445 @@
+{
+  "extName": {
+    "message": "DeepSeek Usage Monitor"
+  },
+  "extDescription": {
+    "message": "Saldo, gasto de hoje e gasto por chave da DeepSeek Platform, direto na barra de ferramentas."
+  },
+  "actionTitle": {
+    "message": "DeepSeek Usage Monitor"
+  },
+
+  "popupTitle": {
+    "message": "Uso do DeepSeek"
+  },
+  "popupLoading": {
+    "message": "Carregando…"
+  },
+  "refreshNow": {
+    "message": "Atualizar agora"
+  },
+  "errorFix": {
+    "message": "Corrigir"
+  },
+  "walletBalance": {
+    "message": "Saldo da carteira"
+  },
+  "spentToday": {
+    "message": "Gasto hoje"
+  },
+  "recentSpend": {
+    "message": "Gasto recente"
+  },
+  "chartAria": {
+    "message": "Gasto diário dos últimos dias"
+  },
+  "apiKeys": {
+    "message": "Chaves de API"
+  },
+  "allKeys": {
+    "message": "Todas as chaves"
+  },
+  "noPerKeyUsage": {
+    "message": "Nenhum uso por chave neste período."
+  },
+  "openUsagePage": {
+    "message": "Abrir página de uso"
+  },
+  "settings": {
+    "message": "Configurações"
+  },
+
+  "statusNoData": {
+    "message": "Sem dados ainda"
+  },
+  "statusUpdated": {
+    "message": "Atualizado $ago$",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
+  "statusUpdatedInteractive": {
+    "message": "Atualizado $ago$",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
+  "statusYesterday": {
+    "message": "$ago$ · ontem",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
+  "signInPrompt": {
+    "message": "Entre em platform.deepseek.com"
+  },
+  "balanceUnavailable": {
+    "message": "Saldo indisponível"
+  },
+  "balancePaidBonus": {
+    "message": "pago $paid$ · bônus $bonus$",
+    "placeholders": {
+      "paid": { "content": "$1" },
+      "bonus": { "content": "$2" }
+    }
+  },
+  "tokensCount": {
+    "message": "$count$ tokens",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "tokensScope": {
+    "message": "$tokens$ · $scope$",
+    "placeholders": {
+      "tokens": { "content": "$1" },
+      "scope": { "content": "$2" }
+    }
+  },
+  "keysCount": {
+    "message": "$count$ chaves",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "keysCountSelected": {
+    "message": "$count$ selecionadas",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+
+  "budgetDailyScope": {
+    "message": "Orçamento diário · $scope$",
+    "placeholders": {
+      "scope": { "content": "$1" }
+    }
+  },
+  "budgetAccount": {
+    "message": "conta"
+  },
+  "budgetForSelection": {
+    "message": "para $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "budgetForSelectionFallback": {
+    "message": "seleção"
+  },
+  "budgetWarnMark": {
+    "message": "Alerta em $percent$%",
+    "placeholders": {
+      "percent": { "content": "$1" }
+    }
+  },
+  "budgetSpentLeft": {
+    "message": "$spent$ gastos · restam $left$ de $budget$",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "left": { "content": "$2" },
+      "budget": { "content": "$3" }
+    }
+  },
+  "budgetSpentOver": {
+    "message": "$spent$ gastos · excedeu em $over$",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "over": { "content": "$2" }
+    }
+  },
+
+  "chartEmpty": {
+    "message": "Nenhum uso neste período"
+  },
+  "chartTotal": {
+    "message": "$amount$ em $days$ d",
+    "placeholders": {
+      "amount": { "content": "$1" },
+      "days": { "content": "$2" }
+    }
+  },
+  "chartTooltipDay": {
+    "message": "$date$: $amount$",
+    "placeholders": {
+      "date": { "content": "$1" },
+      "amount": { "content": "$2" }
+    }
+  },
+  "chartSeriesAllKeys": {
+    "message": "Todas as chaves"
+  },
+
+  "keyRemoveFromChart": {
+    "message": "Clique para remover do gráfico"
+  },
+  "keyPlot": {
+    "message": "Clique para exibir esta chave"
+  },
+  "keyTodayMeta": {
+    "message": "hoje $today$",
+    "placeholders": {
+      "today": { "content": "$1" }
+    }
+  },
+  "keyTodayMetaBudget": {
+    "message": "hoje $today$ / $budget$",
+    "placeholders": {
+      "today": { "content": "$1" },
+      "budget": { "content": "$2" }
+    }
+  },
+
+  "optionsTitle": {
+    "message": "DeepSeek Usage Monitor — Configurações"
+  },
+  "optionsSubtitle": {
+    "message": "Selo, atualização e limites."
+  },
+  "panelBadge": {
+    "message": "Selo da barra"
+  },
+  "showOnIcon": {
+    "message": "Mostrar no ícone"
+  },
+  "metricTodayCost": {
+    "message": "Gasto hoje"
+  },
+  "metricMonthCost": {
+    "message": "Gasto no período (30 dias)"
+  },
+  "metricBalance": {
+    "message": "Saldo da carteira"
+  },
+  "metricTodayTokens": {
+    "message": "Tokens de hoje"
+  },
+  "measureFor": {
+    "message": "Medir para"
+  },
+  "measureForHint": {
+    "message": "Sem seleção = conta inteira. As chaves selecionadas são somadas."
+  },
+  "preview": {
+    "message": "Prévia"
+  },
+  "noApiKeysYet": {
+    "message": "Ainda não há chaves de API — abra o pop-up uma vez."
+  },
+  "panelRefresh": {
+    "message": "Atualização e limites"
+  },
+  "autoRefresh": {
+    "message": "Atualização automática (minutos, 0 = desligado)"
+  },
+  "aggregationWindow": {
+    "message": "Janela de agregação (dias)"
+  },
+  "lowBalanceWarning": {
+    "message": "Aviso de saldo baixo"
+  },
+  "dailyBudget": {
+    "message": "Orçamento diário (0 = desligado)"
+  },
+  "warnAtPercent": {
+    "message": "Avisar em (% do orçamento)"
+  },
+  "notifyBudget": {
+    "message": "Notificar quando um orçamento estiver quase esgotado / for excedido"
+  },
+  "showDecimals": {
+    "message": "Mostrar decimais no pop-up"
+  },
+  "panelKeyBudgets": {
+    "message": "Orçamentos diários por chave"
+  },
+  "keyBudgetsHelp": {
+    "message": "O orçamento de uma chave é verificado separadamente do orçamento da conta: o selo usa a cor do orçamento mais próximo do limite. Deixe um campo vazio para desativar o orçamento daquela chave."
+  },
+  "keyBudgetsEmpty": {
+    "message": "Ainda não há chaves de API — abra o pop-up uma vez para carregar os dados de uso."
+  },
+  "keyBudgetAria": {
+    "message": "Orçamento diário de $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "keyBudgetOff": {
+    "message": "desligado"
+  },
+  "panelSession": {
+    "message": "Sessão"
+  },
+  "sessionChecking": {
+    "message": "Verificando…"
+  },
+  "sessionDetecting": {
+    "message": "Detectando…"
+  },
+  "reDetect": {
+    "message": "Detectar sessão novamente"
+  },
+  "openPlatform": {
+    "message": "Abrir platform.deepseek.com"
+  },
+  "saved": {
+    "message": "Salvo"
+  },
+  "chipRemoveFromBadge": {
+    "message": "Remover do selo"
+  },
+  "chipMeasureForKey": {
+    "message": "Medir o selo para esta chave"
+  },
+  "previewNoData": {
+    "message": "Sem dados ainda — atualize o pop-up uma vez."
+  },
+  "previewNoBudget": {
+    "message": "Sem orçamento definido — o selo fica neutro."
+  },
+  "previewClosestBudget": {
+    "message": "$percent$% do orçamento mais próximo ($status$)",
+    "placeholders": {
+      "percent": { "content": "$1" },
+      "status": { "content": "$2" }
+    }
+  },
+  "sessionDetected": {
+    "message": "Sessão detectada ($source$).",
+    "placeholders": {
+      "source": { "content": "$1" }
+    }
+  },
+  "sessionMissing": {
+    "message": "Nenhuma sessão encontrada. Abra platform.deepseek.com, entre na conta e clique em \"Detectar sessão novamente\"."
+  },
+  "sourceUnknown": {
+    "message": "origem desconhecida"
+  },
+  "sourceCookie": {
+    "message": "cookie $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "sourcePage": {
+    "message": "armazenamento da página"
+  },
+
+  "badgeNoData": {
+    "message": "Uso do DeepSeek — sem dados, clique para atualizar"
+  },
+  "badgeSessionExpired": {
+    "message": "Uso do DeepSeek — sessão expirada, entre em platform.deepseek.com"
+  },
+  "badgeTitle": {
+    "message": "DeepSeek$scope$: $label$",
+    "placeholders": {
+      "scope": { "content": "$1" },
+      "label": { "content": "$2" }
+    }
+  },
+  "badgeLabelBalance": {
+    "message": "Saldo $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "badgeLabelPeriod": {
+    "message": "$days$ d gastos $amount$",
+    "placeholders": {
+      "days": { "content": "$1" },
+      "amount": { "content": "$2" }
+    }
+  },
+  "badgeLabelTodayTokens": {
+    "message": "Hoje $count$ tokens",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "badgeLabelTodayCost": {
+    "message": "Hoje $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "badgeScopeKey": {
+    "message": " · $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "budgetLine": {
+    "message": "$scope$$percent$% do orçamento diário de $amount$ ($state$, $left$)",
+    "placeholders": {
+      "scope": { "content": "$1" },
+      "percent": { "content": "$2" },
+      "amount": { "content": "$3" },
+      "state": { "content": "$4" },
+      "left": { "content": "$5" }
+    }
+  },
+  "budgetStateOver": {
+    "message": "orçamento excedido"
+  },
+  "budgetStateWarn": {
+    "message": "perto do limite"
+  },
+  "budgetStateOk": {
+    "message": "dentro do orçamento"
+  },
+  "budgetLeft": {
+    "message": "restam $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "budgetOverBy": {
+    "message": "$amount$ excedidos",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+
+  "notifyTitleOver": {
+    "message": "Orçamento diário excedido$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1" }
+    }
+  },
+  "notifyTitleWarn": {
+    "message": "Orçamento diário quase esgotado$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1" }
+    }
+  },
+  "notifyForKey": {
+    "message": " para $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "notifyMessageOver": {
+    "message": "Gastou $spent$ de $budget$ hoje ($percent$%)",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "budget": { "content": "$2" },
+      "percent": { "content": "$3" }
+    }
+  },
+  "notifyMessageWarn": {
+    "message": "Gastou $spent$ de $budget$ hoje ($percent$%), restam $left$",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "budget": { "content": "$2" },
+      "percent": { "content": "$3" },
+      "left": { "content": "$4" }
+    }
+  },
+
+  "errorNoSession": {
+    "message": "Nenhuma sessão do DeepSeek encontrada. Abra platform.deepseek.com e entre na conta."
+  }
+}

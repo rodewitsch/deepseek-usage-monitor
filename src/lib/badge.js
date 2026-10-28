@@ -1,6 +1,7 @@
 import { BUDGET_COLORS } from './constants.js';
 import { evaluateBudgets } from './budget.js';
 import { formatBadgeValue } from './format.js';
+import { t } from './i18n.js';
 
 /**
  * Works out what to paint on the toolbar icon.
@@ -18,9 +19,7 @@ export function computeBadge(snapshot, settings) {
     return {
       text: authProblem ? '!' : '—',
       color: authProblem ? '#dc2626' : '#6b7280',
-      title: authProblem
-        ? 'DeepSeek Usage — session expired, sign in on platform.deepseek.com'
-        : 'DeepSeek Usage — no data yet, click to refresh',
+      title: authProblem ? t('badgeSessionExpired') : t('badgeNoData'),
       value: null,
       metric,
     };
@@ -114,16 +113,21 @@ function sum(keys, field) {
 
 function buildTitle(scoped, settings, metric, budgets) {
   const names = scoped.keys.map((key) => key.name).filter(Boolean);
-  const keyLabel = names.length === 1 ? ` · ${names[0]}` : names.length > 1 ? ` · ${names.length} keys` : '';
+  const keyLabel =
+    names.length === 1
+      ? t('badgeScopeKey', [names[0]])
+      : names.length > 1
+        ? ` · ${t('keysCount', [String(names.length)])}`
+        : '';
   const money = (value) => `${scoped.currency} ${Number(value).toFixed(4)}`;
   const label = {
-    balance: `Balance ${money(scoped.balance?.total ?? 0)}`,
-    monthCost: `${settings.windowDays}d spend ${money(scoped.windowCost)}`,
-    todayTokens: `Today ${Math.round(scoped.todayTokens).toLocaleString('en-US')} tokens`,
-    todayCost: `Today ${money(scoped.todayCost)}`,
+    balance: t('badgeLabelBalance', [money(scoped.balance?.total ?? 0)]),
+    monthCost: t('badgeLabelPeriod', [String(settings.windowDays), money(scoped.windowCost)]),
+    todayTokens: t('badgeLabelTodayTokens', [Math.round(scoped.todayTokens).toLocaleString()]),
+    todayCost: t('badgeLabelTodayCost', [money(scoped.todayCost)]),
   }[metric];
 
-  const parts = [`DeepSeek${keyLabel}: ${label}`];
+  const parts = [t('badgeTitle', [keyLabel, label])];
 
   for (const line of budgetLines(budgets, money)) parts.push(line);
 
@@ -135,9 +139,16 @@ function budgetLines(budgets, money) {
   const describe = (budget, scope) => {
     const pct = Math.round(budget.percent);
     const state =
-      budget.status === 'over' ? 'over budget' : budget.status === 'warn' ? 'close to budget' : 'within budget';
-    const left = budget.remaining >= 0 ? `${money(budget.remaining)} left` : `${money(-budget.remaining)} over`;
-    return `${scope}${pct}% of ${money(budget.budget)} daily budget (${state}, ${left})`;
+      budget.status === 'over'
+        ? t('budgetStateOver')
+        : budget.status === 'warn'
+          ? t('budgetStateWarn')
+          : t('budgetStateOk');
+    const left =
+      budget.remaining >= 0
+        ? t('budgetLeft', [money(budget.remaining)])
+        : t('budgetOverBy', [money(-budget.remaining)]);
+    return t('budgetLine', [scope, String(pct), money(budget.budget), state, left]);
   };
 
   if (budgets.account.status !== 'off') lines.push(describe(budgets.account, ''));

@@ -1,6 +1,7 @@
 import { SERIES_COLORS, USAGE_PAGE_URL } from '../lib/constants.js';
 import { evaluateBudgets } from '../lib/budget.js';
 import { currencySymbol, formatMoney, formatRelativeTime, formatTokens, localDayKey } from '../lib/format.js';
+import { applyDocumentLanguage, localizeDocument, t } from '../lib/i18n.js';
 import { scrapeFromPage } from '../lib/scrape.js';
 import { getSettings, getSnapshot, saveSettings, saveSnapshot } from '../lib/settings.js';
 
@@ -34,6 +35,8 @@ let settings = null;
 init();
 
 async function init() {
+  applyDocumentLanguage();
+  localizeDocument();
   ui.openUsage.href = USAGE_PAGE_URL;
   ui.refresh.addEventListener('click', () => refresh(true));
   ui.openOptions.addEventListener('click', () => chrome.runtime.openOptionsPage());
@@ -87,7 +90,7 @@ async function refresh(interactive) {
     ui.refresh.classList.remove('is-busy');
     await render();
   }
-  if (interactive) ui.updated.textContent = `Updated ${formatRelativeTime(Date.now())}`;
+  if (interactive) ui.updated.textContent = t('statusUpdated', [formatRelativeTime(Date.now())]);
 }
 
 /** Merges the scraped page numbers into the stored snapshot. */
@@ -146,11 +149,12 @@ function renderStatus(snapshot, lastError) {
   }
 
   if (!snapshot?.updatedAt) {
-    ui.updated.textContent = 'No data yet';
+    ui.updated.textContent = t('statusNoData');
     return;
   }
   const stale = snapshot.todayKey && snapshot.todayKey !== localDayKey();
-  ui.updated.textContent = `Updated ${formatRelativeTime(snapshot.updatedAt)}${stale ? ' · yesterday' : ''}`;
+  const ago = formatRelativeTime(snapshot.updatedAt);
+  ui.updated.textContent = stale ? t('statusYesterday', [ago]) : t('statusUpdated', [ago]);
 }
 
 function renderSummary(snapshot, selected) {
@@ -159,7 +163,7 @@ function renderSummary(snapshot, selected) {
 
   if (!usage) {
     ui.balance.textContent = '—';
-    ui.balanceDetail.textContent = 'Sign in on platform.deepseek.com';
+    ui.balanceDetail.textContent = t('signInPrompt');
     ui.todayCost.textContent = '—';
     ui.todayTokens.textContent = '—';
     return;
@@ -173,21 +177,21 @@ function renderSummary(snapshot, selected) {
     ? formatMoney(balance.total, balance.currency, { decimals: settings.showDecimals })
     : '—';
   ui.balanceDetail.textContent = balance
-    ? `paid ${formatMoney(balance.toppedUp, balance.currency, { decimals: settings.showDecimals })} · bonus ${formatMoney(
-        balance.granted,
-        balance.currency,
-        { decimals: settings.showDecimals },
-      )}`
-    : 'Balance unavailable';
+    ? t('balancePaidBonus', [
+        formatMoney(balance.toppedUp, balance.currency, { decimals: settings.showDecimals }),
+        formatMoney(balance.granted, balance.currency, { decimals: settings.showDecimals }),
+      ])
+    : t('balanceUnavailable');
 
   ui.todayCost.textContent = formatMoney(todayCost, usage.currency, { decimals: settings.showDecimals });
   const scope =
     selected.length === 1
       ? selected[0].name
       : selected.length > 1
-        ? `${selected.length} keys`
+        ? t('keysCount', [String(selected.length)])
         : '';
-  ui.todayTokens.textContent = `${formatTokens(todayTokens)} tokens${scope ? ` · ${scope}` : ''}`;
+  const tokens = t('tokensCount', [formatTokens(todayTokens)]);
+  ui.todayTokens.textContent = scope ? t('tokensScope', [tokens, scope]) : tokens;
 }
 
 /** One progress bar per active budget: the account plus each selected key. */
@@ -197,8 +201,11 @@ function renderBudgets(snapshot, currentSettings, selectedIds) {
   const rows = [];
 
   if (budgets.account.status !== 'off') {
-    const scope = selectedIds.length === 1 ? `for ${budgets.keys[0]?.name || 'selection'}` : 'account';
-    rows.push({ label: `Daily budget · ${scope}`, budget: budgets.account });
+    const scope =
+      selectedIds.length === 1
+        ? t('budgetForSelection', [budgets.keys[0]?.name || t('budgetForSelectionFallback')])
+        : t('budgetAccount');
+    rows.push({ label: t('budgetDailyScope', [scope]), budget: budgets.account });
   }
   for (const budget of budgets.keys) rows.push({ label: budget.name, budget });
 
@@ -235,17 +242,16 @@ function renderBudgets(snapshot, currentSettings, selectedIds) {
     fill.style.background = budget.color;
     const mark = document.createElement('div');
     mark.className = 'budget__mark';
-    mark.title = `Warn threshold ${warnMark}%`;
+    mark.title = t('budgetWarnMark', [String(warnMark)]);
     mark.style.left = `${warnMark}%`;
     track.append(fill, mark);
 
     const detail = document.createElement('span');
     detail.className = 'budget__detail';
-    const state =
+    detail.textContent =
       budget.status === 'over'
-        ? `over by ${money(budget.remaining)}`
-        : `${money(budget.remaining)} left of ${money(budget.budget)}`;
-    detail.textContent = `${money(budget.spent)} spent · ${state}`;
+        ? t('budgetSpentOver', [money(budget.spent), money(budget.remaining)])
+        : t('budgetSpentLeft', [money(budget.spent), money(budget.remaining), money(budget.budget)]);
 
     wrapper.append(head, track, detail);
     ui.budgetList.append(wrapper);
@@ -268,7 +274,7 @@ function renderChart(snapshot, currentSettings, selected) {
   if (!daily.length) {
     const empty = document.createElement('span');
     empty.className = 'chart-empty';
-    empty.textContent = 'No usage in this period';
+    empty.textContent = t('chartEmpty');
     ui.chart.append(empty);
     return;
   }
@@ -280,7 +286,14 @@ function renderChart(snapshot, currentSettings, selected) {
         color: SERIES_COLORS[index % SERIES_COLORS.length],
         values: daily.map((day) => Number(key.dailyCost?.[day.date]) || 0),
       }))
-    : [{ id: 'account', name: 'All keys', color: null, values: daily.map((day) => Number(day.cost) || 0) }];
+    : [
+        {
+          id: 'account',
+          name: t('chartSeriesAllKeys'),
+          color: null,
+          values: daily.map((day) => Number(day.cost) || 0),
+        },
+      ];
 
   const days = daily.slice(-currentSettings.windowDays);
   const offset = daily.length - days.length;
@@ -309,14 +322,14 @@ function renderChart(snapshot, currentSettings, selected) {
       stack.append(segment);
     }
 
-    const lines = [`${day.date}: ${formatMoney(totals[index], currency)}`];
+    const lines = [t('chartTooltipDay', [day.date, formatMoney(totals[index], currency)])];
     if (series.length > 1) {
       for (const entry of series) {
         const value = entry.values[offset + index] || 0;
         if (value > 0) lines.push(`${entry.name}: ${formatMoney(value, currency)}`);
       }
     } else {
-      lines.push(`${formatTokens(day.tokens)} tokens`);
+      lines.push(t('tokensCount', [formatTokens(day.tokens)]));
     }
     column.title = lines.join('\n');
     column.append(stack);
@@ -324,7 +337,7 @@ function renderChart(snapshot, currentSettings, selected) {
   });
 
   const total = totals.reduce((sum, value) => sum + value, 0);
-  ui.chartTotal.textContent = `${formatMoney(total, currency)} in ${days.length}d`;
+  ui.chartTotal.textContent = t('chartTotal', [formatMoney(total, currency), String(days.length)]);
 
   if (series.length > 1) {
     ui.chartLegend.hidden = false;
@@ -347,7 +360,7 @@ function renderKeys(snapshot, currentSettings, selected) {
   const keys = usage?.keys || [];
   const selectedIds = new Set(selected.map((key) => key.id));
 
-  ui.keySelected.textContent = selectedIds.size ? `${selectedIds.size} selected` : '';
+  ui.keySelected.textContent = selectedIds.size ? t('keysCountSelected', [String(selectedIds.size)]) : '';
   ui.keyClear.hidden = selectedIds.size === 0;
 
   ui.keyList.replaceChildren();
@@ -362,7 +375,7 @@ function renderKeys(snapshot, currentSettings, selected) {
     const item = document.createElement('li');
     item.className = `key-item${isSelected ? ' is-selected' : ''}`;
     item.dataset.keyId = key.id;
-    item.title = isSelected ? 'Click to remove from the chart' : 'Click to plot this key';
+    item.title = isSelected ? t('keyRemoveFromChart') : t('keyPlot');
 
     const marker = document.createElement('span');
     marker.className = 'key-item__marker';
@@ -378,9 +391,11 @@ function renderKeys(snapshot, currentSettings, selected) {
     const meta = document.createElement('span');
     meta.className = 'key-item__meta';
     const budget = Number(currentSettings.keyBudgets?.[key.id]) || 0;
-    meta.textContent = `today ${formatMoney(key.todayCost, usage.currency)}${
-      budget > 0 ? ` / ${formatMoney(budget, usage.currency)}` : ''
-    }`;
+    const today = formatMoney(key.todayCost, usage.currency);
+    meta.textContent =
+      budget > 0
+        ? t('keyTodayMetaBudget', [today, formatMoney(budget, usage.currency)])
+        : t('keyTodayMeta', [today]);
 
     const cost = document.createElement('span');
     cost.className = 'key-item__cost';

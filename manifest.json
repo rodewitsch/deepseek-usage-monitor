@@ -1,10 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "DeepSeek Usage Monitor",
+  "name": "__MSG_extName__",
   "short_name": "DeepSeek Usage",
   "version": "1.0.0",
-  "description": "Balance, today's spend and per-key spend for DeepSeek Platform, right in the toolbar and popup.",
+  "description": "__MSG_extDescription__",
   "author": "Rodevich Dmitry",
+  "default_locale": "ru",
   "minimum_chrome_version": "116",
 
   "permissions": ["storage", "alarms", "cookies", "scripting", "notifications"],
@@ -16,7 +17,7 @@
   },
 
   "action": {
-    "default_title": "DeepSeek Usage Monitor",
+    "default_title": "__MSG_actionTitle__",
     "default_popup": "src/popup/popup.html",
     "default_icon": {
       "16": "icons/icon16.png",

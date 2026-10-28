@@ -2,6 +2,7 @@ import { fetchUsageByKey, parseBalance } from './api.js';
 import { ENDPOINTS } from './constants.js';
 import { ApiError, localDayKey } from './format.js';
 import { requestPlatformJson } from './http.js';
+import { t } from './i18n.js';
 import { getSettings, getSnapshot, saveSnapshot, clearToken } from './settings.js';
 import { discoverPlatformToken } from './token.js';
 
@@ -16,10 +17,7 @@ export async function refreshUsage({ forceToken = false } = {}) {
   let source = found.source;
 
   if (!token) {
-    const error = new ApiError(
-      'No DeepSeek session found. Open platform.deepseek.com and sign in.',
-      'auth',
-    );
+    const error = new ApiError(t('errorNoSession'), 'auth');
     const previous = await getSnapshot();
     await saveSnapshot(
       {

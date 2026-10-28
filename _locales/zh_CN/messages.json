@@ -1,0 +1,445 @@
+{
+  "extName": {
+    "message": "DeepSeek Usage Monitor"
+  },
+  "extDescription": {
+    "message": "在工具栏中直接查看 DeepSeek 平台的余额、今日花费和每个密钥的花费。"
+  },
+  "actionTitle": {
+    "message": "DeepSeek Usage Monitor"
+  },
+
+  "popupTitle": {
+    "message": "DeepSeek 用量"
+  },
+  "popupLoading": {
+    "message": "加载中…"
+  },
+  "refreshNow": {
+    "message": "立即刷新"
+  },
+  "errorFix": {
+    "message": "修复"
+  },
+  "walletBalance": {
+    "message": "钱包余额"
+  },
+  "spentToday": {
+    "message": "今日花费"
+  },
+  "recentSpend": {
+    "message": "近期花费"
+  },
+  "chartAria": {
+    "message": "最近几天的每日花费"
+  },
+  "apiKeys": {
+    "message": "API 密钥"
+  },
+  "allKeys": {
+    "message": "全部密钥"
+  },
+  "noPerKeyUsage": {
+    "message": "该时段内没有按密钥统计的用量。"
+  },
+  "openUsagePage": {
+    "message": "打开用量页面"
+  },
+  "settings": {
+    "message": "设置"
+  },
+
+  "statusNoData": {
+    "message": "暂无数据"
+  },
+  "statusUpdated": {
+    "message": "$ago$ 更新",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
+  "statusUpdatedInteractive": {
+    "message": "$ago$ 更新",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
+  "statusYesterday": {
+    "message": "$ago$ · 昨天",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
+  "signInPrompt": {
+    "message": "请登录 platform.deepseek.com"
+  },
+  "balanceUnavailable": {
+    "message": "余额不可用"
+  },
+  "balancePaidBonus": {
+    "message": "充值 $paid$ · 赠送 $bonus$",
+    "placeholders": {
+      "paid": { "content": "$1" },
+      "bonus": { "content": "$2" }
+    }
+  },
+  "tokensCount": {
+    "message": "$count$ 个 token",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "tokensScope": {
+    "message": "$tokens$ · $scope$",
+    "placeholders": {
+      "tokens": { "content": "$1" },
+      "scope": { "content": "$2" }
+    }
+  },
+  "keysCount": {
+    "message": "$count$ 个密钥",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "keysCountSelected": {
+    "message": "已选 $count$ 个",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+
+  "budgetDailyScope": {
+    "message": "每日预算 · $scope$",
+    "placeholders": {
+      "scope": { "content": "$1" }
+    }
+  },
+  "budgetAccount": {
+    "message": "账户"
+  },
+  "budgetForSelection": {
+    "message": "仅限 $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "budgetForSelectionFallback": {
+    "message": "所选密钥"
+  },
+  "budgetWarnMark": {
+    "message": "预警阈值 $percent$%",
+    "placeholders": {
+      "percent": { "content": "$1" }
+    }
+  },
+  "budgetSpentLeft": {
+    "message": "已花 $spent$ · 预算 $budget$ 剩余 $left$",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "left": { "content": "$2" },
+      "budget": { "content": "$3" }
+    }
+  },
+  "budgetSpentOver": {
+    "message": "已花 $spent$ · 超出 $over$",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "over": { "content": "$2" }
+    }
+  },
+
+  "chartEmpty": {
+    "message": "该时段内没有用量"
+  },
+  "chartTotal": {
+    "message": "$days$ 天共 $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" },
+      "days": { "content": "$2" }
+    }
+  },
+  "chartTooltipDay": {
+    "message": "$date$：$amount$",
+    "placeholders": {
+      "date": { "content": "$1" },
+      "amount": { "content": "$2" }
+    }
+  },
+  "chartSeriesAllKeys": {
+    "message": "全部密钥"
+  },
+
+  "keyRemoveFromChart": {
+    "message": "点击从图表中移除"
+  },
+  "keyPlot": {
+    "message": "点击在图表中显示该密钥"
+  },
+  "keyTodayMeta": {
+    "message": "今日 $today$",
+    "placeholders": {
+      "today": { "content": "$1" }
+    }
+  },
+  "keyTodayMetaBudget": {
+    "message": "今日 $today$ / $budget$",
+    "placeholders": {
+      "today": { "content": "$1" },
+      "budget": { "content": "$2" }
+    }
+  },
+
+  "optionsTitle": {
+    "message": "DeepSeek Usage Monitor — 设置"
+  },
+  "optionsSubtitle": {
+    "message": "工具栏徽章、刷新与阈值。"
+  },
+  "panelBadge": {
+    "message": "工具栏徽章"
+  },
+  "showOnIcon": {
+    "message": "在图标上显示"
+  },
+  "metricTodayCost": {
+    "message": "今日花费"
+  },
+  "metricMonthCost": {
+    "message": "该时段花费（30 天）"
+  },
+  "metricBalance": {
+    "message": "钱包余额"
+  },
+  "metricTodayTokens": {
+    "message": "今日 token"
+  },
+  "measureFor": {
+    "message": "统计范围"
+  },
+  "measureForHint": {
+    "message": "不选即为整个账户。选中的密钥会合并计算。"
+  },
+  "preview": {
+    "message": "预览"
+  },
+  "noApiKeysYet": {
+    "message": "还没有 API 密钥 — 请先打开弹窗一次。"
+  },
+  "panelRefresh": {
+    "message": "刷新与阈值"
+  },
+  "autoRefresh": {
+    "message": "自动刷新（分钟，0 = 关闭）"
+  },
+  "aggregationWindow": {
+    "message": "统计窗口（天）"
+  },
+  "lowBalanceWarning": {
+    "message": "余额偏低提醒"
+  },
+  "dailyBudget": {
+    "message": "每日预算（0 = 关闭）"
+  },
+  "warnAtPercent": {
+    "message": "提醒阈值（预算百分比）"
+  },
+  "notifyBudget": {
+    "message": "预算将用尽或超出时通知我"
+  },
+  "showDecimals": {
+    "message": "在弹窗中显示小数"
+  },
+  "panelKeyBudgets": {
+    "message": "各密钥每日预算"
+  },
+  "keyBudgetsHelp": {
+    "message": "密钥预算与账户预算分别计算：徽章使用最接近上限的那个预算的颜色。留空表示该密钥不设预算。"
+  },
+  "keyBudgetsEmpty": {
+    "message": "还没有 API 密钥 — 请先打开弹窗一次以加载用量数据。"
+  },
+  "keyBudgetAria": {
+    "message": "$name$ 的每日预算",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "keyBudgetOff": {
+    "message": "关闭"
+  },
+  "panelSession": {
+    "message": "会话"
+  },
+  "sessionChecking": {
+    "message": "检查中…"
+  },
+  "sessionDetecting": {
+    "message": "检测中…"
+  },
+  "reDetect": {
+    "message": "重新检测会话"
+  },
+  "openPlatform": {
+    "message": "打开 platform.deepseek.com"
+  },
+  "saved": {
+    "message": "已保存"
+  },
+  "chipRemoveFromBadge": {
+    "message": "从徽章中移除"
+  },
+  "chipMeasureForKey": {
+    "message": "按该密钥统计徽章"
+  },
+  "previewNoData": {
+    "message": "暂无数据 — 请先刷新弹窗一次。"
+  },
+  "previewNoBudget": {
+    "message": "未设置预算 — 徽章保持中性。"
+  },
+  "previewClosestBudget": {
+    "message": "最接近的预算已用 $percent$%（$status$）",
+    "placeholders": {
+      "percent": { "content": "$1" },
+      "status": { "content": "$2" }
+    }
+  },
+  "sessionDetected": {
+    "message": "已检测到会话（$source$）。",
+    "placeholders": {
+      "source": { "content": "$1" }
+    }
+  },
+  "sessionMissing": {
+    "message": "未找到会话。请打开 platform.deepseek.com 登录后点击“重新检测会话”。"
+  },
+  "sourceUnknown": {
+    "message": "未知来源"
+  },
+  "sourceCookie": {
+    "message": "cookie $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "sourcePage": {
+    "message": "页面存储"
+  },
+
+  "badgeNoData": {
+    "message": "DeepSeek 用量 — 暂无数据，点击刷新"
+  },
+  "badgeSessionExpired": {
+    "message": "DeepSeek 用量 — 会话已过期，请登录 platform.deepseek.com"
+  },
+  "badgeTitle": {
+    "message": "DeepSeek$scope$：$label$",
+    "placeholders": {
+      "scope": { "content": "$1" },
+      "label": { "content": "$2" }
+    }
+  },
+  "badgeLabelBalance": {
+    "message": "余额 $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "badgeLabelPeriod": {
+    "message": "$days$ 天花费 $amount$",
+    "placeholders": {
+      "days": { "content": "$1" },
+      "amount": { "content": "$2" }
+    }
+  },
+  "badgeLabelTodayTokens": {
+    "message": "今日 $count$ token",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "badgeLabelTodayCost": {
+    "message": "今日 $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "badgeScopeKey": {
+    "message": " · $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "budgetLine": {
+    "message": "$scope$$percent$% · 每日预算 $amount$（$state$，$left$）",
+    "placeholders": {
+      "scope": { "content": "$1" },
+      "percent": { "content": "$2" },
+      "amount": { "content": "$3" },
+      "state": { "content": "$4" },
+      "left": { "content": "$5" }
+    }
+  },
+  "budgetStateOver": {
+    "message": "超出预算"
+  },
+  "budgetStateWarn": {
+    "message": "接近预算"
+  },
+  "budgetStateOk": {
+    "message": "预算内"
+  },
+  "budgetLeft": {
+    "message": "剩余 $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "budgetOverBy": {
+    "message": "超出 $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+
+  "notifyTitleOver": {
+    "message": "已超出每日预算$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1" }
+    }
+  },
+  "notifyTitleWarn": {
+    "message": "每日预算即将用尽$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1" }
+    }
+  },
+  "notifyForKey": {
+    "message": "（$name$）",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "notifyMessageOver": {
+    "message": "今日已花 $spent$，预算 $budget$（$percent$%）",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "budget": { "content": "$2" },
+      "percent": { "content": "$3" }
+    }
+  },
+  "notifyMessageWarn": {
+    "message": "今日已花 $spent$，预算 $budget$（$percent$%），剩余 $left$",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "budget": { "content": "$2" },
+      "percent": { "content": "$3" },
+      "left": { "content": "$4" }
+    }
+  },
+
+  "errorNoSession": {
+    "message": "未找到 DeepSeek 会话。请打开 platform.deepseek.com 并登录。"
+  }
+}

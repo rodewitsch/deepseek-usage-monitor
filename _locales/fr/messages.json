@@ -1,0 +1,445 @@
+{
+  "extName": {
+    "message": "DeepSeek Usage Monitor"
+  },
+  "extDescription": {
+    "message": "Solde, dépenses du jour et dépenses par clé pour DeepSeek Platform, directement dans la barre d'outils."
+  },
+  "actionTitle": {
+    "message": "DeepSeek Usage Monitor"
+  },
+
+  "popupTitle": {
+    "message": "Consommation DeepSeek"
+  },
+  "popupLoading": {
+    "message": "Chargement…"
+  },
+  "refreshNow": {
+    "message": "Actualiser"
+  },
+  "errorFix": {
+    "message": "Corriger"
+  },
+  "walletBalance": {
+    "message": "Solde du portefeuille"
+  },
+  "spentToday": {
+    "message": "Dépensé aujourd'hui"
+  },
+  "recentSpend": {
+    "message": "Dépenses récentes"
+  },
+  "chartAria": {
+    "message": "Dépenses quotidiennes des derniers jours"
+  },
+  "apiKeys": {
+    "message": "Clés API"
+  },
+  "allKeys": {
+    "message": "Toutes les clés"
+  },
+  "noPerKeyUsage": {
+    "message": "Aucune consommation par clé sur cette période."
+  },
+  "openUsagePage": {
+    "message": "Ouvrir la page de consommation"
+  },
+  "settings": {
+    "message": "Paramètres"
+  },
+
+  "statusNoData": {
+    "message": "Aucune donnée"
+  },
+  "statusUpdated": {
+    "message": "Mis à jour $ago$",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
+  "statusUpdatedInteractive": {
+    "message": "Mis à jour $ago$",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
+  "statusYesterday": {
+    "message": "$ago$ · hier",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
+  "signInPrompt": {
+    "message": "Connectez-vous sur platform.deepseek.com"
+  },
+  "balanceUnavailable": {
+    "message": "Solde indisponible"
+  },
+  "balancePaidBonus": {
+    "message": "payé $paid$ · bonus $bonus$",
+    "placeholders": {
+      "paid": { "content": "$1" },
+      "bonus": { "content": "$2" }
+    }
+  },
+  "tokensCount": {
+    "message": "$count$ jetons",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "tokensScope": {
+    "message": "$tokens$ · $scope$",
+    "placeholders": {
+      "tokens": { "content": "$1" },
+      "scope": { "content": "$2" }
+    }
+  },
+  "keysCount": {
+    "message": "$count$ clés",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "keysCountSelected": {
+    "message": "$count$ sélectionnée(s)",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+
+  "budgetDailyScope": {
+    "message": "Budget quotidien · $scope$",
+    "placeholders": {
+      "scope": { "content": "$1" }
+    }
+  },
+  "budgetAccount": {
+    "message": "compte"
+  },
+  "budgetForSelection": {
+    "message": "pour $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "budgetForSelectionFallback": {
+    "message": "sélection"
+  },
+  "budgetWarnMark": {
+    "message": "Seuil d'alerte $percent$ %",
+    "placeholders": {
+      "percent": { "content": "$1" }
+    }
+  },
+  "budgetSpentLeft": {
+    "message": "$spent$ dépensés · $left$ restants sur $budget$",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "left": { "content": "$2" },
+      "budget": { "content": "$3" }
+    }
+  },
+  "budgetSpentOver": {
+    "message": "$spent$ dépensés · dépassé de $over$",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "over": { "content": "$2" }
+    }
+  },
+
+  "chartEmpty": {
+    "message": "Aucune consommation sur cette période"
+  },
+  "chartTotal": {
+    "message": "$amount$ sur $days$ j",
+    "placeholders": {
+      "amount": { "content": "$1" },
+      "days": { "content": "$2" }
+    }
+  },
+  "chartTooltipDay": {
+    "message": "$date$ : $amount$",
+    "placeholders": {
+      "date": { "content": "$1" },
+      "amount": { "content": "$2" }
+    }
+  },
+  "chartSeriesAllKeys": {
+    "message": "Toutes les clés"
+  },
+
+  "keyRemoveFromChart": {
+    "message": "Cliquer pour retirer du graphique"
+  },
+  "keyPlot": {
+    "message": "Cliquer pour afficher cette clé"
+  },
+  "keyTodayMeta": {
+    "message": "aujourd'hui $today$",
+    "placeholders": {
+      "today": { "content": "$1" }
+    }
+  },
+  "keyTodayMetaBudget": {
+    "message": "aujourd'hui $today$ / $budget$",
+    "placeholders": {
+      "today": { "content": "$1" },
+      "budget": { "content": "$2" }
+    }
+  },
+
+  "optionsTitle": {
+    "message": "DeepSeek Usage Monitor — Paramètres"
+  },
+  "optionsSubtitle": {
+    "message": "Badge, actualisation et seuils."
+  },
+  "panelBadge": {
+    "message": "Badge de la barre d'outils"
+  },
+  "showOnIcon": {
+    "message": "Afficher sur l'icône"
+  },
+  "metricTodayCost": {
+    "message": "Dépensé aujourd'hui"
+  },
+  "metricMonthCost": {
+    "message": "Dépensé sur la période (30 jours)"
+  },
+  "metricBalance": {
+    "message": "Solde du portefeuille"
+  },
+  "metricTodayTokens": {
+    "message": "Jetons aujourd'hui"
+  },
+  "measureFor": {
+    "message": "Mesurer pour"
+  },
+  "measureForHint": {
+    "message": "Aucune sélection = tout le compte. Les clés sélectionnées sont additionnées."
+  },
+  "preview": {
+    "message": "Aperçu"
+  },
+  "noApiKeysYet": {
+    "message": "Pas encore de clés API — ouvrez le popup une fois."
+  },
+  "panelRefresh": {
+    "message": "Actualisation et seuils"
+  },
+  "autoRefresh": {
+    "message": "Actualisation auto (minutes, 0 = off)"
+  },
+  "aggregationWindow": {
+    "message": "Fenêtre d'agrégation (jours)"
+  },
+  "lowBalanceWarning": {
+    "message": "Alerte de solde bas"
+  },
+  "dailyBudget": {
+    "message": "Budget quotidien (0 = off)"
+  },
+  "warnAtPercent": {
+    "message": "Alerter à (% du budget)"
+  },
+  "notifyBudget": {
+    "message": "Notifier quand un budget est presque épuisé / dépassé"
+  },
+  "showDecimals": {
+    "message": "Afficher les décimales dans le popup"
+  },
+  "panelKeyBudgets": {
+    "message": "Budgets quotidiens par clé"
+  },
+  "keyBudgetsHelp": {
+    "message": "Le budget d'une clé est vérifié indépendamment du budget du compte : le badge prend la couleur du budget le plus proche de sa limite. Laissez un champ vide pour désactiver le budget de cette clé."
+  },
+  "keyBudgetsEmpty": {
+    "message": "Pas encore de clés API — ouvrez le popup une fois pour charger les données de consommation."
+  },
+  "keyBudgetAria": {
+    "message": "Budget quotidien pour $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "keyBudgetOff": {
+    "message": "off"
+  },
+  "panelSession": {
+    "message": "Session"
+  },
+  "sessionChecking": {
+    "message": "Vérification…"
+  },
+  "sessionDetecting": {
+    "message": "Détection…"
+  },
+  "reDetect": {
+    "message": "Redétecter la session"
+  },
+  "openPlatform": {
+    "message": "Ouvrir platform.deepseek.com"
+  },
+  "saved": {
+    "message": "Enregistré"
+  },
+  "chipRemoveFromBadge": {
+    "message": "Retirer du badge"
+  },
+  "chipMeasureForKey": {
+    "message": "Mesurer le badge pour cette clé"
+  },
+  "previewNoData": {
+    "message": "Aucune donnée — actualisez le popup une fois."
+  },
+  "previewNoBudget": {
+    "message": "Aucun budget défini — le badge reste neutre."
+  },
+  "previewClosestBudget": {
+    "message": "$percent$ % du budget le plus proche ($status$)",
+    "placeholders": {
+      "percent": { "content": "$1" },
+      "status": { "content": "$2" }
+    }
+  },
+  "sessionDetected": {
+    "message": "Session détectée ($source$).",
+    "placeholders": {
+      "source": { "content": "$1" }
+    }
+  },
+  "sessionMissing": {
+    "message": "Aucune session trouvée. Ouvrez platform.deepseek.com, connectez-vous, puis cliquez sur « Redétecter la session »."
+  },
+  "sourceUnknown": {
+    "message": "source inconnue"
+  },
+  "sourceCookie": {
+    "message": "cookie $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "sourcePage": {
+    "message": "stockage de la page"
+  },
+
+  "badgeNoData": {
+    "message": "Consommation DeepSeek — aucune donnée, cliquez pour actualiser"
+  },
+  "badgeSessionExpired": {
+    "message": "Consommation DeepSeek — session expirée, connectez-vous sur platform.deepseek.com"
+  },
+  "badgeTitle": {
+    "message": "DeepSeek$scope$ : $label$",
+    "placeholders": {
+      "scope": { "content": "$1" },
+      "label": { "content": "$2" }
+    }
+  },
+  "badgeLabelBalance": {
+    "message": "Solde $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "badgeLabelPeriod": {
+    "message": "$days$ j dépensés $amount$",
+    "placeholders": {
+      "days": { "content": "$1" },
+      "amount": { "content": "$2" }
+    }
+  },
+  "badgeLabelTodayTokens": {
+    "message": "Aujourd'hui $count$ jetons",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "badgeLabelTodayCost": {
+    "message": "Aujourd'hui $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "badgeScopeKey": {
+    "message": " · $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "budgetLine": {
+    "message": "$scope$$percent$ % du budget quotidien de $amount$ ($state$, $left$)",
+    "placeholders": {
+      "scope": { "content": "$1" },
+      "percent": { "content": "$2" },
+      "amount": { "content": "$3" },
+      "state": { "content": "$4" },
+      "left": { "content": "$5" }
+    }
+  },
+  "budgetStateOver": {
+    "message": "budget dépassé"
+  },
+  "budgetStateWarn": {
+    "message": "proche du budget"
+  },
+  "budgetStateOk": {
+    "message": "dans le budget"
+  },
+  "budgetLeft": {
+    "message": "$amount$ restants",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "budgetOverBy": {
+    "message": "$amount$ de trop",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+
+  "notifyTitleOver": {
+    "message": "Budget quotidien dépassé$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1" }
+    }
+  },
+  "notifyTitleWarn": {
+    "message": "Budget quotidien presque épuisé$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1" }
+    }
+  },
+  "notifyForKey": {
+    "message": " pour $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "notifyMessageOver": {
+    "message": "$spent$ dépensés sur $budget$ aujourd'hui ($percent$ %)",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "budget": { "content": "$2" },
+      "percent": { "content": "$3" }
+    }
+  },
+  "notifyMessageWarn": {
+    "message": "$spent$ dépensés sur $budget$ aujourd'hui ($percent$ %), $left$ restants",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "budget": { "content": "$2" },
+      "percent": { "content": "$3" },
+      "left": { "content": "$4" }
+    }
+  },
+
+  "errorNoSession": {
+    "message": "Aucune session DeepSeek trouvée. Ouvrez platform.deepseek.com et connectez-vous."
+  }
+}

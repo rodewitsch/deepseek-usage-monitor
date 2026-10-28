@@ -1,0 +1,445 @@
+{
+  "extName": {
+    "message": "DeepSeek Usage Monitor"
+  },
+  "extDescription": {
+    "message": "Saldo, pengeluaran hari ini, dan pengeluaran per kunci untuk DeepSeek Platform, langsung di toolbar."
+  },
+  "actionTitle": {
+    "message": "DeepSeek Usage Monitor"
+  },
+
+  "popupTitle": {
+    "message": "Penggunaan DeepSeek"
+  },
+  "popupLoading": {
+    "message": "Memuat…"
+  },
+  "refreshNow": {
+    "message": "Perbarui sekarang"
+  },
+  "errorFix": {
+    "message": "Perbaiki"
+  },
+  "walletBalance": {
+    "message": "Saldo dompet"
+  },
+  "spentToday": {
+    "message": "Pengeluaran hari ini"
+  },
+  "recentSpend": {
+    "message": "Pengeluaran terkini"
+  },
+  "chartAria": {
+    "message": "Pengeluaran harian beberapa hari terakhir"
+  },
+  "apiKeys": {
+    "message": "Kunci API"
+  },
+  "allKeys": {
+    "message": "Semua kunci"
+  },
+  "noPerKeyUsage": {
+    "message": "Tidak ada penggunaan per kunci pada periode ini."
+  },
+  "openUsagePage": {
+    "message": "Buka halaman penggunaan"
+  },
+  "settings": {
+    "message": "Pengaturan"
+  },
+
+  "statusNoData": {
+    "message": "Belum ada data"
+  },
+  "statusUpdated": {
+    "message": "Diperbarui $ago$",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
+  "statusUpdatedInteractive": {
+    "message": "Diperbarui $ago$",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
+  "statusYesterday": {
+    "message": "$ago$ · kemarin",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
+  "signInPrompt": {
+    "message": "Masuk di platform.deepseek.com"
+  },
+  "balanceUnavailable": {
+    "message": "Saldo tidak tersedia"
+  },
+  "balancePaidBonus": {
+    "message": "dibayar $paid$ · bonus $bonus$",
+    "placeholders": {
+      "paid": { "content": "$1" },
+      "bonus": { "content": "$2" }
+    }
+  },
+  "tokensCount": {
+    "message": "$count$ token",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "tokensScope": {
+    "message": "$tokens$ · $scope$",
+    "placeholders": {
+      "tokens": { "content": "$1" },
+      "scope": { "content": "$2" }
+    }
+  },
+  "keysCount": {
+    "message": "$count$ kunci",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "keysCountSelected": {
+    "message": "$count$ dipilih",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+
+  "budgetDailyScope": {
+    "message": "Anggaran harian · $scope$",
+    "placeholders": {
+      "scope": { "content": "$1" }
+    }
+  },
+  "budgetAccount": {
+    "message": "akun"
+  },
+  "budgetForSelection": {
+    "message": "untuk $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "budgetForSelectionFallback": {
+    "message": "pilihan"
+  },
+  "budgetWarnMark": {
+    "message": "Ambang peringatan $percent$%",
+    "placeholders": {
+      "percent": { "content": "$1" }
+    }
+  },
+  "budgetSpentLeft": {
+    "message": "$spent$ terpakai · sisa $left$ dari $budget$",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "left": { "content": "$2" },
+      "budget": { "content": "$3" }
+    }
+  },
+  "budgetSpentOver": {
+    "message": "$spent$ terpakai · lebih $over$",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "over": { "content": "$2" }
+    }
+  },
+
+  "chartEmpty": {
+    "message": "Tidak ada penggunaan pada periode ini"
+  },
+  "chartTotal": {
+    "message": "$amount$ dalam $days$ hr",
+    "placeholders": {
+      "amount": { "content": "$1" },
+      "days": { "content": "$2" }
+    }
+  },
+  "chartTooltipDay": {
+    "message": "$date$: $amount$",
+    "placeholders": {
+      "date": { "content": "$1" },
+      "amount": { "content": "$2" }
+    }
+  },
+  "chartSeriesAllKeys": {
+    "message": "Semua kunci"
+  },
+
+  "keyRemoveFromChart": {
+    "message": "Klik untuk hapus dari grafik"
+  },
+  "keyPlot": {
+    "message": "Klik untuk tampilkan kunci ini"
+  },
+  "keyTodayMeta": {
+    "message": "hari ini $today$",
+    "placeholders": {
+      "today": { "content": "$1" }
+    }
+  },
+  "keyTodayMetaBudget": {
+    "message": "hari ini $today$ / $budget$",
+    "placeholders": {
+      "today": { "content": "$1" },
+      "budget": { "content": "$2" }
+    }
+  },
+
+  "optionsTitle": {
+    "message": "DeepSeek Usage Monitor — Pengaturan"
+  },
+  "optionsSubtitle": {
+    "message": "Badge, pembaruan, dan ambang."
+  },
+  "panelBadge": {
+    "message": "Badge toolbar"
+  },
+  "showOnIcon": {
+    "message": "Tampilkan pada ikon"
+  },
+  "metricTodayCost": {
+    "message": "Pengeluaran hari ini"
+  },
+  "metricMonthCost": {
+    "message": "Pengeluaran periode (30 hari)"
+  },
+  "metricBalance": {
+    "message": "Saldo dompet"
+  },
+  "metricTodayTokens": {
+    "message": "Token hari ini"
+  },
+  "measureFor": {
+    "message": "Ukur untuk"
+  },
+  "measureForHint": {
+    "message": "Tanpa pilihan = seluruh akun. Kunci yang dipilih dijumlahkan."
+  },
+  "preview": {
+    "message": "Pratinjau"
+  },
+  "noApiKeysYet": {
+    "message": "Belum ada kunci API — buka popup sekali."
+  },
+  "panelRefresh": {
+    "message": "Pembaruan & ambang"
+  },
+  "autoRefresh": {
+    "message": "Perbarui otomatis (menit, 0 = mati)"
+  },
+  "aggregationWindow": {
+    "message": "Jendela agregasi (hari)"
+  },
+  "lowBalanceWarning": {
+    "message": "Peringatan saldo rendah"
+  },
+  "dailyBudget": {
+    "message": "Anggaran harian (0 = mati)"
+  },
+  "warnAtPercent": {
+    "message": "Peringatkan pada (% anggaran)"
+  },
+  "notifyBudget": {
+    "message": "Beri tahu saat anggaran hampir habis / terlampaui"
+  },
+  "showDecimals": {
+    "message": "Tampilkan desimal di popup"
+  },
+  "panelKeyBudgets": {
+    "message": "Anggaran harian per kunci"
+  },
+  "keyBudgetsHelp": {
+    "message": "Anggaran kunci diperiksa terpisah dari anggaran akun: badge memakai warna anggaran yang paling dekat dengan batasnya. Biarkan kosong untuk menonaktifkan anggaran kunci tersebut."
+  },
+  "keyBudgetsEmpty": {
+    "message": "Belum ada kunci API — buka popup sekali agar data penggunaan dimuat."
+  },
+  "keyBudgetAria": {
+    "message": "Anggaran harian untuk $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "keyBudgetOff": {
+    "message": "mati"
+  },
+  "panelSession": {
+    "message": "Sesi"
+  },
+  "sessionChecking": {
+    "message": "Memeriksa…"
+  },
+  "sessionDetecting": {
+    "message": "Mendeteksi…"
+  },
+  "reDetect": {
+    "message": "Deteksi ulang sesi"
+  },
+  "openPlatform": {
+    "message": "Buka platform.deepseek.com"
+  },
+  "saved": {
+    "message": "Tersimpan"
+  },
+  "chipRemoveFromBadge": {
+    "message": "Hapus dari badge"
+  },
+  "chipMeasureForKey": {
+    "message": "Ukur badge untuk kunci ini"
+  },
+  "previewNoData": {
+    "message": "Belum ada data — perbarui popup sekali."
+  },
+  "previewNoBudget": {
+    "message": "Belum ada anggaran — badge tetap netral."
+  },
+  "previewClosestBudget": {
+    "message": "$percent$% dari anggaran terdekat ($status$)",
+    "placeholders": {
+      "percent": { "content": "$1" },
+      "status": { "content": "$2" }
+    }
+  },
+  "sessionDetected": {
+    "message": "Sesi terdeteksi ($source$).",
+    "placeholders": {
+      "source": { "content": "$1" }
+    }
+  },
+  "sessionMissing": {
+    "message": "Sesi tidak ditemukan. Buka platform.deepseek.com, masuk, lalu tekan \"Deteksi ulang sesi\"."
+  },
+  "sourceUnknown": {
+    "message": "sumber tidak diketahui"
+  },
+  "sourceCookie": {
+    "message": "cookie $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "sourcePage": {
+    "message": "penyimpanan halaman"
+  },
+
+  "badgeNoData": {
+    "message": "Penggunaan DeepSeek — belum ada data, klik untuk memuat"
+  },
+  "badgeSessionExpired": {
+    "message": "Penggunaan DeepSeek — sesi berakhir, masuk di platform.deepseek.com"
+  },
+  "badgeTitle": {
+    "message": "DeepSeek$scope$: $label$",
+    "placeholders": {
+      "scope": { "content": "$1" },
+      "label": { "content": "$2" }
+    }
+  },
+  "badgeLabelBalance": {
+    "message": "Saldo $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "badgeLabelPeriod": {
+    "message": "$days$ hr pakai $amount$",
+    "placeholders": {
+      "days": { "content": "$1" },
+      "amount": { "content": "$2" }
+    }
+  },
+  "badgeLabelTodayTokens": {
+    "message": "Hari ini $count$ token",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "badgeLabelTodayCost": {
+    "message": "Hari ini $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "badgeScopeKey": {
+    "message": " · $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "budgetLine": {
+    "message": "$scope$$percent$% dari anggaran harian $amount$ ($state$, $left$)",
+    "placeholders": {
+      "scope": { "content": "$1" },
+      "percent": { "content": "$2" },
+      "amount": { "content": "$3" },
+      "state": { "content": "$4" },
+      "left": { "content": "$5" }
+    }
+  },
+  "budgetStateOver": {
+    "message": "melebihi anggaran"
+  },
+  "budgetStateWarn": {
+    "message": "mendekati anggaran"
+  },
+  "budgetStateOk": {
+    "message": "dalam anggaran"
+  },
+  "budgetLeft": {
+    "message": "sisa $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "budgetOverBy": {
+    "message": "lebih $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+
+  "notifyTitleOver": {
+    "message": "Anggaran harian terlampaui$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1" }
+    }
+  },
+  "notifyTitleWarn": {
+    "message": "Anggaran harian hampir habis$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1" }
+    }
+  },
+  "notifyForKey": {
+    "message": " untuk $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "notifyMessageOver": {
+    "message": "Hari ini terpakai $spent$ dari $budget$ ($percent$%)",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "budget": { "content": "$2" },
+      "percent": { "content": "$3" }
+    }
+  },
+  "notifyMessageWarn": {
+    "message": "Hari ini terpakai $spent$ dari $budget$ ($percent$%), sisa $left$",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "budget": { "content": "$2" },
+      "percent": { "content": "$3" },
+      "left": { "content": "$4" }
+    }
+  },
+
+  "errorNoSession": {
+    "message": "Sesi DeepSeek tidak ditemukan. Buka platform.deepseek.com dan masuk."
+  }
+}

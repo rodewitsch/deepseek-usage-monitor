@@ -1,5 +1,6 @@
 import { computeBadge } from './lib/badge.js';
 import { budgetNoticeKey, evaluateBudgets } from './lib/budget.js';
+import { t } from './lib/i18n.js';
 import { refreshUsage } from './lib/refresh.js';
 import { refreshFromPage } from './lib/scrape.js';
 import { getSettings, getSnapshot } from './lib/settings.js';
@@ -112,7 +113,7 @@ async function notifyBudget(snapshot, settings) {
   }
   for (const budget of budgets.keys) {
     if (budget.status === 'warn' || budget.status === 'over') {
-      scopes.push({ scope: `key:${budget.id}`, budget, suffix: ` for ${budget.name}` });
+      scopes.push({ scope: `key:${budget.id}`, budget, suffix: t('notifyForKey', [budget.name]) });
     }
   }
   if (!scopes.length) return;
@@ -129,13 +130,20 @@ async function notifyBudget(snapshot, settings) {
     added.push(key);
 
     const title =
-      budget.status === 'over' ? `Daily budget exceeded${suffix}` : `Daily budget almost used up${suffix}`;
+      budget.status === 'over' ? t('notifyTitleOver', [suffix]) : t('notifyTitleWarn', [suffix]);
     const message =
       budget.status === 'over'
-        ? `Spent ${money(budget.spent)} of ${money(budget.budget)} today (${Math.round(budget.percent)}%)`
-        : `Spent ${money(budget.spent)} of ${money(budget.budget)} today (${Math.round(
-            budget.percent,
-          )}%), ${money(budget.remaining)} left`;
+        ? t('notifyMessageOver', [
+            money(budget.spent),
+            money(budget.budget),
+            String(Math.round(budget.percent)),
+          ])
+        : t('notifyMessageWarn', [
+            money(budget.spent),
+            money(budget.budget),
+            String(Math.round(budget.percent)),
+            money(budget.remaining),
+          ]);
 
     try {
       await chrome.notifications.create(key, {
@@ -167,7 +175,7 @@ async function paintBadge(badge) {
   if (text) {
     await chrome.action.setBadgeBackgroundColor({ color: badge.color || '#4b5563' });
   }
-  await chrome.action.setTitle({ title: badge?.title || 'DeepSeek Usage Monitor' });
+  await chrome.action.setTitle({ title: badge?.title || t('actionTitle') });
 }
 
 async function scheduleAlarm() {

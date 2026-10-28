@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>DeepSeek Usage Monitor — Settings</title>
+    <title data-i18n="optionsTitle">DeepSeek Usage Monitor — Settings</title>
     <link rel="stylesheet" href="options.css" />
   </head>
   <body>
@@ -11,34 +11,34 @@
       <header class="page__head">
         <img src="../../icons/icon48.png" alt="" width="40" height="40" />
         <div>
-          <h1>DeepSeek Usage Monitor</h1>
-          <p class="muted">Toolbar badge, refresh and thresholds.</p>
+          <h1 data-i18n="extName">DeepSeek Usage Monitor</h1>
+          <p class="muted" data-i18n="optionsSubtitle">Toolbar badge, refresh and thresholds.</p>
         </div>
       </header>
 
       <section class="panel">
-        <h2>Toolbar badge</h2>
+        <h2 data-i18n="panelBadge">Toolbar badge</h2>
         <div class="grid">
           <label class="field">
-            <span class="field__label">Show on the icon</span>
+            <span class="field__label" data-i18n="showOnIcon">Show on the icon</span>
             <select id="badge-metric">
-              <option value="todayCost">Spent today</option>
-              <option value="monthCost">Spent in the period (30 days)</option>
-              <option value="balance">Wallet balance</option>
-              <option value="todayTokens">Tokens today</option>
+              <option value="todayCost" data-i18n="metricTodayCost">Spent today</option>
+              <option value="monthCost" data-i18n="metricMonthCost">Spent in the period (30 days)</option>
+              <option value="balance" data-i18n="metricBalance">Wallet balance</option>
+              <option value="todayTokens" data-i18n="metricTodayTokens">Tokens today</option>
             </select>
           </label>
 
           <label id="badge-key-field" class="field field--wide">
-            <span class="field__label">Measure for</span>
+            <span class="field__label" data-i18n="measureFor">Measure for</span>
             <span id="badge-keys" class="chips"></span>
-            <span id="badge-keys-hint" class="field__hint">
+            <span id="badge-keys-hint" class="field__hint" data-i18n="measureForHint">
               Nothing selected = the whole account. Selected keys are summed.
             </span>
           </label>
         </div>
         <div class="preview">
-          <span class="preview__label">Preview</span>
+          <span class="preview__label" data-i18n="preview">Preview</span>
           <span id="badge-preview" class="preview__badge">—</span>
           <span id="badge-preview-title" class="muted"></span>
         </div>
@@ -46,61 +46,61 @@
       </section>
 
       <section class="panel">
-        <h2>Refresh &amp; thresholds</h2>
+        <h2 data-i18n="panelRefresh">Refresh &amp; thresholds</h2>
         <div class="grid">
           <label class="field">
-            <span class="field__label">Auto refresh (minutes, 0 = off)</span>
+            <span class="field__label" data-i18n="autoRefresh">Auto refresh (minutes, 0 = off)</span>
             <input id="refresh-minutes" type="number" min="0" max="1440" step="1" />
           </label>
           <label class="field">
-            <span class="field__label">Aggregation window (days)</span>
+            <span class="field__label" data-i18n="aggregationWindow">Aggregation window (days)</span>
             <input id="window-days" type="number" min="1" max="90" step="1" />
           </label>
           <label class="field">
-            <span class="field__label">Low balance warning</span>
+            <span class="field__label" data-i18n="lowBalanceWarning">Low balance warning</span>
             <input id="low-balance" type="number" min="0" step="0.01" />
           </label>
           <label class="field">
-            <span class="field__label">Daily budget (0 = off)</span>
+            <span class="field__label" data-i18n="dailyBudget">Daily budget (0 = off)</span>
             <input id="daily-budget" type="number" min="0" step="0.01" />
           </label>
           <label class="field">
-            <span class="field__label">Warn at (% of budget)</span>
+            <span class="field__label" data-i18n="warnAtPercent">Warn at (% of budget)</span>
             <input id="budget-warn-percent" type="number" min="1" max="100" step="1" />
           </label>
           <label class="field field--checkbox">
             <input id="budget-notifications" type="checkbox" />
-            <span>Notify when a budget is nearly used up / exceeded</span>
+            <span data-i18n="notifyBudget">Notify when a budget is nearly used up / exceeded</span>
           </label>
           <label class="field field--checkbox">
             <input id="show-decimals" type="checkbox" />
-            <span>Show decimals in the popup</span>
+            <span data-i18n="showDecimals">Show decimals in the popup</span>
           </label>
         </div>
       </section>
 
       <section class="panel">
-        <h2>Per-key daily budgets</h2>
-        <p class="muted">
+        <h2 data-i18n="panelKeyBudgets">Per-key daily budgets</h2>
+        <p class="muted" data-i18n="keyBudgetsHelp">
           A key budget is checked independently of the account budget: the badge uses the colour of whichever
           budget is closest to its limit. Leave a field empty to disable the budget for that key.
         </p>
         <div id="key-budgets" class="key-budgets"></div>
-        <p id="key-budgets-empty" class="muted" hidden>
+        <p id="key-budgets-empty" class="muted" data-i18n="keyBudgetsEmpty" hidden>
           No API keys yet — open the popup once so the usage data is loaded.
         </p>
       </section>
 
       <section class="panel">
-        <h2>Session</h2>
-        <p id="session-status" class="muted">Checking…</p>
+        <h2 data-i18n="panelSession">Session</h2>
+        <p id="session-status" class="muted" data-i18n="sessionChecking">Checking…</p>
         <div class="actions">
-          <button id="re-detect" class="button">Re-detect session</button>
-          <button id="open-platform" class="button">Open platform.deepseek.com</button>
+          <button id="re-detect" class="button" data-i18n="reDetect">Re-detect session</button>
+          <button id="open-platform" class="button" data-i18n="openPlatform">Open platform.deepseek.com</button>
         </div>
       </section>
 
-      <p id="saved" class="saved" hidden>Saved</p>
+      <p id="saved" class="saved" data-i18n="saved" hidden>Saved</p>
     </main>
     <script type="module" src="options.js"></script>
   </body>

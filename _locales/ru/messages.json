@@ -1,0 +1,445 @@
+{
+  "extName": {
+    "message": "DeepSeek Usage Monitor"
+  },
+  "extDescription": {
+    "message": "Баланс, траты за сегодня и по API-ключам DeepSeek Platform — прямо в тулбаре."
+  },
+  "actionTitle": {
+    "message": "DeepSeek Usage Monitor"
+  },
+
+  "popupTitle": {
+    "message": "DeepSeek: расходы"
+  },
+  "popupLoading": {
+    "message": "Загрузка…"
+  },
+  "refreshNow": {
+    "message": "Обновить"
+  },
+  "errorFix": {
+    "message": "Исправить"
+  },
+  "walletBalance": {
+    "message": "Баланс кошелька"
+  },
+  "spentToday": {
+    "message": "Потрачено сегодня"
+  },
+  "recentSpend": {
+    "message": "Расходы за период"
+  },
+  "chartAria": {
+    "message": "Расходы по дням за последние дни"
+  },
+  "apiKeys": {
+    "message": "API-ключи"
+  },
+  "allKeys": {
+    "message": "Все ключи"
+  },
+  "noPerKeyUsage": {
+    "message": "За этот период расходов по ключам нет."
+  },
+  "openUsagePage": {
+    "message": "Открыть страницу расходов"
+  },
+  "settings": {
+    "message": "Настройки"
+  },
+
+  "statusNoData": {
+    "message": "Пока нет данных"
+  },
+  "statusUpdated": {
+    "message": "Обновлено $ago$",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
+  "statusUpdatedInteractive": {
+    "message": "Обновлено $ago$",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
+  "statusYesterday": {
+    "message": "$ago$ · вчера",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
+  "signInPrompt": {
+    "message": "Войдите на platform.deepseek.com"
+  },
+  "balanceUnavailable": {
+    "message": "Баланс недоступен"
+  },
+  "balancePaidBonus": {
+    "message": "основной $paid$ · бонусный $bonus$",
+    "placeholders": {
+      "paid": { "content": "$1" },
+      "bonus": { "content": "$2" }
+    }
+  },
+  "tokensCount": {
+    "message": "$count$ токенов",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "tokensScope": {
+    "message": "$tokens$ · $scope$",
+    "placeholders": {
+      "tokens": { "content": "$1" },
+      "scope": { "content": "$2" }
+    }
+  },
+  "keysCount": {
+    "message": "$count$ ключей",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "keysCountSelected": {
+    "message": "выбрано: $count$",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+
+  "budgetDailyScope": {
+    "message": "Дневной бюджет · $scope$",
+    "placeholders": {
+      "scope": { "content": "$1" }
+    }
+  },
+  "budgetAccount": {
+    "message": "аккаунт"
+  },
+  "budgetForSelection": {
+    "message": "для $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "budgetForSelectionFallback": {
+    "message": "выборки"
+  },
+  "budgetWarnMark": {
+    "message": "Порог предупреждения $percent$%",
+    "placeholders": {
+      "percent": { "content": "$1" }
+    }
+  },
+  "budgetSpentLeft": {
+    "message": "потрачено $spent$ · осталось $left$ из $budget$",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "left": { "content": "$2" },
+      "budget": { "content": "$3" }
+    }
+  },
+  "budgetSpentOver": {
+    "message": "потрачено $spent$ · перерасход $over$",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "over": { "content": "$2" }
+    }
+  },
+
+  "chartEmpty": {
+    "message": "За этот период расходов нет"
+  },
+  "chartTotal": {
+    "message": "$amount$ за $days$ дн.",
+    "placeholders": {
+      "amount": { "content": "$1" },
+      "days": { "content": "$2" }
+    }
+  },
+  "chartTooltipDay": {
+    "message": "$date$: $amount$",
+    "placeholders": {
+      "date": { "content": "$1" },
+      "amount": { "content": "$2" }
+    }
+  },
+  "chartSeriesAllKeys": {
+    "message": "Все ключи"
+  },
+
+  "keyRemoveFromChart": {
+    "message": "Нажмите, чтобы убрать с графика"
+  },
+  "keyPlot": {
+    "message": "Нажмите, чтобы показать ключ на графике"
+  },
+  "keyTodayMeta": {
+    "message": "сегодня $today$",
+    "placeholders": {
+      "today": { "content": "$1" }
+    }
+  },
+  "keyTodayMetaBudget": {
+    "message": "сегодня $today$ / $budget$",
+    "placeholders": {
+      "today": { "content": "$1" },
+      "budget": { "content": "$2" }
+    }
+  },
+
+  "optionsTitle": {
+    "message": "DeepSeek Usage Monitor — настройки"
+  },
+  "optionsSubtitle": {
+    "message": "Значок в тулбаре, обновление и пороги."
+  },
+  "panelBadge": {
+    "message": "Значок в тулбаре"
+  },
+  "showOnIcon": {
+    "message": "Показывать на значке"
+  },
+  "metricTodayCost": {
+    "message": "Потрачено сегодня"
+  },
+  "metricMonthCost": {
+    "message": "Потрачено за период (30 дней)"
+  },
+  "metricBalance": {
+    "message": "Баланс кошелька"
+  },
+  "metricTodayTokens": {
+    "message": "Токены за сегодня"
+  },
+  "measureFor": {
+    "message": "Считать по"
+  },
+  "measureForHint": {
+    "message": "Ничего не выбрано — весь аккаунт. Выбранные ключи суммируются."
+  },
+  "preview": {
+    "message": "Предпросмотр"
+  },
+  "noApiKeysYet": {
+    "message": "Ключей пока нет — откройте попап хотя бы раз."
+  },
+  "panelRefresh": {
+    "message": "Обновление и пороги"
+  },
+  "autoRefresh": {
+    "message": "Автообновление (минуты, 0 = выкл.)"
+  },
+  "aggregationWindow": {
+    "message": "Окно агрегации (дни)"
+  },
+  "lowBalanceWarning": {
+    "message": "Предупреждение о низком балансе"
+  },
+  "dailyBudget": {
+    "message": "Дневной бюджет (0 = выкл.)"
+  },
+  "warnAtPercent": {
+    "message": "Предупреждать при (% бюджета)"
+  },
+  "notifyBudget": {
+    "message": "Уведомлять, когда бюджет почти исчерпан или превышен"
+  },
+  "showDecimals": {
+    "message": "Показывать копейки в попапе"
+  },
+  "panelKeyBudgets": {
+    "message": "Дневные бюджеты по ключам"
+  },
+  "keyBudgetsHelp": {
+    "message": "Бюджет ключа проверяется независимо от бюджета аккаунта: значок берёт цвет того бюджета, который ближе всего к своему лимиту. Оставьте поле пустым, чтобы отключить бюджет для этого ключа."
+  },
+  "keyBudgetsEmpty": {
+    "message": "Ключей пока нет — откройте попап, чтобы загрузились данные о расходах."
+  },
+  "keyBudgetAria": {
+    "message": "Дневной бюджет для $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "keyBudgetOff": {
+    "message": "выкл."
+  },
+  "panelSession": {
+    "message": "Сессия"
+  },
+  "sessionChecking": {
+    "message": "Проверка…"
+  },
+  "sessionDetecting": {
+    "message": "Поиск…"
+  },
+  "reDetect": {
+    "message": "Найти сессию заново"
+  },
+  "openPlatform": {
+    "message": "Открыть platform.deepseek.com"
+  },
+  "saved": {
+    "message": "Сохранено"
+  },
+  "chipRemoveFromBadge": {
+    "message": "Убрать со значка"
+  },
+  "chipMeasureForKey": {
+    "message": "Считать значок для этого ключа"
+  },
+  "previewNoData": {
+    "message": "Пока нет данных — обновите попап."
+  },
+  "previewNoBudget": {
+    "message": "Бюджет не задан — значок нейтральный."
+  },
+  "previewClosestBudget": {
+    "message": "$percent$% ближайшего бюджета ($status$)",
+    "placeholders": {
+      "percent": { "content": "$1" },
+      "status": { "content": "$2" }
+    }
+  },
+  "sessionDetected": {
+    "message": "Сессия найдена ($source$).",
+    "placeholders": {
+      "source": { "content": "$1" }
+    }
+  },
+  "sessionMissing": {
+    "message": "Сессия не найдена. Откройте platform.deepseek.com, войдите и нажмите «Найти сессию заново»."
+  },
+  "sourceUnknown": {
+    "message": "неизвестный источник"
+  },
+  "sourceCookie": {
+    "message": "cookie $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "sourcePage": {
+    "message": "хранилище страницы"
+  },
+
+  "badgeNoData": {
+    "message": "DeepSeek Usage — пока нет данных, нажмите для обновления"
+  },
+  "badgeSessionExpired": {
+    "message": "DeepSeek Usage — сессия истекла, войдите на platform.deepseek.com"
+  },
+  "badgeTitle": {
+    "message": "DeepSeek$scope$: $label$",
+    "placeholders": {
+      "scope": { "content": "$1" },
+      "label": { "content": "$2" }
+    }
+  },
+  "badgeLabelBalance": {
+    "message": "баланс $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "badgeLabelPeriod": {
+    "message": "траты за $days$ дн. $amount$",
+    "placeholders": {
+      "days": { "content": "$1" },
+      "amount": { "content": "$2" }
+    }
+  },
+  "badgeLabelTodayTokens": {
+    "message": "сегодня $count$ токенов",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "badgeLabelTodayCost": {
+    "message": "сегодня $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "badgeScopeKey": {
+    "message": " · $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "budgetLine": {
+    "message": "$scope$$percent$% от дневного бюджета $amount$ ($state$, $left$)",
+    "placeholders": {
+      "scope": { "content": "$1" },
+      "percent": { "content": "$2" },
+      "amount": { "content": "$3" },
+      "state": { "content": "$4" },
+      "left": { "content": "$5" }
+    }
+  },
+  "budgetStateOver": {
+    "message": "бюджет превышен"
+  },
+  "budgetStateWarn": {
+    "message": "близко к бюджету"
+  },
+  "budgetStateOk": {
+    "message": "в пределах бюджета"
+  },
+  "budgetLeft": {
+    "message": "осталось $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "budgetOverBy": {
+    "message": "перерасход $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+
+  "notifyTitleOver": {
+    "message": "Дневной бюджет превышен$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1" }
+    }
+  },
+  "notifyTitleWarn": {
+    "message": "Дневной бюджет почти исчерпан$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1" }
+    }
+  },
+  "notifyForKey": {
+    "message": " для $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "notifyMessageOver": {
+    "message": "Потрачено $spent$ из $budget$ сегодня ($percent$%)",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "budget": { "content": "$2" },
+      "percent": { "content": "$3" }
+    }
+  },
+  "notifyMessageWarn": {
+    "message": "Потрачено $spent$ из $budget$ сегодня ($percent$%), осталось $left$",
+    "placeholders": {
+      "spent": { "content": "$1" },
+      "budget": { "content": "$2" },
+      "percent": { "content": "$3" },
+      "left": { "content": "$4" }
+    }
+  },
+
+  "errorNoSession": {
+    "message": "Сессия DeepSeek не найдена. Откройте platform.deepseek.com и войдите."
+  }
+}

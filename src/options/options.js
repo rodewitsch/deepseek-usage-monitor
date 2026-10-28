@@ -2,6 +2,7 @@ import { computeBadge } from '../lib/badge.js';
 import { evaluateBudgets } from '../lib/budget.js';
 import { PLATFORM_ORIGIN } from '../lib/constants.js';
 import { formatMoney } from '../lib/format.js';
+import { applyDocumentLanguage, localizeDocument, t } from '../lib/i18n.js';
 import { getSettings, getSnapshot, getTokenInfo, saveSettings } from '../lib/settings.js';
 import { discoverPlatformToken } from '../lib/token.js';
 
@@ -40,6 +41,8 @@ let currentSnapshot = null;
 init();
 
 async function init() {
+  applyDocumentLanguage();
+  localizeDocument();
   currentSettings = await getSettings();
   currentSnapshot = (await getSnapshot()).snapshot;
   renderBadgeKeys();
@@ -75,7 +78,7 @@ async function init() {
   });
 
   el('re-detect').addEventListener('click', async () => {
-    sessionStatus.textContent = 'Detecting…';
+    sessionStatus.textContent = t('sessionDetecting');
     await discoverPlatformToken({ force: true });
     await updateSessionStatus();
     await chrome.runtime.sendMessage({ type: 'dsum:refresh', forceToken: true }).catch(() => {});
@@ -151,7 +154,7 @@ function renderBadgeKeys() {
   if (!keys.length) {
     const hint = document.createElement('span');
     hint.className = 'muted';
-    hint.textContent = 'No API keys yet — open the popup once.';
+    hint.textContent = t('noApiKeysYet');
     badgeKeys.append(hint);
     return;
   }
@@ -162,7 +165,7 @@ function renderBadgeKeys() {
     chip.className = `chip${selected.has(key.id) ? ' is-on' : ''}`;
     chip.dataset.keyId = key.id;
     chip.textContent = key.name;
-    chip.title = selected.has(key.id) ? 'Remove from the badge' : 'Measure the badge for this key';
+    chip.title = selected.has(key.id) ? t('chipRemoveFromBadge') : t('chipMeasureForKey');
     badgeKeys.append(chip);
   }
 }
@@ -188,14 +191,14 @@ function renderKeyBudgets() {
     input.type = 'number';
     input.min = '0';
     input.step = '0.01';
-    input.placeholder = 'off';
+    input.placeholder = t('keyBudgetOff');
     input.value = amounts[key.id] ? String(amounts[key.id]) : '';
     input.dataset.budgetKey = key.id;
-    input.setAttribute('aria-label', `Daily budget for ${key.name}`);
+    input.setAttribute('aria-label', t('keyBudgetAria', [key.name]));
 
     const meta = document.createElement('span');
     meta.className = 'key-budget__meta';
-    meta.textContent = `today ${formatMoney(key.todayCost, currency, { decimals })}`;
+    meta.textContent = t('keyTodayMeta', [formatMoney(key.todayCost, currency, { decimals })]);
 
     row.append(name, input, meta);
     keyBudgets.append(row);
@@ -205,7 +208,7 @@ function renderKeyBudgets() {
 function updatePreview() {
   if (!currentSnapshot) {
     preview.textContent = '—';
-    previewTitle.textContent = 'No data yet — refresh the popup once.';
+    previewTitle.textContent = t('previewNoData');
     return;
   }
   const badge = computeBadge(currentSnapshot, currentSettings);
@@ -219,11 +222,14 @@ function updatePreview() {
     currentSettings?.badgeMetric === 'balance' ? [] : currentSettings?.badgeApiKeys || [],
   );
   if (budgets.worst.status === 'off') {
-    previewBudget.textContent = 'No budget set — the badge stays neutral.';
+    previewBudget.textContent = t('previewNoBudget');
     previewBudget.style.color = '';
     return;
   }
-  previewBudget.textContent = `${Math.round(budgets.worst.percent)}% of the closest budget (${budgets.worst.status})`;
+  previewBudget.textContent = t('previewClosestBudget', [
+    String(Math.round(budgets.worst.percent)),
+    budgets.worst.status,
+  ]);
   previewBudget.style.color = budgets.worst.color;
 }
 
@@ -231,14 +237,14 @@ async function updateSessionStatus() {
   const { token, source } = await getTokenInfo();
   sessionStatus.classList.toggle('is-error', !token);
   sessionStatus.textContent = token
-    ? `Session detected (${describeSource(source)}).`
-    : 'No session found. Open platform.deepseek.com, sign in, then press "Re-detect session".';
+    ? t('sessionDetected', [describeSource(source)])
+    : t('sessionMissing');
 }
 
 function describeSource(source) {
-  if (!source) return 'unknown source';
-  if (source.startsWith('cookie:')) return `cookie ${source.slice(7)}`;
-  if (source === 'page') return 'page storage';
+  if (!source) return t('sourceUnknown');
+  if (source.startsWith('cookie:')) return t('sourceCookie', [source.slice(7)]);
+  if (source === 'page') return t('sourcePage');
   return source;
 }
 
