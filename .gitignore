@@ -1,0 +1,17 @@
+node_modules/
+dist/
+*.zip
+*.log
+
+# editor / OS noise
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# playwright artefacts
+.playwright-*/
+test-results/
+
+# local scratch
+tools/*.png

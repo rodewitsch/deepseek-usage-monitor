@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DeepSeek Usage</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="brand">
+        <img class="brand__logo" src="../../icons/icon32.png" alt="" />
+        <div>
+          <h1>DeepSeek Usage</h1>
+          <p id="updated" class="muted">Loading…</p>
+        </div>
+      </div>
+      <button id="refresh" class="icon-button" title="Refresh now" aria-label="Refresh now">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M12 5V2L8 6l4 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"
+          />
+        </svg>
+      </button>
+    </header>
+
+    <div id="error" class="banner banner--error" hidden>
+      <span id="error-text"></span>
+      <button id="error-fix" class="link-button">Fix</button>
+    </div>
+
+    <section class="cards">
+      <article class="card card--primary">
+        <span class="card__label">Wallet balance</span>
+        <strong id="balance" class="card__value">—</strong>
+        <span id="balance-detail" class="card__hint">—</span>
+      </article>
+      <article class="card">
+        <span class="card__label">Spent today</span>
+        <strong id="today-cost" class="card__value">—</strong>
+        <span id="today-tokens" class="card__hint">—</span>
+      </article>
+    </section>
+
+    <section id="budget" class="budget" hidden>
+      <div class="budget__head">
+        <span class="budget__label">Daily budget</span>
+        <span id="budget-percent" class="budget__percent">—</span>
+      </div>
+      <div class="budget__track">
+        <div id="budget-fill" class="budget__fill"></div>
+        <div id="budget-warnmark" class="budget__mark" title="Warn threshold"></div>
+      </div>
+      <span id="budget-detail" class="budget__detail"></span>
+    </section>
+
+    <section class="section">
+      <div class="section__head">
+        <h2>Recent spend</h2>
+        <span id="chart-total" class="muted"></span>
+      </div>
+      <div id="chart" class="chart" role="img" aria-label="Daily spend for the last days"></div>
+    </section>
+
+    <section class="section">
+      <div class="section__head">
+        <h2>API keys</h2>
+        <select id="key-filter" class="select" aria-label="Filter by API key"></select>
+      </div>
+      <ul id="key-list" class="key-list"></ul>
+      <p id="key-empty" class="muted empty" hidden>No per-key usage in this period.</p>
+    </section>
+
+    <footer class="footer">
+      <a id="open-usage" class="button button--primary" href="https://platform.deepseek.com/usage" target="_blank" rel="noreferrer">
+        Open usage page
+      </a>
+      <button id="open-options" class="button" title="Settings">Settings</button>
+    </footer>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>
