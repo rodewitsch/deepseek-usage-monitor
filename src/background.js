@@ -98,7 +98,12 @@ async function updateBadge() {
 async function notifyBudget(snapshot, settings) {
   if (!settings.budgetNotifications) return;
 
-  const keyIds = Array.isArray(settings.badgeApiKeys) ? settings.badgeApiKeys : [];
+  const keyIds =
+    settings.badgeMetric === 'balance'
+      ? []
+      : Array.isArray(settings.badgeApiKeys)
+        ? settings.badgeApiKeys
+        : [];
   const budgets = evaluateBudgets(snapshot?.usage, settings, keyIds);
 
   const scopes = [];

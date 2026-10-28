@@ -8,7 +8,9 @@ import { formatBadgeValue } from './format.js';
  */
 export function computeBadge(snapshot, settings) {
   const metric = settings.badgeMetric || 'todayCost';
-  const keyIds = Array.isArray(settings.badgeApiKeys) ? settings.badgeApiKeys : [];
+  // The wallet balance is account-wide, so a key selection cannot narrow it.
+  const keyIds =
+    metric === 'balance' ? [] : Array.isArray(settings.badgeApiKeys) ? settings.badgeApiKeys : [];
   const scoped = scopeUsage(snapshot, keyIds);
 
   if (!scoped) {

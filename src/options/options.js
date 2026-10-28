@@ -29,6 +29,8 @@ const previewBudget = el('badge-preview-budget');
 const sessionStatus = el('session-status');
 const saved = el('saved');
 const badgeKeys = el('badge-keys');
+const badgeKeyField = el('badge-key-field');
+const badgeKeysHint = el('badge-keys-hint');
 const keyBudgets = el('key-budgets');
 const keyBudgetsEmpty = el('key-budgets-empty');
 
@@ -40,9 +42,9 @@ init();
 async function init() {
   currentSettings = await getSettings();
   currentSnapshot = (await getSnapshot()).snapshot;
-  applySettings(currentSettings);
   renderBadgeKeys();
   renderKeyBudgets();
+  applySettings(currentSettings);
   updatePreview();
   await updateSessionStatus();
 
@@ -113,6 +115,7 @@ async function toggleBadgeKey(id) {
   const next = current.includes(id) ? current.filter((entry) => entry !== id) : [...current, id];
   currentSettings = await saveSettings({ badgeApiKeys: next });
   renderBadgeKeys();
+  applyMetricVisibility(currentSettings);
   updatePreview();
   flashSaved();
 }
@@ -126,6 +129,14 @@ function applySettings(settings) {
   fields.budgetWarnPercent.input.value = settings.budgetWarnPercent;
   fields.budgetNotifications.input.checked = settings.budgetNotifications;
   fields.showDecimals.input.checked = settings.showDecimals;
+  applyMetricVisibility(settings);
+}
+
+/** The wallet balance is account-wide: the key picker does not apply to it. */
+function applyMetricVisibility(settings) {
+  const isBalance = settings.badgeMetric === 'balance';
+  badgeKeyField.hidden = isBalance;
+  badgeKeysHint.hidden = isBalance || (settings.badgeApiKeys || []).length > 0;
 }
 
 function usageKeys() {
@@ -202,7 +213,11 @@ function updatePreview() {
   preview.style.background = badge.color;
   previewTitle.textContent = badge.title;
 
-  const budgets = evaluateBudgets(currentSnapshot?.usage, currentSettings, currentSettings?.badgeApiKeys || []);
+  const budgets = evaluateBudgets(
+    currentSnapshot?.usage,
+    currentSettings,
+    currentSettings?.badgeMetric === 'balance' ? [] : currentSettings?.badgeApiKeys || [],
+  );
   if (budgets.worst.status === 'off') {
     previewBudget.textContent = 'No budget set — the badge stays neutral.';
     previewBudget.style.color = '';
