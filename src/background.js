@@ -1,5 +1,5 @@
 import { computeBadge } from './lib/badge.js';
-import { budgetNoticeKey, evaluateBudget } from './lib/budget.js';
+import { budgetNoticeKey, evaluateBudgets } from './lib/budget.js';
 import { refreshUsage } from './lib/refresh.js';
 import { refreshFromPage } from './lib/scrape.js';
 import { getSettings, getSnapshot } from './lib/settings.js';
@@ -91,45 +91,65 @@ async function updateBadge() {
 }
 
 /**
- * Desktop notification when today's spend crosses the daily budget thresholds.
- * Fires once per day for the warn level and once for the over level.
+ * Desktop notification when today's spend crosses a budget threshold.
+ * Fires once per day and per budget scope (account, or one API key) for the
+ * warn level and once for the over level.
  */
 async function notifyBudget(snapshot, settings) {
   if (!settings.budgetNotifications) return;
-  const todayCost = snapshot?.usage?.todayCost;
-  const budget = evaluateBudget(todayCost, settings);
-  if (budget.status === 'off' || budget.status === 'ok') return;
+
+  const keyIds = Array.isArray(settings.badgeApiKeys) ? settings.badgeApiKeys : [];
+  const budgets = evaluateBudgets(snapshot?.usage, settings, keyIds);
+
+  const scopes = [];
+  if (budgets.account.status === 'warn' || budgets.account.status === 'over') {
+    scopes.push({ scope: 'account', budget: budgets.account, suffix: '' });
+  }
+  for (const budget of budgets.keys) {
+    if (budget.status === 'warn' || budget.status === 'over') {
+      scopes.push({ scope: `key:${budget.id}`, budget, suffix: ` for ${budget.name}` });
+    }
+  }
+  if (!scopes.length) return;
 
   const dayKey = snapshot?.todayKey || new Date().toISOString().slice(0, 10);
-  const key = budgetNoticeKey(budget.status, dayKey);
   const { notified = [] } = await chrome.storage.local.get('notified');
-  if (notified.includes(key)) return;
-
   const currency = snapshot?.usage?.currency || 'USD';
-  const money = (value) => `${currency} ${value.toFixed(2)}`;
-  const title = budget.status === 'over' ? 'Daily budget exceeded' : 'Daily budget almost used up';
-  const message =
-    budget.status === 'over'
-      ? `Spent ${money(budget.spent)} of ${money(budget.budget)} today (${Math.round(budget.percent)}%)`
-      : `Spent ${money(budget.spent)} of ${money(budget.budget)} today (${Math.round(budget.percent)}%), ${money(
-          budget.remaining,
-        )} left`;
+  const money = (value) => `${currency} ${Number(value).toFixed(2)}`;
+  const added = [];
 
-  try {
-    await chrome.notifications.create(key, {
-      type: 'basic',
-      iconUrl: chrome.runtime.getURL('icons/icon128.png'),
-      title,
-      message,
-      priority: budget.status === 'over' ? 2 : 1,
-    });
-  } catch (error) {
-    console.warn('[DeepSeek Usage] notification failed:', error.message);
+  for (const { scope, budget, suffix } of scopes) {
+    const key = budgetNoticeKey(scope, budget.status, dayKey);
+    if (notified.includes(key)) continue;
+    added.push(key);
+
+    const title =
+      budget.status === 'over' ? `Daily budget exceeded${suffix}` : `Daily budget almost used up${suffix}`;
+    const message =
+      budget.status === 'over'
+        ? `Spent ${money(budget.spent)} of ${money(budget.budget)} today (${Math.round(budget.percent)}%)`
+        : `Spent ${money(budget.spent)} of ${money(budget.budget)} today (${Math.round(
+            budget.percent,
+          )}%), ${money(budget.remaining)} left`;
+
+    try {
+      await chrome.notifications.create(key, {
+        type: 'basic',
+        iconUrl: chrome.runtime.getURL('icons/icon128.png'),
+        title,
+        message,
+        priority: budget.status === 'over' ? 2 : 1,
+      });
+    } catch (error) {
+      console.warn('[DeepSeek Usage] notification failed:', error.message);
+    }
   }
+
+  if (!added.length) return;
 
   // Keep only today's markers so the list does not grow forever.
   const kept = notified.filter((entry) => entry.startsWith(dayKey));
-  await chrome.storage.local.set({ notified: [...kept, key] });
+  await chrome.storage.local.set({ notified: [...kept, ...added] });
 }
 
 function withErrorKind(snapshot, lastError) {

@@ -43,16 +43,8 @@
       </article>
     </section>
 
-    <section id="budget" class="budget" hidden>
-      <div class="budget__head">
-        <span class="budget__label">Daily budget</span>
-        <span id="budget-percent" class="budget__percent">—</span>
-      </div>
-      <div class="budget__track">
-        <div id="budget-fill" class="budget__fill"></div>
-        <div id="budget-warnmark" class="budget__mark" title="Warn threshold"></div>
-      </div>
-      <span id="budget-detail" class="budget__detail"></span>
+    <section id="budgets" class="budgets" hidden>
+      <div id="budget-list" class="budget-list"></div>
     </section>
 
     <section class="section">
@@ -61,12 +53,16 @@
         <span id="chart-total" class="muted"></span>
       </div>
       <div id="chart" class="chart" role="img" aria-label="Daily spend for the last days"></div>
+      <div id="chart-legend" class="legend" hidden></div>
     </section>
 
     <section class="section">
       <div class="section__head">
         <h2>API keys</h2>
-        <select id="key-filter" class="select" aria-label="Filter by API key"></select>
+        <div class="section__tools">
+          <span id="key-selected" class="muted"></span>
+          <button id="key-clear" class="link-button" hidden>All keys</button>
+        </div>
       </div>
       <ul id="key-list" class="key-list"></ul>
       <p id="key-empty" class="muted empty" hidden>No per-key usage in this period.</p>

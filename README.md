@@ -13,7 +13,8 @@ already present in your browser for `platform.deepseek.com`.
 |---|---|
 | **Popup** | Wallet balance (paid / bonus split), spend today + tokens, a 30-day spend chart, per-key list and a daily-budget bar. |
 | **Badge** | Shows one of: spend today, spend in the period, wallet balance, tokens today. Can be scoped to a single API key. |
-| **Daily budget** | Green / orange / red badge by budget usage, plus a desktop notification when the budget is nearly used up or exceeded. |
+| **Daily budgets** | Account-wide and/or per-API-key budgets, green / orange / red badge, desktop notification on the warn and over thresholds. |
+| **Multi-key chart** | Plot the spend of several API keys at once as a stacked per-day chart with a legend. |
 | **Settings** | Metric, key scope, number format, auto-refresh interval, aggregation window, low-balance warning, daily budget, decimals. |
 | **Shortcut** | `Open usage page` button opens `https://platform.deepseek.com/usage`. |
 
@@ -121,18 +122,19 @@ Quirks that are handled in `src/lib/api.js` / `src/lib/http.js`:
 Click **Settings** in the popup (or *Options* on `chrome://extensions`).
 
 * **Show on the icon** — spend today / spend in period / balance / tokens today.
-* **Measure for** — all keys, or a single API key.
+* **Measure for** — all keys, or any combination of API keys (their spend is summed).
 * **Auto refresh** — background alarm interval in minutes (`0` disables it).
 * **Aggregation window** — how many days the per-key and chart spend covers.
 * **Low balance warning** — the badge goes red below this balance.
-* **Daily budget** — today's spend budget (`0` = off). When set, the badge and
-  the popup bar are **green** below the warn ratio, **orange** at/above it and
-  **red** once the budget is reached.
+* **Daily budget** — today's spend budget for the selected scope (`0` = off).
+  When set, the badge and the popup bar are **green** below the warn ratio,
+  **orange** at/above it and **red** once the budget is reached.
+* **Per-key daily budgets** — one independent budget per API key.
 * **Warn at (% of budget)** — the orange threshold, `90` by default.
-* **Notify** — one desktop notification per day when the budget is nearly used
-  up, and one when it is exceeded.
+* **Notify** — one desktop notification per day and per budget when it is nearly
+  used up, and one when it is exceeded.
 
-### Daily budget
+### Daily budgets
 
 With a budget of `$1` and the default 90 % warn ratio:
 
@@ -142,15 +144,30 @@ With a budget of `$1` and the default 90 % warn ratio:
 | `$0.93` | orange | orange bar, `93%`, warn marker |
 | `$1.15` | red | red bar, `Over by $0.15` |
 
-When the `Measure for` setting points at a single API key, the budget applies to
-**that key's** spend for today.
+Two scopes are supported and they are independent:
+
+* **Account budget** (`dailyBudget`) — measured on whatever is selected in
+  **Measure for**: the whole account by default, or the sum of the selected keys.
+* **Per-key budgets** (`keyBudgets`) — each key is checked on its own spend.
+
+The badge is coloured by whichever active budget is closest to its limit, and
+notifications are emitted per budget, so one overloaded key does not hide the
+account state.
+
+### Multi-key chart
+
+The popup chart plots **all** keys as a single series by default. Click any key
+in the **API keys** list to add it to the chart — the bars become stacked
+segments with a colour per key and a legend underneath. Click **All keys** in
+the section header to go back to the total. A budget bar is shown for the
+account and for every selected key that has a budget.
 
 ## Project layout
 
 * `src/lib/format.js` — formatting + envelope unwrapping helpers.
 * `src/lib/api.js` — DeepSeek client and payload normalisation.
 * `src/lib/badge.js` — decides the badge text/colour/tooltip.
-* `src/lib/budget.js` — daily-budget thresholds and notification keys.
+* `src/lib/budget.js` — account and per-key budget evaluation, notification keys.
 * `src/lib/waf.js` — WAF cookie state (read-only, never opens tabs).
 * `src/background.js` — alarms, badge painting, refresh orchestration.
 

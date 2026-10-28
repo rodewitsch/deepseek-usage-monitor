@@ -3,6 +3,18 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/), versioned with [SemVer](https://semver.org/).
 
+## 1.1.0 (2026-10-28)
+
+### Added
+
+- Multi-key spend chart: select any combination of API keys in the popup and the daily chart becomes stacked segments with a colour per key and a legend.
+- Per-key daily budgets, independent of the account budget. The popup shows one bar per active budget and notifications fire for each budget separately.
+
+### Changed
+
+- `Measure for` in the badge settings is now a multi-select; the selected keys' spend is summed. Settings left over from 1.0.0 (`badgeApiKey`, `focusApiKey`) are migrated automatically.
+- The account budget is evaluated against the current selection (whole account when nothing is selected).
+
 ## 1.0.0 (2026-10-28)
 
 ### Added

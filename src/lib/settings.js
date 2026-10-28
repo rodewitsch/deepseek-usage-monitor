@@ -22,10 +22,38 @@ export function normaliseSettings(raw) {
   settings.dailyBudget = clampNumber(settings.dailyBudget, 0, 1e9, DEFAULT_SETTINGS.dailyBudget);
   settings.showDecimals = settings.showDecimals !== false;
   settings.budgetNotifications = settings.budgetNotifications !== false;
-  settings.badgeApiKey = emptyToNull(settings.badgeApiKey);
-  settings.focusApiKey = emptyToNull(settings.focusApiKey);
+  settings.badgeApiKeys = normaliseKeyList(settings.badgeApiKeys);
+  settings.selectedApiKeys = normaliseKeyList(settings.selectedApiKeys);
+  settings.keyBudgets = normaliseKeyBudgets(settings.keyBudgets);
+
+  // Migrate the single-key settings used before 1.1.
+  if (settings.badgeApiKey && !settings.badgeApiKeys.length) {
+    settings.badgeApiKeys = [String(settings.badgeApiKey)];
+  }
+  if (settings.focusApiKey && !settings.selectedApiKeys.length) {
+    settings.selectedApiKeys = [String(settings.focusApiKey)];
+  }
+  delete settings.badgeApiKey;
+  delete settings.focusApiKey;
 
   return settings;
+}
+
+/** De-duplicated, trimmed list of API key ids. */
+function normaliseKeyList(value) {
+  if (!Array.isArray(value)) return [];
+  return [...new Set(value.map((id) => String(id || '').trim()).filter(Boolean))];
+}
+
+/** `{ keyId: positiveBudget }`, dropping empty/zero entries. */
+function normaliseKeyBudgets(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
+  const out = {};
+  for (const [id, budget] of Object.entries(value)) {
+    const amount = clampNumber(budget, 0, 1e9, 0);
+    if (id && amount > 0) out[String(id)] = amount;
+  }
+  return out;
 }
 
 export async function saveSettings(patch) {
@@ -79,10 +107,4 @@ function clampNumber(value, min, max, fallback) {
   const parsed = Number(value);
   if (!Number.isFinite(parsed)) return fallback;
   return Math.min(max, Math.max(min, parsed));
-}
-
-function emptyToNull(value) {
-  if (value === null || value === undefined) return null;
-  const trimmed = String(value).trim();
-  return trimmed === '' || trimmed === 'all' ? null : trimmed;
 }

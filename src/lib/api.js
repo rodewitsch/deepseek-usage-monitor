@@ -109,6 +109,8 @@ export async function fetchUsageByKey(token, { windowDays = 30, now = new Date()
         todayTokens: 0,
         windowTokens: 0,
         lastUsedDay: null,
+        /** { 'YYYY-MM-DD': cost } — used to plot selected keys. */
+        dailyCost: {},
       });
     }
     return keys.get(id);
@@ -157,6 +159,7 @@ export async function fetchUsageByKey(token, { windowDays = 30, now = new Date()
         dayEntry.costs[currency] = (dayEntry.costs[currency] || 0) + amount;
         daily.set(day, dayEntry);
         key.windowCost += amount;
+        key.dailyCost[day] = (key.dailyCost[day] || 0) + amount;
         key.lastUsedDay = maxDay(key.lastUsedDay, day);
       }
     }
@@ -195,6 +198,7 @@ export async function fetchUsageByKey(token, { windowDays = 30, now = new Date()
       for (const bucket of Array.isArray(series.buckets) ? series.buckets : []) {
         const amount = toNumber(bucket.cost);
         key.todayCost += amount;
+        key.dailyCost[todayKey] = amount;
         todayCost += amount;
       }
     }

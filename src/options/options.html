@@ -29,11 +29,10 @@
             </select>
           </label>
 
-          <label class="field">
+          <label class="field field--wide">
             <span class="field__label">Measure for</span>
-            <select id="badge-key">
-              <option value="">All API keys</option>
-            </select>
+            <span id="badge-keys" class="chips"></span>
+            <span class="field__hint">Nothing selected = the whole account. Selected keys are summed.</span>
           </label>
 
           <label class="field">
@@ -78,13 +77,25 @@
           </label>
           <label class="field field--checkbox">
             <input id="budget-notifications" type="checkbox" />
-            <span>Notify when the budget is nearly used up / exceeded</span>
+            <span>Notify when a budget is nearly used up / exceeded</span>
           </label>
           <label class="field field--checkbox">
             <input id="show-decimals" type="checkbox" />
             <span>Show decimals in the popup</span>
           </label>
         </div>
+      </section>
+
+      <section class="panel">
+        <h2>Per-key daily budgets</h2>
+        <p class="muted">
+          A key budget is checked independently of the account budget: the badge uses the colour of whichever
+          budget is closest to its limit. Leave a field empty to disable the budget for that key.
+        </p>
+        <div id="key-budgets" class="key-budgets"></div>
+        <p id="key-budgets-empty" class="muted" hidden>
+          No API keys yet — open the popup once so the usage data is loaded.
+        </p>
       </section>
 
       <section class="panel">

@@ -1,5 +1,5 @@
-import { USAGE_PAGE_URL } from '../lib/constants.js';
-import { evaluateBudget } from '../lib/budget.js';
+import { SERIES_COLORS, USAGE_PAGE_URL } from '../lib/constants.js';
+import { evaluateBudgets } from '../lib/budget.js';
 import { currencySymbol, formatMoney, formatRelativeTime, formatTokens, localDayKey } from '../lib/format.js';
 import { scrapeFromPage } from '../lib/scrape.js';
 import { getSettings, getSnapshot, saveSettings, saveSnapshot } from '../lib/settings.js';
@@ -18,12 +18,11 @@ const ui = {
   todayTokens: el('today-tokens'),
   chart: el('chart'),
   chartTotal: el('chart-total'),
-  budget: el('budget'),
-  budgetPercent: el('budget-percent'),
-  budgetFill: el('budget-fill'),
-  budgetWarnMark: el('budget-warnmark'),
-  budgetDetail: el('budget-detail'),
-  keyFilter: el('key-filter'),
+  chartLegend: el('chart-legend'),
+  budgets: el('budgets'),
+  budgetList: el('budget-list'),
+  keySelected: el('key-selected'),
+  keyClear: el('key-clear'),
   keyList: el('key-list'),
   keyEmpty: el('key-empty'),
   openUsage: el('open-usage'),
@@ -39,15 +38,14 @@ async function init() {
   ui.refresh.addEventListener('click', () => refresh(true));
   ui.openOptions.addEventListener('click', () => chrome.runtime.openOptionsPage());
   ui.errorFix.addEventListener('click', () => chrome.runtime.openOptionsPage());
-  ui.keyFilter.addEventListener('change', async () => {
-    await saveSettings({ focusApiKey: ui.keyFilter.value || null });
-    await render();
-  });
+
   ui.keyList.addEventListener('click', async (event) => {
     const item = event.target.closest('[data-key-id]');
     if (!item) return;
-    const id = item.dataset.keyId;
-    await saveSettings({ focusApiKey: settings.focusApiKey === id ? null : id });
+    await toggleKey(item.dataset.keyId);
+  });
+  ui.keyClear.addEventListener('click', async () => {
+    await saveSettings({ selectedApiKeys: [] });
     await render();
   });
 
@@ -61,6 +59,14 @@ async function init() {
   const isStale = !snapshot?.updatedAt || Date.now() - snapshot.updatedAt > 5 * 60000;
   if (isStale) refresh(false);
   else if (lastError) ui.refresh.classList.remove('is-busy');
+}
+
+/** Adds/removes one API key from the selection shared by chart and budget. */
+async function toggleKey(id) {
+  const current = settings?.selectedApiKeys || [];
+  const next = current.includes(id) ? current.filter((entry) => entry !== id) : [...current, id];
+  await saveSettings({ selectedApiKeys: next });
+  await render();
 }
 
 async function refresh(interactive) {
@@ -114,39 +120,20 @@ async function applyScrapedSnapshot(page) {
 async function render() {
   settings = await getSettings();
   const { snapshot, lastError } = await getSnapshot();
+  const selected = selectedKeys(snapshot?.usage, settings);
 
   renderStatus(snapshot, lastError);
-  renderSummary(snapshot);
-  renderBudget(snapshot, settings);
-  renderChart(snapshot, settings);
-  renderKeys(snapshot, settings);
+  renderSummary(snapshot, selected);
+  renderBudgets(snapshot, settings, selected.map((key) => key.id));
+  renderChart(snapshot, settings, selected);
+  renderKeys(snapshot, settings, selected);
 }
 
-/** Spend-today progress against the optional daily budget. */
-function renderBudget(snapshot, currentSettings) {
-  const usage = snapshot?.usage;
-  const budget = evaluateBudget(usage?.todayCost, currentSettings);
-
-  if (budget.status === 'off' || !usage) {
-    ui.budget.hidden = true;
-    return;
-  }
-
-  const currency = usage.currency || 'USD';
-  const shown = Math.min(100, Math.max(0, budget.percent));
-  ui.budget.hidden = false;
-  ui.budgetPercent.textContent = `${Math.round(budget.percent)}%`;
-  ui.budgetPercent.style.color = budget.color;
-  ui.budgetFill.style.width = `${shown}%`;
-  ui.budgetFill.style.background = budget.color;
-  ui.budgetWarnMark.style.left = `${Math.min(99, Number(currentSettings.budgetWarnPercent) || 90)}%`;
-
-  // Budget figures stay at 2 decimals: "$0.0700 left" reads badly.
-  const money = (value) => `${currencySymbol(currency)}${Math.abs(Number(value) || 0).toFixed(2)}`;
-  const state =
-    budget.status === 'over'
-      ? `Over by ${money(budget.remaining)}`
-      : `${money(budget.remaining)} left of ${money(budget.budget)}`;  ui.budgetDetail.textContent = `${money(budget.spent)} · ${state}`;
+/** Selected API keys that still exist in the payload. */
+function selectedKeys(usage, currentSettings) {
+  const ids = currentSettings?.selectedApiKeys || [];
+  if (!usage?.keys?.length) return [];
+  return ids.map((id) => usage.keys.find((key) => key.id === id || key.name === id)).filter(Boolean);
 }
 
 function renderStatus(snapshot, lastError) {
@@ -166,7 +153,7 @@ function renderStatus(snapshot, lastError) {
   ui.updated.textContent = `Updated ${formatRelativeTime(snapshot.updatedAt)}${stale ? ' · yesterday' : ''}`;
 }
 
-function renderSummary(snapshot) {
+function renderSummary(snapshot, selected) {
   const usage = snapshot?.usage;
   const balance = snapshot?.balance;
 
@@ -178,14 +165,13 @@ function renderSummary(snapshot) {
     return;
   }
 
-  const key = settings.focusApiKey
-    ? usage.keys.find((item) => item.id === settings.focusApiKey || item.name === settings.focusApiKey)
-    : null;
+  const sum = (field) => selected.reduce((total, key) => total + (Number(key[field]) || 0), 0);
+  const todayCost = selected.length ? sum('todayCost') : usage.todayCost;
+  const todayTokens = selected.length ? sum('todayTokens') : usage.todayTokens;
 
-  const todayCost = key ? key.todayCost : usage.todayCost;
-  const todayTokens = key ? key.todayTokens : usage.todayTokens;
-
-  ui.balance.textContent = balance ? formatMoney(balance.total, balance.currency, { decimals: settings.showDecimals }) : '—';
+  ui.balance.textContent = balance
+    ? formatMoney(balance.total, balance.currency, { decimals: settings.showDecimals })
+    : '—';
   ui.balanceDetail.textContent = balance
     ? `paid ${formatMoney(balance.toppedUp, balance.currency, { decimals: settings.showDecimals })} · bonus ${formatMoney(
         balance.granted,
@@ -195,13 +181,90 @@ function renderSummary(snapshot) {
     : 'Balance unavailable';
 
   ui.todayCost.textContent = formatMoney(todayCost, usage.currency, { decimals: settings.showDecimals });
-  ui.todayTokens.textContent = `${formatTokens(todayTokens)} tokens${key ? ` · ${key.name}` : ''}`;
+  const scope =
+    selected.length === 1
+      ? selected[0].name
+      : selected.length > 1
+        ? `${selected.length} keys`
+        : '';
+  ui.todayTokens.textContent = `${formatTokens(todayTokens)} tokens${scope ? ` · ${scope}` : ''}`;
 }
 
-function renderChart(snapshot, currentSettings) {
-  const daily = snapshot?.usage?.daily || [];
+/** One progress bar per active budget: the account plus each selected key. */
+function renderBudgets(snapshot, currentSettings, selectedIds) {
+  const usage = snapshot?.usage;
+  const budgets = evaluateBudgets(usage, currentSettings, selectedIds);
+  const rows = [];
+
+  if (budgets.account.status !== 'off') {
+    const scope = selectedIds.length === 1 ? `for ${budgets.keys[0]?.name || 'selection'}` : 'account';
+    rows.push({ label: `Daily budget · ${scope}`, budget: budgets.account });
+  }
+  for (const budget of budgets.keys) rows.push({ label: budget.name, budget });
+
+  ui.budgetList.replaceChildren();
+  ui.budgets.hidden = rows.length === 0;
+  if (!rows.length) return;
+
+  const currency = usage?.currency || 'USD';
+  const money = (value) => `${currencySymbol(currency)}${Math.abs(Number(value) || 0).toFixed(2)}`;
+  const warnMark = Math.min(99, Number(currentSettings.budgetWarnPercent) || 90);
+
+  for (const row of rows) {
+    const { budget } = row;
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'budget';
+
+    const head = document.createElement('div');
+    head.className = 'budget__head';
+    const label = document.createElement('span');
+    label.className = 'budget__label';
+    label.textContent = row.label;
+    const percent = document.createElement('span');
+    percent.className = 'budget__percent';
+    percent.style.color = budget.color;
+    percent.textContent = `${Math.round(budget.percent)}%`;
+    head.append(label, percent);
+
+    const track = document.createElement('div');
+    track.className = 'budget__track';
+    const fill = document.createElement('div');
+    fill.className = 'budget__fill';
+    fill.style.width = `${Math.min(100, Math.max(0, budget.percent))}%`;
+    fill.style.background = budget.color;
+    const mark = document.createElement('div');
+    mark.className = 'budget__mark';
+    mark.title = `Warn threshold ${warnMark}%`;
+    mark.style.left = `${warnMark}%`;
+    track.append(fill, mark);
+
+    const detail = document.createElement('span');
+    detail.className = 'budget__detail';
+    const state =
+      budget.status === 'over'
+        ? `over by ${money(budget.remaining)}`
+        : `${money(budget.remaining)} left of ${money(budget.budget)}`;
+    detail.textContent = `${money(budget.spent)} spent · ${state}`;
+
+    wrapper.append(head, track, detail);
+    ui.budgetList.append(wrapper);
+  }
+}
+
+/**
+ * Stacked per-day chart. With nothing selected the account total is drawn as a
+ * single series; with N selected keys the bars are split into N coloured
+ * segments, so each key's contribution stays visible.
+ */
+function renderChart(snapshot, currentSettings, selected) {
+  const usage = snapshot?.usage;
+  const daily = usage?.daily || [];
   ui.chart.replaceChildren();
   ui.chartTotal.textContent = '';
+  ui.chartLegend.replaceChildren();
+  ui.chartLegend.hidden = true;
+
   if (!daily.length) {
     const empty = document.createElement('span');
     empty.className = 'chart-empty';
@@ -210,41 +273,82 @@ function renderChart(snapshot, currentSettings) {
     return;
   }
 
+  const series = selected.length
+    ? selected.map((key, index) => ({
+        id: key.id,
+        name: key.name,
+        color: SERIES_COLORS[index % SERIES_COLORS.length],
+        values: daily.map((day) => Number(key.dailyCost?.[day.date]) || 0),
+      }))
+    : [{ id: 'account', name: 'All keys', color: null, values: daily.map((day) => Number(day.cost) || 0) }];
+
   const days = daily.slice(-currentSettings.windowDays);
-  const max = Math.max(...days.map((day) => day.cost), 0.0001);
+  const offset = daily.length - days.length;
+  const totals = days.map((day, index) =>
+    series.reduce((sum, entry) => sum + (entry.values[offset + index] || 0), 0),
+  );
+  const max = Math.max(...totals, 0.0001);
   const today = localDayKey();
+  const currency = usage.currency || 'USD';
 
-  for (const day of days) {
-    const bar = document.createElement('div');
-    const ratio = day.cost / max;
-    bar.className = `bar${day.cost === 0 ? ' bar--empty' : ''}${day.date === today ? ' bar--today' : ''}`;
-    bar.style.height = `${Math.max(2, Math.round(ratio * 100))}%`;
-    bar.title = `${day.date}: ${formatMoney(day.cost, snapshot.usage.currency)} · ${formatTokens(day.tokens)} tokens`;
-    ui.chart.append(bar);
+  days.forEach((day, index) => {
+    const column = document.createElement('div');
+    column.className = `chart__column${day.date === today ? ' chart__column--today' : ''}`;
+
+    const stack = document.createElement('div');
+    stack.className = 'chart__stack';
+    stack.style.height = `${Math.max(2, Math.round((totals[index] / max) * 100))}%`;
+
+    for (const entry of series) {
+      const value = entry.values[offset + index] || 0;
+      if (totals[index] > 0 && value <= 0) continue;
+      const segment = document.createElement('div');
+      segment.className = 'chart__segment';
+      segment.style.flexGrow = String(totals[index] > 0 ? value : 1);
+      if (entry.color) segment.style.background = entry.color;
+      stack.append(segment);
+    }
+
+    const lines = [`${day.date}: ${formatMoney(totals[index], currency)}`];
+    if (series.length > 1) {
+      for (const entry of series) {
+        const value = entry.values[offset + index] || 0;
+        if (value > 0) lines.push(`${entry.name}: ${formatMoney(value, currency)}`);
+      }
+    } else {
+      lines.push(`${formatTokens(day.tokens)} tokens`);
+    }
+    column.title = lines.join('\n');
+    column.append(stack);
+    ui.chart.append(column);
+  });
+
+  const total = totals.reduce((sum, value) => sum + value, 0);
+  ui.chartTotal.textContent = `${formatMoney(total, currency)} in ${days.length}d`;
+
+  if (series.length > 1) {
+    ui.chartLegend.hidden = false;
+    for (const entry of series) {
+      const item = document.createElement('span');
+      item.className = 'legend__item';
+      const dot = document.createElement('span');
+      dot.className = 'legend__dot';
+      dot.style.background = entry.color;
+      const name = document.createElement('span');
+      name.textContent = entry.name;
+      item.append(dot, name);
+      ui.chartLegend.append(item);
+    }
   }
-
-  const total = days.reduce((sum, day) => sum + day.cost, 0);
-  ui.chartTotal.textContent = `${formatMoney(total, snapshot.usage.currency)} in ${days.length}d`;
 }
 
-function renderKeys(snapshot, currentSettings) {
+function renderKeys(snapshot, currentSettings, selected) {
   const usage = snapshot?.usage;
   const keys = usage?.keys || [];
+  const selectedIds = new Set(selected.map((key) => key.id));
 
-  ui.keyFilter.replaceChildren();
-  const allOption = document.createElement('option');
-  allOption.value = '';
-  allOption.textContent = 'All keys';
-  ui.keyFilter.append(allOption);
-  for (const key of keys) {
-    const option = document.createElement('option');
-    option.value = key.id;
-    option.textContent = key.name;
-    ui.keyFilter.append(option);
-  }
-  const currentFocus =
-    keys.find((key) => key.id === currentSettings.focusApiKey || key.name === currentSettings.focusApiKey)?.id || '';
-  ui.keyFilter.value = currentFocus;
+  ui.keySelected.textContent = selectedIds.size ? `${selectedIds.size} selected` : '';
+  ui.keyClear.hidden = selectedIds.size === 0;
 
   ui.keyList.replaceChildren();
   if (!keys.length) {
@@ -253,10 +357,19 @@ function renderKeys(snapshot, currentSettings) {
   }
   ui.keyEmpty.hidden = true;
 
-  for (const key of keys) {
+  keys.forEach((key, index) => {
+    const isSelected = selectedIds.has(key.id);
     const item = document.createElement('li');
-    item.className = `key-item${currentFocus === key.id ? ' is-selected' : ''}`;
+    item.className = `key-item${isSelected ? ' is-selected' : ''}`;
     item.dataset.keyId = key.id;
+    item.title = isSelected ? 'Click to remove from the chart' : 'Click to plot this key';
+
+    const marker = document.createElement('span');
+    marker.className = 'key-item__marker';
+    if (isSelected) {
+      const index2 = selected.findIndex((entry) => entry.id === key.id);
+      marker.style.background = SERIES_COLORS[index2 % SERIES_COLORS.length];
+    }
 
     const name = document.createElement('span');
     name.className = 'key-item__name';
@@ -264,13 +377,16 @@ function renderKeys(snapshot, currentSettings) {
 
     const meta = document.createElement('span');
     meta.className = 'key-item__meta';
-    meta.textContent = `today ${formatMoney(key.todayCost, usage.currency)}`;
+    const budget = Number(currentSettings.keyBudgets?.[key.id]) || 0;
+    meta.textContent = `today ${formatMoney(key.todayCost, usage.currency)}${
+      budget > 0 ? ` / ${formatMoney(budget, usage.currency)}` : ''
+    }`;
 
     const cost = document.createElement('span');
     cost.className = 'key-item__cost';
     cost.textContent = formatMoney(key.windowCost, usage.currency);
 
-    item.append(name, meta, cost);
+    item.append(marker, name, meta, cost);
     ui.keyList.append(item);
-  }
+  });
 }

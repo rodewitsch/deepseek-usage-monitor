@@ -1,6 +1,7 @@
 import { computeBadge } from '../lib/badge.js';
-import { evaluateBudget } from '../lib/budget.js';
+import { evaluateBudgets } from '../lib/budget.js';
 import { PLATFORM_ORIGIN } from '../lib/constants.js';
+import { formatMoney } from '../lib/format.js';
 import { getSettings, getSnapshot, getTokenInfo, saveSettings } from '../lib/settings.js';
 import { discoverPlatformToken } from '../lib/token.js';
 
@@ -13,7 +14,6 @@ const el = (id) => document.getElementById(id);
  */
 const fields = {
   badgeMetric: { input: el('badge-metric'), setting: 'badgeMetric' },
-  badgeKey: { input: el('badge-key'), setting: 'badgeApiKey' },
   badgeFormat: { input: el('badge-format'), setting: 'badgeFormat' },
   refreshMinutes: { input: el('refresh-minutes'), setting: 'refreshMinutes' },
   windowDays: { input: el('window-days'), setting: 'windowDays' },
@@ -29,6 +29,9 @@ const previewTitle = el('badge-preview-title');
 const previewBudget = el('badge-preview-budget');
 const sessionStatus = el('session-status');
 const saved = el('saved');
+const badgeKeys = el('badge-keys');
+const keyBudgets = el('key-budgets');
+const keyBudgetsEmpty = el('key-budgets-empty');
 
 let currentSettings = null;
 let currentSnapshot = null;
@@ -38,8 +41,9 @@ init();
 async function init() {
   currentSettings = await getSettings();
   currentSnapshot = (await getSnapshot()).snapshot;
-  fillKeyOptions(currentSnapshot);
   applySettings(currentSettings);
+  renderBadgeKeys();
+  renderKeyBudgets();
   updatePreview();
   await updateSessionStatus();
 
@@ -48,13 +52,35 @@ async function init() {
     if (input.type === 'number') input.addEventListener('input', onFieldChange(setting, input));
   }
 
+  badgeKeys.addEventListener('click', async (event) => {
+    const chip = event.target.closest('[data-key-id]');
+    if (!chip) return;
+    await toggleBadgeKey(chip.dataset.keyId);
+  });
+
+  // `change` on the list (not per input) keeps a single listener across re-renders.
+  keyBudgets.addEventListener('change', async (event) => {
+    const input = event.target.closest('[data-budget-key]');
+    if (!input) return;
+    const id = input.dataset.budgetKey;
+    const value = input.value === '' ? 0 : Number(input.value);
+    const next = { ...(currentSettings.keyBudgets || {}) };
+    if (value > 0) next[id] = value;
+    else delete next[id];
+    currentSettings = await saveSettings({ keyBudgets: next });
+    renderKeyBudgets();
+    updatePreview();
+    flashSaved();
+  });
+
   el('re-detect').addEventListener('click', async () => {
     sessionStatus.textContent = 'Detecting…';
     await discoverPlatformToken({ force: true });
     await updateSessionStatus();
     await chrome.runtime.sendMessage({ type: 'dsum:refresh', forceToken: true }).catch(() => {});
     currentSnapshot = (await getSnapshot()).snapshot;
-    fillKeyOptions(currentSnapshot);
+    renderKeyBudgets();
+    updatePreview();
   });
 
   el('open-platform').addEventListener('click', () => {
@@ -64,7 +90,7 @@ async function init() {
   chrome.storage.onChanged.addListener((changes, area) => {
     if (area !== 'local' || !changes.usageSnapshot) return;
     currentSnapshot = changes.usageSnapshot.newValue || null;
-    fillKeyOptions(currentSnapshot);
+    renderKeyBudgets();
     updatePreview();
   });
 }
@@ -83,6 +109,15 @@ function onFieldChange(setting, input) {
   };
 }
 
+async function toggleBadgeKey(id) {
+  const current = currentSettings.badgeApiKeys || [];
+  const next = current.includes(id) ? current.filter((entry) => entry !== id) : [...current, id];
+  currentSettings = await saveSettings({ badgeApiKeys: next });
+  renderBadgeKeys();
+  updatePreview();
+  flashSaved();
+}
+
 function applySettings(settings) {
   fields.badgeMetric.input.value = settings.badgeMetric;
   fields.badgeFormat.input.value = settings.badgeFormat;
@@ -93,32 +128,69 @@ function applySettings(settings) {
   fields.budgetWarnPercent.input.value = settings.budgetWarnPercent;
   fields.budgetNotifications.input.checked = settings.budgetNotifications;
   fields.showDecimals.input.checked = settings.showDecimals;
-
-  const target = settings.badgeApiKey || '';
-  const select = fields.badgeKey.input;
-  const hasOption = [...select.options].some((option) => option.value === target);
-  select.value = hasOption ? target : '';
 }
 
-function fillKeyOptions(snapshot) {
-  const keys = snapshot?.usage?.keys || [];
-  const select = fields.badgeKey.input;
-  const previous = select.value;
-  select.replaceChildren();
-  const all = document.createElement('option');
-  all.value = '';
-  all.textContent = 'All API keys';
-  select.append(all);
+function usageKeys() {
+  return currentSnapshot?.usage?.keys || [];
+}
 
-  for (const key of keys) {
-    const option = document.createElement('option');
-    option.value = key.id;
-    option.textContent = key.name;
-    select.append(option);
+function renderBadgeKeys() {
+  const keys = usageKeys();
+  const selected = new Set(currentSettings?.badgeApiKeys || []);
+  badgeKeys.replaceChildren();
+
+  if (!keys.length) {
+    const hint = document.createElement('span');
+    hint.className = 'muted';
+    hint.textContent = 'No API keys yet — open the popup once.';
+    badgeKeys.append(hint);
+    return;
   }
 
-  const preferred = currentSettings?.badgeApiKey || previous;
-  select.value = keys.some((key) => key.id === preferred) ? preferred : '';
+  for (const key of keys) {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = `chip${selected.has(key.id) ? ' is-on' : ''}`;
+    chip.dataset.keyId = key.id;
+    chip.textContent = key.name;
+    chip.title = selected.has(key.id) ? 'Remove from the badge' : 'Measure the badge for this key';
+    badgeKeys.append(chip);
+  }
+}
+
+function renderKeyBudgets() {
+  const keys = usageKeys();
+  const currency = currentSnapshot?.usage?.currency || 'USD';
+  const decimals = currentSettings?.showDecimals !== false;
+  const amounts = currentSettings?.keyBudgets || {};
+
+  keyBudgets.replaceChildren();
+  keyBudgetsEmpty.hidden = keys.length > 0;
+
+  for (const key of keys) {
+    const row = document.createElement('div');
+    row.className = 'key-budget';
+
+    const name = document.createElement('span');
+    name.className = 'key-budget__name';
+    name.textContent = key.name;
+
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.min = '0';
+    input.step = '0.01';
+    input.placeholder = 'off';
+    input.value = amounts[key.id] ? String(amounts[key.id]) : '';
+    input.dataset.budgetKey = key.id;
+    input.setAttribute('aria-label', `Daily budget for ${key.name}`);
+
+    const meta = document.createElement('span');
+    meta.className = 'key-budget__meta';
+    meta.textContent = `today ${formatMoney(key.todayCost, currency, { decimals })}`;
+
+    row.append(name, input, meta);
+    keyBudgets.append(row);
+  }
 }
 
 function updatePreview() {
@@ -132,14 +204,14 @@ function updatePreview() {
   preview.style.background = badge.color;
   previewTitle.textContent = badge.title;
 
-  const budget = evaluateBudget(currentSnapshot?.usage?.todayCost, currentSettings);
-  if (budget.status === 'off') {
-    previewBudget.textContent = 'No daily budget set — the badge stays grey/green-neutral.';
+  const budgets = evaluateBudgets(currentSnapshot?.usage, currentSettings, currentSettings?.badgeApiKeys || []);
+  if (budgets.worst.status === 'off') {
+    previewBudget.textContent = 'No budget set — the badge stays neutral.';
     previewBudget.style.color = '';
-  } else {
-    previewBudget.textContent = `Today ${Math.round(budget.percent)}% of budget (${budget.status})`;
-    previewBudget.style.color = budget.color;
+    return;
   }
+  previewBudget.textContent = `${Math.round(budgets.worst.percent)}% of the closest budget (${budgets.worst.status})`;
+  previewBudget.style.color = budgets.worst.color;
 }
 
 async function updateSessionStatus() {

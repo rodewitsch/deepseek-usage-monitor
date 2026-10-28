@@ -34,25 +34,39 @@ export const DEFAULT_SETTINGS = {
   badgeMetric: 'todayCost',
   /** auto | money | tokens */
   badgeFormat: 'auto',
-  /** null = all keys, otherwise an API key tracking id (or name). */
-  badgeApiKey: null,
-  /** Which API key the popup focuses on: null = all keys. */
-  focusApiKey: null,
+  /** API key ids the toolbar badge is measured for (empty = whole account). */
+  badgeApiKeys: [],
+  /** API key ids selected in the popup chart/budget (empty = whole account). */
+  selectedApiKeys: [],
   /** Refresh interval in minutes (0 disables the background alarm). */
   refreshMinutes: 15,
   /** Show cents/tokens decimals on the popup cards. */
   showDecimals: true,
   /** Colour the badge red when the balance is below this value. */
   lowBalanceThreshold: 1,
-  /** Daily spend budget. 0 disables budget colouring and alerts. */
+  /** Daily spend budget for the whole account. 0 disables it. */
   dailyBudget: 0,
+  /** Per-key daily budgets: `{ [apiKeyId]: budget }`. */
+  keyBudgets: {},
   /** Ratio of the budget at which the badge turns orange (percent). */
   budgetWarnPercent: 90,
-  /** Desktop notification when the budget is used up. */
+  /** Desktop notification when a budget is nearly used up or exceeded. */
   budgetNotifications: true,
   /** Rolling window used to aggregate spend, in days. */
   windowDays: 30,
 };
+
+/** Distinct colours for plotting several API keys on one chart. */
+export const SERIES_COLORS = [
+  '#4d6bfe',
+  '#d97706',
+  '#067647',
+  '#9333ea',
+  '#0891b2',
+  '#be123c',
+  '#65a30d',
+  '#475569',
+];
 
 /** Badge colours shared by the toolbar badge and the popup progress bar. */
 export const BUDGET_COLORS = {
