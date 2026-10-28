@@ -2,6 +2,8 @@ import { ApiError } from './format.js';
 import { withWafRetry } from './waf.js';
 
 const REQUEST_TIMEOUT = 20000;
+/** How long a WAF-blocked request waits for a token renewal before giving up. */
+const WAF_RETRY_DELAY = 1500;
 
 /**
  * Requests the DeepSeek console API.
@@ -62,9 +64,18 @@ export async function requestJson(url, token, { platform = true } = {}) {
 }
 
 /**
- * Same as {@link requestJson}, but transparently refreshes the AWS WAF
- * challenge cookies and retries once when the request is intercepted.
+ * Same as {@link requestJson}, but retries once after a short pause when the
+ * request is intercepted by the AWS WAF challenge — a token renewal that is
+ * already in flight then gets a chance to land before the error is reported.
  */
-export function requestPlatformJson(url, token) {
-  return withWafRetry(() => requestJson(url, token));
+export async function requestPlatformJson(url, token) {
+  try {
+    return await withWafRetry(() => requestJson(url, token));
+  } catch (error) {
+    if (!error?.message?.startsWith('DeepSeek WAF') && !error?.message?.startsWith('Blocked by DeepSeek WAF')) {
+      throw error;
+    }
+    await new Promise((resolve) => setTimeout(resolve, WAF_RETRY_DELAY));
+    return withWafRetry(() => requestJson(url, token));
+  }
 }

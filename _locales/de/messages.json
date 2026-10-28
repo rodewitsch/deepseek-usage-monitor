@@ -70,6 +70,12 @@
       "ago": { "content": "$1" }
     }
   },
+  "statusStale": {
+    "message": "Zwischengespeicherte Daten von $ago$ – aktualisiert sich nach einem Besuch auf platform.deepseek.com",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
   "signInPrompt": {
     "message": "Auf platform.deepseek.com anmelden"
   },

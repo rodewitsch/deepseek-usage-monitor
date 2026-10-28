@@ -70,6 +70,12 @@
       "ago": { "content": "$1" }
     }
   },
+  "statusStale": {
+    "message": "Data cache dari $ago$ — akan diperbarui setelah membuka platform.deepseek.com",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
   "signInPrompt": {
     "message": "Masuk di platform.deepseek.com"
   },

@@ -70,6 +70,12 @@
       "ago": { "content": "$1" }
     }
   },
+  "statusStale": {
+    "message": "Кэш от $ago$ — обновится после захода на platform.deepseek.com",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
   "signInPrompt": {
     "message": "Войдите на platform.deepseek.com"
   },

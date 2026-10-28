@@ -70,6 +70,12 @@
       "ago": { "content": "$1" }
     }
   },
+  "statusStale": {
+    "message": "Données en cache de $ago$ — mises à jour après une visite sur platform.deepseek.com",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
   "signInPrompt": {
     "message": "Connectez-vous sur platform.deepseek.com"
   },

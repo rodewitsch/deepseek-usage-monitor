@@ -65,8 +65,10 @@ export async function describeWafState() {
 /**
  * Runs a request and, when the WAF blocks it, throws a helpful error instead of
  * silently opening a tab. The caller decides what to show the user.
+ * `retryDelayMs` gives a token renewal that is already in flight a moment to
+ * land before the request is repeated.
  */
-export async function withWafRetry(request) {
+export async function withWafRetry(request, { retryDelayMs = 0 } = {}) {
   try {
     return await request();
   } catch (error) {
@@ -81,4 +83,14 @@ export async function withWafRetry(request) {
       202,
     );
   }
+}
+
+/** True when the error is a WAF block that a page visit would cure. */
+export function isWafError(error) {
+  return error instanceof ApiError && error.kind === 'waf';
+}
+
+/** Resolves after `ms`; used to let a token renewal finish. */
+export function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }

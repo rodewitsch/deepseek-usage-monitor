@@ -1,11 +1,15 @@
 import { computeBadge } from './lib/badge.js';
 import { budgetNoticeKey, evaluateBudgets } from './lib/budget.js';
+import { WAF_COOKIE_NAMES } from './lib/constants.js';
 import { t } from './lib/i18n.js';
 import { refreshUsage } from './lib/refresh.js';
 import { refreshFromPage } from './lib/scrape.js';
 import { getSettings, getSnapshot } from './lib/settings.js';
+import { delay } from './lib/waf.js';
 
 const ALARM_NAME = 'dsum-refresh';
+/** How long a reloaded console page gets to renew the WAF token. */
+const WAF_RENEW_WAIT = 6000;
 let refreshing = null;
 
 chrome.runtime.onInstalled.addListener(async () => {
@@ -26,13 +30,17 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
   await refreshAndPaint();
 });
 
-// A console page changed or finished loading → its DOM has fresh numbers.
+// A console page changed or finished loading → its DOM has fresh numbers (and
+// its challenge usually just renewed the WAF token). Debounced so a reload does
+// not trigger three refresh rounds.
+let tabRefreshTimer = null;
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status !== 'complete') return;
   if (!tab?.url?.includes('platform.deepseek.com')) return;
+  clearTimeout(tabRefreshTimer);
   // Let the React app render before scraping.
-  setTimeout(() => {
-    void refreshAndPaint();
+  tabRefreshTimer = setTimeout(() => {
+    void refreshAndPaint({ forceToken: true });
   }, 1500);
 });
 
@@ -45,6 +53,22 @@ chrome.storage.onChanged.addListener(async (changes, area) => {
   }
   // NOTE: usageSnapshot changes are painted by refreshAndPaint() itself, which
   // also knows the error kind. Painting here would race and drop that info.
+});
+
+/**
+ * The WAF token is renewed by the platform page itself. When the browser stores
+ * a new one, the API becomes reachable again — so retry immediately instead of
+ * waiting for the next alarm. Debounced: the page often writes several cookies.
+ */
+let wafRenewTimer = null;
+chrome.cookies.onChanged.addListener(({ cookie, removed }) => {
+  if (removed || !cookie?.domain?.includes('deepseek.com')) return;
+  if (!WAF_COOKIE_NAMES.includes(cookie.name)) return;
+
+  clearTimeout(wafRenewTimer);
+  wafRenewTimer = setTimeout(() => {
+    void refreshAndPaint();
+  }, 2000);
 });
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
@@ -62,9 +86,17 @@ async function refreshAndPaint({ forceToken = false } = {}) {
   refreshing = (async () => {
     const settings = await getSettings();
 
-    // The DOM only has balance + period totals. Per-day and per-key figures
-    // exist exclusively in the console API. No tab is ever opened here: the
-    // WAF token comes from the browser's cookies and renews on normal visits.
+    // 1. An open console tab is the cheapest source: its page has already
+    //    passed the WAF challenge, so its DOM needs no API call at all.
+    const scraped = await refreshFromPage();
+    if (scraped.snapshot) {
+      await paintBadge(computeBadge(withErrorKind(scraped.snapshot, null), settings));
+      // Per-day and per-key figures exist only in the API — keep trying for
+      // them in the background when the scrape looked complete.
+    }
+
+    // 2. Ask the console API. The WAF token comes from the browser's cookies
+    //    and renews on normal visits; no tab is ever opened here.
     const result = await refreshUsage({ forceToken });
 
     if (!result.lastError) {
@@ -73,16 +105,49 @@ async function refreshAndPaint({ forceToken = false } = {}) {
       return result;
     }
 
-    // API unavailable → at least keep the balance/period totals from the page.
-    const scraped = await refreshFromPage();
+    // 3. WAF block → renew the token by reloading a console tab the user
+    //    already has open (never creating one), then try once more.
+    if (result.lastError.kind === 'waf') {
+      const reloaded = await reloadConsoleTab();
+      if (reloaded) {
+        await delay(WAF_RENEW_WAIT);
+        const retried = await refreshUsage({ forceToken: true });
+        if (!retried.lastError) {
+          await paintBadge(computeBadge(withErrorKind(retried.snapshot, null), settings));
+          await notifyBudget(retried.snapshot, settings);
+          return retried;
+        }
+      }
+    }
+
+    // 4. API still unavailable → keep whatever the page gave us and report a
+    //    WAF block as "cached", not as an error the user has to fix.
+    const effective = result.lastError.kind === 'waf' ? null : result.lastError;
     const snapshot = scraped.snapshot || result.snapshot;
-    await paintBadge(computeBadge(withErrorKind(snapshot, result.lastError), settings));
-    return { snapshot, lastError: result.lastError };
+    await paintBadge(computeBadge(withErrorKind(snapshot, effective), settings));
+    return { snapshot, lastError: effective, cached: Boolean(scraped.snapshot) };
   })();
   try {
     return await refreshing;
   } finally {
     refreshing = null;
+  }
+}
+
+/**
+ * Reloads an already-open console tab so its JavaScript challenge renews the
+ * WAF token. Returns `false` when no console tab exists — the extension never
+ * creates one.
+ */
+async function reloadConsoleTab() {
+  try {
+    const tabs = await chrome.tabs.query({ url: 'https://platform.deepseek.com/*' });
+    const tab = tabs.find((entry) => entry.url?.includes('/usage')) || tabs[0];
+    if (!tab?.id) return false;
+    await chrome.tabs.reload(tab.id, { bypassCache: false });
+    return true;
+  } catch {
+    return false;
   }
 }
 
@@ -189,11 +254,3 @@ async function scheduleAlarm() {
   }
 }
 
-// A page load on the platform usually means a fresh login → refresh soon.
-chrome.tabs.onUpdated.addListener(
-  (tabId, changeInfo, tab) => {
-    if (changeInfo.status !== 'complete') return;
-    if (!tab?.url?.startsWith('https://platform.deepseek.com/')) return;
-    refreshAndPaint({ forceToken: true });
-  },
-);

@@ -27,7 +27,8 @@
   /**
    * @param {Document} doc
    * @returns {null | {balance, toppedUp, granted, currency, windowCost,
-   *   windowCurrency, requests, tokens, capturedAt, sourceUrl}}
+   *   windowCurrency, todayCost, todayCurrency, requests, tokens, todayTokens,
+   *   capturedAt, sourceUrl}}
    */
   function parseUsagePage(doc = document) {
     const lines = pageLines(doc);
@@ -36,10 +37,14 @@
     const toppedUp = amountAfter(lines, /topped-?up balance/i);
     const granted = amountAfter(lines, /granted balance/i);
     const windowCost = amountAfter(lines, /^cost$/i, { skip: [/^total cost$/i] });
+    const todayCost = amountAfter(lines, /^(?:cost|expense)s?\(?today\)?$|^(?:cost|expense)s? today$/i, {
+      skip: [/^total cost$/i, /last \d+ days/i],
+    });
     const requests = countAfter(lines, /^api requests$/i);
     const tokens = countAfter(lines, /^tokens$/i);
+    const todayTokens = countAfter(lines, /^(?:tokens?|usage)\s*\(?today\)?$|^tokens? today$/i);
 
-    if (!toppedUp && !windowCost && !tokens) return null;
+    if (!toppedUp && !windowCost && !tokens && !todayCost) return null;
 
     const currency = toppedUp?.currency || granted?.currency || windowCost?.currency || 'USD';
 
@@ -50,8 +55,11 @@
       currency,
       windowCost: windowCost?.value ?? null,
       windowCurrency: windowCost?.currency ?? currency,
+      todayCost: todayCost?.value ?? null,
+      todayCurrency: todayCost?.currency ?? currency,
       requests,
       tokens,
+      todayTokens,
       capturedAt: Date.now(),
       sourceUrl: doc.location?.href || '',
     };

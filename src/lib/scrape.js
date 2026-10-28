@@ -86,6 +86,8 @@ export async function refreshFromPage() {
       currency: page.windowCurrency || page.currency,
       windowCost: page.windowCost ?? previous.snapshot?.usage?.windowCost ?? 0,
       windowTokens: page.tokens ?? previous.snapshot?.usage?.windowTokens ?? 0,
+      todayCost: page.todayCost ?? previous.snapshot?.usage?.todayCost ?? 0,
+      todayTokens: page.todayTokens ?? previous.snapshot?.usage?.todayTokens ?? 0,
       requests: page.requests ?? null,
       source: 'page',
     },

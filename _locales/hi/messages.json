@@ -70,6 +70,12 @@
       "ago": { "content": "$1" }
     }
   },
+  "statusStale": {
+    "message": "$ago$ का कैश डेटा — platform.deepseek.com खोलने पर अपडेट होगा",
+    "placeholders": {
+      "ago": { "content": "$1" }
+    }
+  },
   "signInPrompt": {
     "message": "platform.deepseek.com पर साइन इन करें"
   },

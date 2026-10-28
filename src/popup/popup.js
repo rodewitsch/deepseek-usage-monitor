@@ -82,7 +82,7 @@ async function refresh(interactive) {
 
     // 2. Per-day / per-key numbers only exist in the console API, so always
     //    ask the service worker for them (it reuses the scraped values when the
-    //    API is unavailable).
+    //    API is unavailable, and renews an expired WAF token if a tab exists).
     await chrome.runtime.sendMessage({ type: 'dsum:refresh' });
   } catch {
     // Service worker may be asleep — it wakes up for the message anyway.
@@ -140,7 +140,11 @@ function selectedKeys(usage, currentSettings) {
 }
 
 function renderStatus(snapshot, lastError) {
-  if (lastError?.message) {
+  // A WAF block is not something the user must fix: cached numbers stay on
+  // screen and the status line says when they will refresh. Auth problems and
+  // real failures still show the banner.
+  const isWaf = lastError?.kind === 'waf';
+  if (lastError?.message && !isWaf) {
     ui.error.hidden = false;
     ui.errorText.textContent = lastError.message;
     ui.errorFix.hidden = lastError.kind !== 'auth';
@@ -149,11 +153,15 @@ function renderStatus(snapshot, lastError) {
   }
 
   if (!snapshot?.updatedAt) {
-    ui.updated.textContent = t('statusNoData');
+    ui.updated.textContent = isWaf ? t('badgeNoData') : t('statusNoData');
+    return;
+  }
+  const ago = formatRelativeTime(snapshot.updatedAt);
+  if (isWaf) {
+    ui.updated.textContent = t('statusStale', [ago]);
     return;
   }
   const stale = snapshot.todayKey && snapshot.todayKey !== localDayKey();
-  const ago = formatRelativeTime(snapshot.updatedAt);
   ui.updated.textContent = stale ? t('statusYesterday', [ago]) : t('statusUpdated', [ago]);
 }
 
