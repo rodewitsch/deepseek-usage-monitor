@@ -3,6 +3,13 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/), versioned with [SemVer](https://semver.org/).
 
+### [1.0.2](https://github.com/rodewitsch/deepseek-usage-monitor/compare/v1.0.1...v1.0.2) (2026-10-29)
+
+
+### Added
+
+* new icons ([0d724ed](https://github.com/rodewitsch/deepseek-usage-monitor/commit/0d724edf5d21331a4874f4524f1cd53d7c9174c1))
+
 ### 1.0.1 (2026-10-29)
 
 
