@@ -1,6 +1,6 @@
 {
   "name": "deepseek-usage-monitor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "DeepSeek Usage Monitor — balance, today's spend and per-key spend in the toolbar",
   "scripts": {

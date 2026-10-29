@@ -2,20 +2,25 @@
   "manifest_version": 3,
   "name": "__MSG_extName__",
   "short_name": "DeepSeek Usage",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "__MSG_extDescription__",
   "author": "Rodevich Dmitry",
   "default_locale": "ru",
   "minimum_chrome_version": "116",
-
-  "permissions": ["storage", "alarms", "cookies", "scripting", "notifications"],
-  "host_permissions": ["https://platform.deepseek.com/*"],
-
+  "permissions": [
+    "storage",
+    "alarms",
+    "cookies",
+    "scripting",
+    "notifications"
+  ],
+  "host_permissions": [
+    "https://platform.deepseek.com/*"
+  ],
   "background": {
     "service_worker": "src/background.js",
     "type": "module"
   },
-
   "action": {
     "default_title": "__MSG_actionTitle__",
     "default_popup": "src/popup/popup.html",
@@ -26,31 +31,41 @@
       "128": "icons/icon128.png"
     }
   },
-
   "options_page": "src/options/options.html",
-
   "icons": {
     "16": "icons/icon16.png",
     "32": "icons/icon32.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-
   "content_scripts": [
     {
-      "matches": ["https://platform.deepseek.com/*"],
-      "js": ["src/content/token-bridge.js"],
+      "matches": [
+        "https://platform.deepseek.com/*"
+      ],
+      "js": [
+        "src/content/token-bridge.js"
+      ],
       "run_at": "document_start",
       "world": "MAIN"
     },
     {
-      "matches": ["https://platform.deepseek.com/*"],
-      "js": ["src/content/token-relay.js"],
+      "matches": [
+        "https://platform.deepseek.com/*"
+      ],
+      "js": [
+        "src/content/token-relay.js"
+      ],
       "run_at": "document_start"
     },
     {
-      "matches": ["https://platform.deepseek.com/*"],
-      "js": ["src/content/page-scraper.js", "src/content/usage-scraper.js"],
+      "matches": [
+        "https://platform.deepseek.com/*"
+      ],
+      "js": [
+        "src/content/page-scraper.js",
+        "src/content/usage-scraper.js"
+      ],
       "run_at": "document_idle"
     }
   ]
