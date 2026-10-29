@@ -10,7 +10,7 @@
   },
 
   "popupTitle": {
-    "message": "Consumo de DeepSeek"
+    "message": "DeepSeek Usage Monitor"
   },
   "popupLoading": {
     "message": "Cargando…"
