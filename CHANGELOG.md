@@ -3,6 +3,8 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/), versioned with [SemVer](https://semver.org/).
 
+### [1.0.3](https://github.com/rodewitsch/deepseek-usage-monitor/compare/v1.0.2...v1.0.3) (2026-10-30)
+
 ### [1.0.2](https://github.com/rodewitsch/deepseek-usage-monitor/compare/v1.0.1...v1.0.2) (2026-10-29)
 
 
