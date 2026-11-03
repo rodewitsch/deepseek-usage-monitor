@@ -445,6 +445,56 @@
     }
   },
 
+  "openStatusPage": {
+    "message": "Открыть страницу статуса DeepSeek"
+  },
+  "statusOperational": {
+    "message": "Все системы работают штатно"
+  },
+  "statusDegraded": {
+    "message": "Снижение производительности"
+  },
+  "statusPartialOutage": {
+    "message": "Частичный сбой"
+  },
+  "statusFullOutage": {
+    "message": "Крупный сбой"
+  },
+  "statusUnknown": {
+    "message": "Статус неизвестен"
+  },
+  "panelNotifications": {
+    "message": "Уведомления"
+  },
+  "notifyLowBalance": {
+    "message": "Уведомлять, когда баланс опускается ниже порога"
+  },
+  "notifyStatus": {
+    "message": "Уведомлять о проблемах в работе DeepSeek"
+  },
+  "notifyStatusTitle": {
+    "message": "Проблемы в работе DeepSeek"
+  },
+  "notifyStatusMaintenanceTitle": {
+    "message": "Техобслуживание DeepSeek"
+  },
+  "notifyStatusRecoveredTitle": {
+    "message": "DeepSeek восстановлен"
+  },
+  "notifyStatusRecoveredMessage": {
+    "message": "Все системы снова работают штатно."
+  },
+  "notifyLowBalanceTitle": {
+    "message": "Баланс DeepSeek на исходе"
+  },
+  "notifyLowBalanceMessage": {
+    "message": "Баланс $balance$ (ниже порога $threshold$).",
+    "placeholders": {
+      "balance": { "content": "$1" },
+      "threshold": { "content": "$2" }
+    }
+  },
+
   "errorNoSession": {
     "message": "Сессия DeepSeek не найдена. Откройте platform.deepseek.com и войдите."
   }

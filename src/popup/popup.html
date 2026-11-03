@@ -37,6 +37,31 @@
       <button id="error-fix" class="link-button" data-i18n="errorFix">Fix</button>
     </div>
 
+    <a
+      id="status"
+      class="status"
+      href="https://status.deepseek.com/"
+      target="_blank"
+      rel="noreferrer"
+      data-i18n-title="openStatusPage"
+      title="Open status page"
+      hidden
+    >
+      <span id="status-icon" class="status__icon" aria-hidden="true"></span>
+      <span id="status-text" class="status__text">—</span>
+      <svg class="status__arrow" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true">
+        <path
+          fill="currentColor"
+          d="M5 12h12m0 0-4-4m4 4-4 4"
+          stroke="currentColor"
+          stroke-width="2"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </a>
+
     <section class="cards">
       <article class="card card--primary">
         <span class="card__label" data-i18n="walletBalance">Wallet balance</span>

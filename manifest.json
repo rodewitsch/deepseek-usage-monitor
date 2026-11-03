@@ -15,7 +15,8 @@
     "notifications"
   ],
   "host_permissions": [
-    "https://platform.deepseek.com/*"
+    "https://platform.deepseek.com/*",
+    "https://status.deepseek.com/*"
   ],
   "background": {
     "service_worker": "src/background.js",

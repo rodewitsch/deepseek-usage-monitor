@@ -1,33 +1,40 @@
 import { computeBadge } from './lib/badge.js';
 import { budgetNoticeKey, evaluateBudgets } from './lib/budget.js';
-import { WAF_COOKIE_NAMES } from './lib/constants.js';
+import { STORAGE_KEYS, WAF_COOKIE_NAMES } from './lib/constants.js';
 import { t } from './lib/i18n.js';
 import { refreshUsage } from './lib/refresh.js';
 import { refreshFromPage } from './lib/scrape.js';
 import { getSettings, getSnapshot } from './lib/settings.js';
+import { fetchServiceStatus, statusHasTrouble } from './lib/status.js';
 import { delay } from './lib/waf.js';
 
 const ALARM_NAME = 'dsum-refresh';
+const STATUS_ALARM_NAME = 'dsum-status';
+/** The status page updates itself every ~60 s; 5 min is a good polling rate. */
+const STATUS_PERIOD_MINUTES = 5;
 /** How long a reloaded console page gets to renew the WAF token. */
 const WAF_RENEW_WAIT = 6000;
 let refreshing = null;
+let statusChecking = null;
 
 chrome.runtime.onInstalled.addListener(async () => {
   await scheduleAlarm();
+  await ensureStatusAlarm();
   await updateBadge();
   await refreshAndPaint();
 });
 
 chrome.runtime.onStartup.addListener(async () => {
   await scheduleAlarm();
+  await ensureStatusAlarm();
   await updateBadge();
   // A console tab restored by the browser already has the numbers — read them.
   await refreshAndPaint();
 });
 
 chrome.alarms.onAlarm.addListener(async (alarm) => {
-  if (alarm.name !== ALARM_NAME) return;
-  await refreshAndPaint();
+  if (alarm.name === ALARM_NAME) await refreshAndPaint();
+  else if (alarm.name === STATUS_ALARM_NAME) await checkStatus();
 });
 
 // A console page changed or finished loading → its DOM has fresh numbers (and
@@ -78,6 +85,12 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       .catch((error) => sendResponse({ ok: false, error: error.message }));
     return true; // async response
   }
+  if (message?.type === 'dsum:status') {
+    checkStatus()
+      .then((result) => sendResponse({ ok: true, status: result?.ok ? result.status : null }))
+      .catch((error) => sendResponse({ ok: false, error: error.message }));
+    return true; // async response
+  }
   return false;
 });
 
@@ -85,6 +98,10 @@ async function refreshAndPaint({ forceToken = false } = {}) {
   if (refreshing) return refreshing;
   refreshing = (async () => {
     const settings = await getSettings();
+
+    // The DeepSeek service status is independent of the console session, so it
+    // is checked alongside every usage refresh (fire-and-forget).
+    void checkStatus();
 
     // 1. An open console tab is the cheapest source: its page has already
     //    passed the WAF challenge, so its DOM needs no API call at all.
@@ -102,6 +119,7 @@ async function refreshAndPaint({ forceToken = false } = {}) {
     if (!result.lastError) {
       await paintBadge(computeBadge(withErrorKind(result.snapshot, null), settings));
       await notifyBudget(result.snapshot, settings);
+      await notifyLowBalance(result.snapshot, settings);
       return result;
     }
 
@@ -115,6 +133,7 @@ async function refreshAndPaint({ forceToken = false } = {}) {
         if (!retried.lastError) {
           await paintBadge(computeBadge(withErrorKind(retried.snapshot, null), settings));
           await notifyBudget(retried.snapshot, settings);
+          await notifyLowBalance(retried.snapshot, settings);
           return retried;
         }
       }
@@ -230,6 +249,128 @@ async function notifyBudget(snapshot, settings) {
   await chrome.storage.local.set({ notified: [...kept, ...added] });
 }
 
+/**
+ * Desktop notification when the wallet balance falls below the configured
+ * threshold. Fires once per day.
+ */
+async function notifyLowBalance(snapshot, settings) {
+  if (!settings.lowBalanceNotifications) return;
+
+  const threshold = Number(settings.lowBalanceThreshold) || 0;
+  const total = Number(snapshot?.balance?.total);
+  if (!(threshold > 0) || !Number.isFinite(total) || total >= threshold) return;
+
+  const dayKey = snapshot?.todayKey || new Date().toISOString().slice(0, 10);
+  const marker = `${dayKey}:low-balance`;
+  const { notified = [] } = await chrome.storage.local.get('notified');
+  if (notified.includes(marker)) return;
+
+  const currency = snapshot.balance.currency || 'USD';
+  try {
+    await chrome.notifications.create(marker, {
+      type: 'basic',
+      iconUrl: chrome.runtime.getURL('icons/icon128.png'),
+      title: t('notifyLowBalanceTitle'),
+      message: t('notifyLowBalanceMessage', [
+        `${currency} ${total.toFixed(2)}`,
+        `${currency} ${threshold.toFixed(2)}`,
+      ]),
+      priority: 2,
+    });
+  } catch (error) {
+    console.warn('[DeepSeek Usage] notification failed:', error.message);
+    return;
+  }
+
+  const kept = notified.filter((entry) => entry.startsWith(dayKey));
+  await chrome.storage.local.set({ notified: [...kept, marker] });
+}
+
+/**
+ * Fetches the DeepSeek service status and notifies on state transitions.
+ * Failure keeps the previous status; notification dedup is per incident id.
+ */
+async function checkStatus() {
+  if (statusChecking) return statusChecking;
+  statusChecking = (async () => {
+    const settings = await getSettings();
+    const result = await fetchServiceStatus();
+    if (!result.ok) return result;
+
+    const current = result.status;
+    const previous =
+      (await chrome.storage.local.get(STORAGE_KEYS.status))[STORAGE_KEYS.status] || null;
+    await chrome.storage.local.set({ [STORAGE_KEYS.status]: current });
+
+    if (settings.statusNotifications) await notifyStatus(previous, current);
+    return result;
+  })();
+  try {
+    return await statusChecking;
+  } finally {
+    statusChecking = null;
+  }
+}
+
+/** One notification per new incident, plus one on recovery. */
+async function notifyStatus(previous, current) {
+  const prevTrouble = hasIssues(previous);
+  const currTrouble = hasIssues(current);
+  const iconUrl = chrome.runtime.getURL('icons/icon128.png');
+
+  if (prevTrouble && !currTrouble) {
+    try {
+      await chrome.notifications.create('dsum-status-recovered', {
+        type: 'basic',
+        iconUrl,
+        title: t('notifyStatusRecoveredTitle'),
+        message: t('notifyStatusRecoveredMessage'),
+        priority: 0,
+      });
+    } catch (error) {
+      console.warn('[DeepSeek Usage] notification failed:', error.message);
+    }
+    await chrome.storage.local.set({ [STORAGE_KEYS.statusNotified]: { ids: [] } });
+    return;
+  }
+
+  const { ids = [] } = await chrome.storage.local.get(STORAGE_KEYS.statusNotified);
+  const known = new Set(ids);
+  const added = [];
+
+  for (const incident of current?.incidents || []) {
+    if (known.has(incident.id)) continue;
+    known.add(incident.id);
+    added.push(incident.id);
+
+    const title =
+      incident.kind === 'maintenance'
+        ? t('notifyStatusMaintenanceTitle')
+        : t('notifyStatusTitle');
+    try {
+      await chrome.notifications.create(`dsum-status-${incident.id}`, {
+        type: 'basic',
+        iconUrl,
+        title,
+        message: incident.summary || incident.title,
+        priority: 2,
+      });
+    } catch (error) {
+      console.warn('[DeepSeek Usage] notification failed:', error.message);
+    }
+  }
+
+  if (added.length) {
+    await chrome.storage.local.set({ [STORAGE_KEYS.statusNotified]: { ids: [...known].slice(-50) } });
+  }
+}
+
+/** True when the status page reports an active incident or an outage. */
+function hasIssues(status) {
+  if (!status) return false;
+  return statusHasTrouble(status) || Boolean(status.incidents?.length);
+}
+
 function withErrorKind(snapshot, lastError) {
   return { ...(snapshot || {}), lastErrorKind: lastError?.kind || null };
 }
@@ -253,4 +394,27 @@ async function scheduleAlarm() {
     });
   }
 }
+
+/**
+ * The status alarm runs independently of the usage refresh: it must survive an
+ * unpacked-extension reload (which fires neither `onInstalled` nor `onStartup`).
+ * It is re-created when missing, not on every worker start, so waking the
+ * worker does not keep postponing it.
+ */
+async function ensureStatusAlarm() {
+  try {
+    const existing = await chrome.alarms.get(STATUS_ALARM_NAME);
+    if (!existing) {
+      chrome.alarms.create(STATUS_ALARM_NAME, {
+        periodInMinutes: STATUS_PERIOD_MINUTES,
+        delayInMinutes: 1,
+      });
+    }
+  } catch {
+    // alarms API unavailable — the popup-triggered check still works.
+  }
+}
+
+// Re-create the status alarm as soon as the worker starts.
+void ensureStatusAlarm();
 

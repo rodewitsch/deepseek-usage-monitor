@@ -21,6 +21,8 @@ const fields = {
   dailyBudget: { input: el('daily-budget'), setting: 'dailyBudget' },
   budgetWarnPercent: { input: el('budget-warn-percent'), setting: 'budgetWarnPercent' },
   budgetNotifications: { input: el('budget-notifications'), setting: 'budgetNotifications' },
+  lowBalanceNotifications: { input: el('low-balance-notifications'), setting: 'lowBalanceNotifications' },
+  statusNotifications: { input: el('status-notifications'), setting: 'statusNotifications' },
   showDecimals: { input: el('show-decimals'), setting: 'showDecimals' },
 };
 
@@ -131,6 +133,8 @@ function applySettings(settings) {
   fields.dailyBudget.input.value = settings.dailyBudget || '';
   fields.budgetWarnPercent.input.value = settings.budgetWarnPercent;
   fields.budgetNotifications.input.checked = settings.budgetNotifications;
+  fields.lowBalanceNotifications.input.checked = settings.lowBalanceNotifications;
+  fields.statusNotifications.input.checked = settings.statusNotifications;
   fields.showDecimals.input.checked = settings.showDecimals;
   applyMetricVisibility(settings);
 }

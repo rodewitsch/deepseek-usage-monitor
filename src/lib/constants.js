@@ -3,6 +3,15 @@
 export const PLATFORM_ORIGIN = 'https://platform.deepseek.com';
 export const USAGE_PAGE_URL = `${PLATFORM_ORIGIN}/usage`;
 
+/** DeepSeek public status page (Flashduty). */
+export const STATUS_PAGE_URL = 'https://status.deepseek.com';
+/**
+ * JSON endpoint behind the status page. It sends no CORS headers, so it can
+ * only be fetched from the service worker (which has `host_permissions`).
+ * The page id `6410630422455` is baked into the status page HTML.
+ */
+export const STATUS_ENDPOINT = `${STATUS_PAGE_URL}/api/status-page/6410630422455/summary/active`;
+
 export const ENDPOINTS = {
   userSummary: `${PLATFORM_ORIGIN}/api/v0/users/get_user_summary`,
   usageAmountByKey: `${PLATFORM_ORIGIN}/api/v0/usage/by_api_key/amount`,
@@ -50,6 +59,10 @@ export const DEFAULT_SETTINGS = {
   budgetWarnPercent: 90,
   /** Desktop notification when a budget is nearly used up or exceeded. */
   budgetNotifications: true,
+  /** Desktop notification when the wallet balance drops below the threshold. */
+  lowBalanceNotifications: true,
+  /** Desktop notification when DeepSeek has service issues (status page). */
+  statusNotifications: true,
   /** Rolling window used to aggregate spend, in days. */
   windowDays: 30,
 };
@@ -81,4 +94,6 @@ export const STORAGE_KEYS = {
   tokenSource: 'platformTokenSource',
   snapshot: 'usageSnapshot',
   lastError: 'lastError',
+  status: 'serviceStatus',
+  statusNotified: 'statusNotified',
 };

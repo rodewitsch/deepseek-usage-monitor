@@ -19,6 +19,8 @@ export function normaliseSettings(raw) {
   settings.dailyBudget = clampNumber(settings.dailyBudget, 0, 1e9, DEFAULT_SETTINGS.dailyBudget);
   settings.showDecimals = settings.showDecimals !== false;
   settings.budgetNotifications = settings.budgetNotifications !== false;
+  settings.lowBalanceNotifications = settings.lowBalanceNotifications !== false;
+  settings.statusNotifications = settings.statusNotifications !== false;
   settings.badgeApiKeys = normaliseKeyList(settings.badgeApiKeys);
   settings.selectedApiKeys = normaliseKeyList(settings.selectedApiKeys);
   settings.keyBudgets = normaliseKeyBudgets(settings.keyBudgets);

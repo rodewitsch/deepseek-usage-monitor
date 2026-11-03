@@ -1,4 +1,4 @@
-import { SERIES_COLORS, USAGE_PAGE_URL } from '../lib/constants.js';
+import { SERIES_COLORS, STATUS_PAGE_URL, USAGE_PAGE_URL } from '../lib/constants.js';
 import { evaluateBudgets } from '../lib/budget.js';
 import { currencySymbol, formatMoney, formatRelativeTime, formatTokens, localDayKey } from '../lib/format.js';
 import { applyDocumentLanguage, localizeDocument, t } from '../lib/i18n.js';
@@ -13,6 +13,9 @@ const ui = {
   error: el('error'),
   errorText: el('error-text'),
   errorFix: el('error-fix'),
+  status: el('status'),
+  statusIcon: el('status-icon'),
+  statusText: el('status-text'),
   balance: el('balance'),
   balanceDetail: el('balance-detail'),
   todayCost: el('today-cost'),
@@ -38,6 +41,7 @@ async function init() {
   applyDocumentLanguage();
   localizeDocument();
   ui.openUsage.href = USAGE_PAGE_URL;
+  ui.status.href = STATUS_PAGE_URL;
   ui.refresh.addEventListener('click', () => refresh(true));
   ui.openOptions.addEventListener('click', () => chrome.runtime.openOptionsPage());
   ui.errorFix.addEventListener('click', () => chrome.runtime.openOptionsPage());
@@ -55,7 +59,12 @@ async function init() {
   chrome.storage.onChanged.addListener((changes, area) => {
     if (area !== 'local') return;
     if (changes.settings || changes.usageSnapshot || changes.lastError) render();
+    else if (changes.serviceStatus) renderServiceStatus(changes.serviceStatus.newValue);
   });
+
+  // Ask the service worker for the current status so the indicator appears
+  // immediately, even when the usage snapshot is still fresh.
+  chrome.runtime.sendMessage({ type: 'dsum:status' }).catch(() => {});
 
   await render();
   const { snapshot, lastError } = await getSnapshot();
@@ -126,6 +135,7 @@ async function render() {
   const selected = selectedKeys(snapshot?.usage, settings);
 
   renderStatus(snapshot, lastError);
+  await renderServiceStatus();
   renderSummary(snapshot, selected);
   renderBudgets(snapshot, settings, selected.map((key) => key.id));
   renderChart(snapshot, settings, selected);
@@ -163,6 +173,58 @@ function renderStatus(snapshot, lastError) {
   }
   const stale = snapshot.todayKey && snapshot.todayKey !== localDayKey();
   ui.updated.textContent = stale ? t('statusYesterday', [ago]) : t('statusUpdated', [ago]);
+}
+
+const STATUS_COLORS = {
+  operational: '#067647',
+  degraded: '#d97706',
+  partial_outage: '#d97706',
+  full_outage: '#dc2626',
+  unknown: '#6b7280',
+};
+
+/** Service-status pill from https://status.deepseek.com (stored by the SW). */
+async function renderServiceStatus(freshStatus) {
+  const status =
+    freshStatus ||
+    (await chrome.storage.local.get('serviceStatus')).serviceStatus ||
+    null;
+  if (!status) {
+    ui.status.hidden = true;
+    return;
+  }
+
+  const level = status.level || 'operational';
+  const trouble = level !== 'operational';
+  ui.status.hidden = false;
+  ui.status.classList.toggle('is-trouble', trouble);
+  ui.status.dataset.level = level;
+
+  const color = STATUS_COLORS[level] || STATUS_COLORS.unknown;
+  ui.statusIcon.innerHTML = trouble
+    ? `<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+         <circle class="status__pulse" cx="8" cy="8" r="7" fill="none" stroke="${color}" stroke-width="1.5"></circle>
+         <circle cx="8" cy="8" r="4.5" fill="${color}"></circle>
+       </svg>`
+    : `<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+         <circle cx="8" cy="8" r="5" fill="${color}"></circle>
+       </svg>`;
+  ui.statusText.textContent = statusLabel(level);
+}
+
+function statusLabel(level) {
+  switch (level) {
+    case 'operational':
+      return t('statusOperational');
+    case 'degraded':
+      return t('statusDegraded');
+    case 'partial_outage':
+      return t('statusPartialOutage');
+    case 'full_outage':
+      return t('statusFullOutage');
+    default:
+      return t('statusUnknown');
+  }
 }
 
 function renderSummary(snapshot, selected) {

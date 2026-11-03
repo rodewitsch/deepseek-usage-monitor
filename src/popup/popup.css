@@ -127,6 +127,72 @@ h2 {
   color: var(--danger);
 }
 
+.status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 10px;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--bg-soft);
+  color: var(--text);
+  font-size: 11.5px;
+  text-decoration: none;
+}
+
+.status:hover {
+  border-color: var(--accent);
+}
+
+.status.is-trouble {
+  border-color: color-mix(in srgb, var(--danger) 35%, transparent);
+  background: color-mix(in srgb, var(--danger) 8%, var(--bg-soft));
+}
+
+.status__icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+}
+
+.status__icon svg {
+  display: block;
+}
+
+.status__pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: status-pulse 1.6s ease-out infinite;
+}
+
+@keyframes status-pulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 1;
+  }
+  70%,
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+.status__text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status__arrow {
+  flex: 0 0 auto;
+  color: var(--muted);
+}
+
 .link-button {
   margin-left: auto;
   padding: 0;

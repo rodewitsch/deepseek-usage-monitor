@@ -69,12 +69,26 @@
             <input id="budget-warn-percent" type="number" min="1" max="100" step="1" />
           </label>
           <label class="field field--checkbox">
+            <input id="show-decimals" type="checkbox" />
+            <span data-i18n="showDecimals">Show decimals in the popup</span>
+          </label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2 data-i18n="panelNotifications">Notifications</h2>
+        <div class="grid">
+          <label class="field field--checkbox">
             <input id="budget-notifications" type="checkbox" />
             <span data-i18n="notifyBudget">Notify when a budget is nearly used up / exceeded</span>
           </label>
           <label class="field field--checkbox">
-            <input id="show-decimals" type="checkbox" />
-            <span data-i18n="showDecimals">Show decimals in the popup</span>
+            <input id="low-balance-notifications" type="checkbox" />
+            <span data-i18n="notifyLowBalance">Notify when the wallet balance drops below the threshold</span>
+          </label>
+          <label class="field field--checkbox">
+            <input id="status-notifications" type="checkbox" />
+            <span data-i18n="notifyStatus">Notify when DeepSeek has service issues</span>
           </label>
         </div>
       </section>

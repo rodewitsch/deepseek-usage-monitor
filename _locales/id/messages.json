@@ -445,6 +445,56 @@
     }
   },
 
+  "openStatusPage": {
+    "message": "Open the DeepSeek status page"
+  },
+  "statusOperational": {
+    "message": "All systems operational"
+  },
+  "statusDegraded": {
+    "message": "Degraded performance"
+  },
+  "statusPartialOutage": {
+    "message": "Partial outage"
+  },
+  "statusFullOutage": {
+    "message": "Major outage"
+  },
+  "statusUnknown": {
+    "message": "Status unknown"
+  },
+  "panelNotifications": {
+    "message": "Notifications"
+  },
+  "notifyLowBalance": {
+    "message": "Notify when the wallet balance drops below the threshold"
+  },
+  "notifyStatus": {
+    "message": "Notify when DeepSeek has service issues"
+  },
+  "notifyStatusTitle": {
+    "message": "DeepSeek service issue"
+  },
+  "notifyStatusMaintenanceTitle": {
+    "message": "DeepSeek maintenance"
+  },
+  "notifyStatusRecoveredTitle": {
+    "message": "DeepSeek recovered"
+  },
+  "notifyStatusRecoveredMessage": {
+    "message": "All systems are operational again."
+  },
+  "notifyLowBalanceTitle": {
+    "message": "DeepSeek balance is low"
+  },
+  "notifyLowBalanceMessage": {
+    "message": "Balance is $balance$ (below the $threshold$ threshold).",
+    "placeholders": {
+      "balance": { "content": "$1" },
+      "threshold": { "content": "$2" }
+    }
+  },
+
   "errorNoSession": {
     "message": "Sesi DeepSeek tidak ditemukan. Buka platform.deepseek.com dan masuk."
   }

@@ -12,10 +12,12 @@ already present in your browser for `platform.deepseek.com`.
 | | |
 |---|---|
 | **Popup** | Wallet balance (paid / bonus split), spend today + tokens, a 30-day spend chart, per-key list and a daily-budget bar. |
+| **Status** | DeepSeek service status from status.deepseek.com — a live indicator in the popup with a link to the status page. |
 | **Badge** | Shows one of: spend today, spend in the period, wallet balance, tokens today. Can be scoped to a single API key. |
 | **Daily budgets** | Account-wide and/or per-API-key budgets, green / orange / red badge, desktop notification on the warn and over thresholds. |
+| **Notifications** | Toggleable desktop notifications for budgets, low balance and DeepSeek service issues. |
 | **Multi-key chart** | Plot the spend of several API keys at once as a stacked per-day chart with a legend. |
-| **Settings** | Metric, key scope, auto-refresh interval, aggregation window, low-balance warning, daily budgets, decimals. |
+| **Settings** | Metric, key scope, auto-refresh interval, aggregation window, low-balance warning, daily budgets, decimals, notification toggles. |
 | **Shortcut** | `Open usage page` button opens `https://platform.deepseek.com/usage`. |
 
 ## Install
@@ -101,7 +103,11 @@ because that requires running DeepSeek's JS challenge on their page.
 GET https://platform.deepseek.com/api/v0/users/get_user_summary
 GET https://platform.deepseek.com/api/v0/usage/by_api_key/amount?start&end&tz
 GET https://platform.deepseek.com/api/v0/usage/by_api_key/cost?start&end&tz
+GET https://status.deepseek.com/api/status-page/6410630422455/summary/active
 ```
+
+The last one is the JSON backing the DeepSeek status page. It sends no CORS
+headers, so it is fetched by the service worker only.
 
 Quirks that are handled in `src/lib/api.js` / `src/lib/http.js`:
 
@@ -131,8 +137,22 @@ Click **Settings** in the popup (or *Options* on `chrome://extensions`).
   **orange** at/above it and **red** once the budget is reached.
 * **Per-key daily budgets** — one independent budget per API key.
 * **Warn at (% of budget)** — the orange threshold, `90` by default.
-* **Notify** — one desktop notification per day and per budget when it is nearly
-  used up, and one when it is exceeded.
+* **Notify** — desktop notifications, each toggleable independently:
+  * budgets nearly used up / exceeded (one per day and per budget, per threshold),
+  * wallet balance below the low-balance threshold (once per day),
+  * DeepSeek service issues / recovery (from the status page).
+
+### Service status
+
+The popup shows a live indicator of DeepSeek's service health, fetched from the
+public status page [status.deepseek.com](https://status.deepseek.com/) and
+refreshed together with the usage data. A green dot means all systems are
+operational; orange/red (with a pulsing ring) means degraded performance or an
+outage. Click the indicator to open the status page.
+
+When the service starts experiencing problems the extension shows a desktop
+notification (one per incident, plus one when it recovers) — this can be turned
+off in **Settings → Notifications**.
 
 ### Daily budgets
 
@@ -168,6 +188,7 @@ account and for every selected key that has a budget.
 * `src/lib/api.js` — DeepSeek client and payload normalisation.
 * `src/lib/badge.js` — decides the badge text/colour/tooltip.
 * `src/lib/budget.js` — account and per-key budget evaluation, notification keys.
+* `src/lib/status.js` — DeepSeek service status (status.deepseek.com) fetch + normalisation.
 * `src/lib/waf.js` — WAF cookie state (read-only, never opens tabs).
 * `src/background.js` — alarms, badge painting, refresh orchestration.
 
