@@ -3,12 +3,12 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/), versioned with [SemVer](https://semver.org/).
 
-### Unreleased
+## [1.1.0](https://github.com/rodewitsch/deepseek-usage-monitor/compare/v1.0.4...v1.1.0) (2026-11-03)
+
 
 ### Added
 
-* **status:** DeepSeek service status from status.deepseek.com in the popup, with desktop notifications on service issues (toggleable)
-* **settings:** per-kind notification toggles (budgets, low balance, service status)
+* add DeepSeek service status monitor ([bf25fa1](https://github.com/rodewitsch/deepseek-usage-monitor/commit/bf25fa162f1b38476b04f8c5a11981e5bd5757e1))
 
 ### [1.0.4](https://github.com/rodewitsch/deepseek-usage-monitor/compare/v1.0.3...v1.0.4) (2026-11-02)
 
