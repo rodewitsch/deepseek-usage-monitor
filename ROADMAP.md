@@ -33,6 +33,7 @@ Effort is relative to this codebase: **S** (hours), **M** (a day), **L** (multi-
 | 2026-11-04 | unreleased | **Milestone 1** — per-model breakdown, prompt-cache savings, end-of-day forecast | `src/lib/models.js`, `src/lib/forecast.js` (`6673630`) |
 | 2026-11-04 | unreleased | **Popup layout** — show/hide and reorder the popup blocks | settings only; `popupSections` / `popupHidden` (`6673630`) |
 | 2026-11-04 | unreleased | **Milestone 2** — local history, month/today comparison, balance depletion, CSV/JSON export | `src/lib/history.js`, `src/lib/exporter.js` |
+| 2026-11-04 | v1.3.0 | **Header actions** — usage page, refresh and settings moved into the header as icon buttons (the footer is gone) | `popup.html`, `.header__actions` |
 
 Not done on purpose: **drag-and-drop inside the popup** was implemented and then
 removed — reordering in Settings is enough and the drag was unreliable in the
@@ -85,6 +86,8 @@ older days in the CSV carry day totals but empty model columns.
       *(P0, S)*
 - [x] **Popup layout** — pick which blocks are shown and reorder them (arrows
       in Settings). *(P0, M)* — `settings.popupSections` + `settings.popupHidden`.
+- [x] **Header toolbar** — usage page, refresh and settings as icon buttons in
+      the header instead of footer buttons with labels. *(P0, S)* — `.header__actions`.
 - [ ] **Context menu** — "Open usage for this key" via `chrome.contextMenus`
       (needs its own permission, already accounted for). *(P1, S)*
 - [ ] **On-console widget** — a compact balance/budget strip injected into

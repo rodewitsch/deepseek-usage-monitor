@@ -15,21 +15,55 @@
           <p id="updated" class="muted" data-i18n="popupLoading">Loading…</p>
         </div>
       </div>
-      <button
-        id="refresh"
-        class="icon-button"
-        data-i18n-title="refreshNow"
-        data-i18n-aria-label="refreshNow"
-        title="Refresh now"
-        aria-label="Refresh now"
-      >
-        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-          <path
-            fill="currentColor"
-            d="M12 5V2L8 6l4 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"
-          />
-        </svg>
-      </button>
+      <div class="header__actions">
+        <a
+          id="open-usage"
+          class="icon-button"
+          href="https://platform.deepseek.com/usage"
+          target="_blank"
+          rel="noreferrer"
+          data-i18n-title="openUsagePage"
+          data-i18n-aria-label="openUsagePage"
+          title="Open usage page"
+          aria-label="Open usage page"
+        >
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"
+            />
+          </svg>
+        </a>
+        <button
+          id="refresh"
+          class="icon-button"
+          data-i18n-title="refreshNow"
+          data-i18n-aria-label="refreshNow"
+          title="Refresh now"
+          aria-label="Refresh now"
+        >
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 12a8 8 0 1 1-2.34-5.66" />
+              <path d="M20 4v4h-4" />
+            </g>
+          </svg>
+        </button>
+        <button
+          id="open-options"
+          class="icon-button"
+          data-i18n-title="settings"
+          data-i18n-aria-label="settings"
+          title="Settings"
+          aria-label="Settings"
+        >
+          <span class="icon-button__glyph" aria-hidden="true">⚙</span>
+        </button>
+      </div>
     </header>
 
     <div id="error" class="banner banner--error" hidden>
@@ -177,15 +211,6 @@
         </section>
       </div>
     </div>
-
-    <footer class="footer">
-      <a id="open-usage" class="button button--primary" href="https://platform.deepseek.com/usage" target="_blank" rel="noreferrer">
-        <span data-i18n="openUsagePage">Open usage page</span>
-      </a>
-      <button id="open-options" class="button" data-i18n-title="settings" title="Settings">
-        <span data-i18n="settings">Settings</span>
-      </button>
-    </footer>
 
     <script type="module" src="/tools/preview-popup.js"></script>
   </body>

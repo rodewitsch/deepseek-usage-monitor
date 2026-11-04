@@ -39,8 +39,9 @@ export const TOKEN_COOKIE_NAMES = [
 export const WAF_COOKIE_NAMES = ['aws-waf-token', 'smidV2'];
 
 /**
- * Popup sections, in their default order. `header` and `footer` are pinned
- * (always visible, never reorderable) and are not part of this list.
+ * Popup sections, in their default order. `header` (brand, usage/settings/
+ * refresh icons) is pinned (always visible, never reorderable) and is not part
+ * of this list.
  * Declared before DEFAULT_SETTINGS, which uses POPUP_SECTION_IDS.
  */
 export const POPUP_SECTIONS = [

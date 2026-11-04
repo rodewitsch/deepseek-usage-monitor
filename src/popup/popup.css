@@ -51,6 +51,14 @@ body {
   gap: 8px;
 }
 
+/* Usage page, settings and refresh — icon-only, right of the brand. */
+.header__actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
+}
+
 .brand {
   display: flex;
   align-items: center;
@@ -86,14 +94,17 @@ h2 {
 }
 
 .icon-button {
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 30px;
   height: 30px;
+  padding: 0;
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--bg-soft);
   color: var(--text);
+  font: inherit;
   cursor: pointer;
 }
 
@@ -104,6 +115,28 @@ h2 {
 
 .icon-button.is-busy svg {
   animation: spin 0.9s linear infinite;
+}
+
+.icon-button.is-busy .icon-button__glyph {
+  animation: spin 0.9s linear infinite;
+}
+
+/*
+ * Glyph icons (⚙). Flex on the button centres the span's box, but the span is
+ * a text run and its ink sits off-centre inside the em box. Making the span a
+ * flex container with `line-height: 1` shrinks it to the glyph, so both the
+ * button and the span centre the visible ink instead of the text metrics.
+ */
+.icon-button__glyph {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Flex centres the em box; the glyph's ink is half a pixel left-heavy
+     inside it, so only that axis needs a nudge. Vertical is already exact. */
+  left: 0.5px;
+  font-size: 18px;
+  line-height: 1;
 }
 
 @keyframes spin {
@@ -643,12 +676,6 @@ h2 {
 .empty {
   padding: 8px 0;
   text-align: center;
-}
-
-.footer {
-  display: flex;
-  gap: 8px;
-  margin-top: 14px;
 }
 
 .button {
