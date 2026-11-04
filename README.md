@@ -14,6 +14,9 @@ already present in your browser for `platform.deepseek.com`.
 | **Popup** | Wallet balance (paid / bonus split), spend today + tokens, a 30-day spend chart, per-key list and a daily-budget bar. |
 | **By model** | Spend and tokens per model (`DeepSeek Chat` / `DeepSeek Reasoner`), plus prompt-cache hit rate and the money the cache saved. |
 | **Projected today** | Live forecast for the rest of the day from the pace so far, compared with the average day of the window. |
+| **Comparison** | Today vs. yesterday and this month vs. the same days of the previous month, from a local day-by-day history that outlives the 31-day API window. |
+| **Balance depletion** | “Balance runs out on …” — wallet balance divided by the average daily spend (window configurable). |
+| **Export** | One-click CSV (day / key / model) or JSON download of the stored history. |
 | **Status** | DeepSeek service status from status.deepseek.com — a live indicator in the popup with a link to the status page. |
 | **Badge** | Shows one of: spend today, spend in the period, wallet balance, tokens today. Can be scoped to a single API key. |
 | **Daily budgets** | Account-wide and/or per-API-key budgets, green / orange / red badge, desktop notification on the warn and over thresholds. |
@@ -43,6 +46,10 @@ npm install
 npm run build            # minify + zip into dist/
 npm run release          # bump version (package.json + manifest.json), CHANGELOG
 npm run release:minor    # force a minor bump
+
+node tools/history-check.mjs   # history / comparison / export asserts
+node tools/models-check.mjs    # model split + forecast asserts
+node tools/locale-parity.cjs   # every locale has the same key set as en
 ```
 
 Release flow: commit with Conventional Commits, run `npm run release`, then

@@ -17,6 +17,7 @@ const fields = {
   badgeMetric: { input: el('badge-metric'), setting: 'badgeMetric' },
   refreshMinutes: { input: el('refresh-minutes'), setting: 'refreshMinutes' },
   windowDays: { input: el('window-days'), setting: 'windowDays' },
+  depletionWindowDays: { input: el('depletion-window'), setting: 'depletionWindowDays' },
   lowBalance: { input: el('low-balance'), setting: 'lowBalanceThreshold' },
   dailyBudget: { input: el('daily-budget'), setting: 'dailyBudget' },
   budgetWarnPercent: { input: el('budget-warn-percent'), setting: 'budgetWarnPercent' },
@@ -24,6 +25,8 @@ const fields = {
   lowBalanceNotifications: { input: el('low-balance-notifications'), setting: 'lowBalanceNotifications' },
   statusNotifications: { input: el('status-notifications'), setting: 'statusNotifications' },
   showDecimals: { input: el('show-decimals'), setting: 'showDecimals' },
+  showMonthComparison: { input: el('show-month-comparison'), setting: 'showMonthComparison' },
+  showDepletion: { input: el('show-depletion'), setting: 'showDepletion' },
 };
 
 const preview = el('badge-preview');
@@ -158,6 +161,7 @@ function applySettings(settings) {
   fields.badgeMetric.input.value = settings.badgeMetric;
   fields.refreshMinutes.input.value = settings.refreshMinutes;
   fields.windowDays.input.value = settings.windowDays;
+  fields.depletionWindowDays.input.value = settings.depletionWindowDays;
   fields.lowBalance.input.value = settings.lowBalanceThreshold;
   fields.dailyBudget.input.value = settings.dailyBudget || '';
   fields.budgetWarnPercent.input.value = settings.budgetWarnPercent;
@@ -165,6 +169,8 @@ function applySettings(settings) {
   fields.lowBalanceNotifications.input.checked = settings.lowBalanceNotifications;
   fields.statusNotifications.input.checked = settings.statusNotifications;
   fields.showDecimals.input.checked = settings.showDecimals;
+  fields.showMonthComparison.input.checked = settings.showMonthComparison;
+  fields.showDepletion.input.checked = settings.showDepletion;
   applyMetricVisibility(settings);
 }
 

@@ -12,7 +12,8 @@
     "alarms",
     "cookies",
     "scripting",
-    "notifications"
+    "notifications",
+    "downloads"
   ],
   "host_permissions": [
     "https://platform.deepseek.com/*",

@@ -81,6 +81,81 @@
       "percent": { "content": "$1" }
     }
   },
+
+  "sectionCompareName": {
+    "message": "Perbandingan dan riwayat"
+  },
+  "compareTitle": {
+    "message": "Perbandingan"
+  },
+  "historyRange": {
+    "message": "sejak $from$ · $days$ hari tercatat",
+    "placeholders": {
+      "from": { "content": "$1$" },
+      "days": { "content": "$2$" }
+    }
+  },
+  "compareToday": {
+    "message": "Hari ini vs. kemarin"
+  },
+  "compareTodayNote": {
+    "message": "$values$ ($change$)",
+    "placeholders": {
+      "values": { "content": "$1$" },
+      "change": { "content": "$2$" }
+    }
+  },
+  "compareMonth": {
+    "message": "Bulan ini vs. lalu"
+  },
+  "compareMonthNote": {
+    "message": "$values$ dalam $days$ hari pertama ($change$)",
+    "placeholders": {
+      "values": { "content": "$1$" },
+      "days": { "content": "$2$" },
+      "change": { "content": "$3$" }
+    }
+  },
+  "depletionTitle": {
+    "message": "Saldo habis pada"
+  },
+  "depletionNow": {
+    "message": "Sudah kosong"
+  },
+  "depletionNote": {
+    "message": "sekitar $days$ hari lagi dengan $perDay$ per hari",
+    "placeholders": {
+      "days": { "content": "$1$" },
+      "perDay": { "content": "$2$" }
+    }
+  },
+  "exportTitle": {
+    "message": "Ekspor"
+  },
+  "exportCsv": {
+    "message": "CSV"
+  },
+  "exportJson": {
+    "message": "JSON"
+  },
+  "exportNote": {
+    "message": "$days$ hari riwayat",
+    "placeholders": {
+      "days": { "content": "$1$" }
+    }
+  },
+  "exportEmpty": {
+    "message": "Belum ada riwayat"
+  },
+  "depletionWindow": {
+    "message": "Periode rata-rata pengeluaran (hari, 0 = semua riwayat)"
+  },
+  "showMonthComparison": {
+    "message": "Tampilkan perbandingan bulanan di popup"
+  },
+  "showDepletion": {
+    "message": "Tampilkan perkiraan “saldo habis pada…” di popup"
+  },
   "sectionSummaryName": {
     "message": "Saldo dan pengeluaran hari ini"
   },

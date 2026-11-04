@@ -508,6 +508,61 @@ h2 {
   color: var(--muted);
 }
 
+.compare {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-soft);
+}
+
+.compare__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.compare__row + .compare__row {
+  margin-top: 2px;
+}
+
+.compare__label {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.compare__delta {
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.compare__delta.is-up {
+  color: #dc2626;
+}
+
+.compare__delta.is-down {
+  color: #067647;
+}
+
+.compare__delta.is-flat {
+  color: var(--muted);
+}
+
+.compare__note {
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.export-row {
+  display: flex;
+  gap: 8px;
+}
+
 .select {
   max-width: 170px;
   padding: 3px 6px;
@@ -622,4 +677,10 @@ h2 {
 
 .button--primary:hover {
   filter: brightness(1.06);
+}
+
+/* Must come after `.button`: a same-specificity padding here overrides it. */
+.button--small {
+  padding: 5px 12px;
+  font-size: 11.5px;
 }

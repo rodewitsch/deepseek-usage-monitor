@@ -32,6 +32,7 @@ Effort is relative to this codebase: **S** (hours), **M** (a day), **L** (multi-
 | 1.1.0 | v1.1.0 | DeepSeek service status monitor | `src/lib/status.js` |
 | 2026-11-04 | unreleased | **Milestone 1** — per-model breakdown, prompt-cache savings, end-of-day forecast | `src/lib/models.js`, `src/lib/forecast.js` (`6673630`) |
 | 2026-11-04 | unreleased | **Popup layout** — show/hide and reorder the popup blocks | settings only; `popupSections` / `popupHidden` (`6673630`) |
+| 2026-11-04 | unreleased | **Milestone 2** — local history, month/today comparison, balance depletion, CSV/JSON export | `src/lib/history.js`, `src/lib/exporter.js` |
 
 Not done on purpose: **drag-and-drop inside the popup** was implemented and then
 removed — reordering in Settings is enough and the drag was unreliable in the
@@ -52,17 +53,22 @@ this is mostly normalisation + UI.
 - [x] **End-of-day forecast** — today's pace × remaining hours → projected
       spend. *(P0, S)* — `src/lib/forecast.js` + "Projected today" block.
 
-## Milestone 2 — History & projections (v1.3)
+## Milestone 2 — History & projections (v1.3) ✅
 
-- [ ] **Local history accumulation** — persist the daily total (and per-key
-      daily totals) to `chrome.storage.local` once a day, so charts can cover
-      more than the 31-day API window. *(P1, M)*
-- [ ] **Month-over-month / today-vs-yesterday comparison** — built on top of
-      the accumulated history. *(P1, S after history)*
-- [ ] **"Balance runs out on …"** — balance ÷ average daily spend → estimated
-      depletion date. *(P0, S)*
-- [ ] **CSV/JSON export** — one button in the popup exporting
-      day/key/model spend. *(P1, S)*
+- [x] **Local history accumulation** — persist the daily total (and per-key
+      daily totals) to `chrome.storage.local`, so charts can cover more than
+      the 31-day API window. *(P1, M)* — `src/lib/history.js`, merged on every
+      successful refresh into `usageHistory`.
+- [x] **Month-over-month / today-vs-yesterday comparison** — built on top of
+      the accumulated history. *(P1, S after history)* — "Comparison" popup
+      block, compared like-for-like (same day-of-month slice).
+- [x] **"Balance runs out on …"** — balance ÷ average daily spend → estimated
+      depletion date. *(P0, S)* — average window configurable (0 = all history).
+- [x] **CSV/JSON export** — one button in the popup exporting day/key/model
+      spend. *(P1, S)* — `src/lib/exporter.js`.
+
+Known limit: the per-model split is only known for the current API window, so
+older days in the CSV carry day totals but empty model columns.
 
 ## Milestone 3 — Smarter alerts (v1.4)
 

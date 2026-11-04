@@ -81,6 +81,81 @@
       "percent": { "content": "$1" }
     }
   },
+
+  "sectionCompareName": {
+    "message": "对比与历史"
+  },
+  "compareTitle": {
+    "message": "对比"
+  },
+  "historyRange": {
+    "message": "自 $from$ · 已记录 $days$ 天",
+    "placeholders": {
+      "from": { "content": "$1$" },
+      "days": { "content": "$2$" }
+    }
+  },
+  "compareToday": {
+    "message": "今日对比昨日"
+  },
+  "compareTodayNote": {
+    "message": "$values$（$change$）",
+    "placeholders": {
+      "values": { "content": "$1$" },
+      "change": { "content": "$2$" }
+    }
+  },
+  "compareMonth": {
+    "message": "本月对比上月"
+  },
+  "compareMonthNote": {
+    "message": "前 $days$ 天 $values$（$change$）",
+    "placeholders": {
+      "values": { "content": "$1$" },
+      "days": { "content": "$2$" },
+      "change": { "content": "$3$" }
+    }
+  },
+  "depletionTitle": {
+    "message": "余额耗尽"
+  },
+  "depletionNow": {
+    "message": "已空"
+  },
+  "depletionNote": {
+    "message": "按每天 $perDay$ 约剩 $days$ 天",
+    "placeholders": {
+      "days": { "content": "$1$" },
+      "perDay": { "content": "$2$" }
+    }
+  },
+  "exportTitle": {
+    "message": "导出"
+  },
+  "exportCsv": {
+    "message": "CSV"
+  },
+  "exportJson": {
+    "message": "JSON"
+  },
+  "exportNote": {
+    "message": "$days$ 天历史",
+    "placeholders": {
+      "days": { "content": "$1$" }
+    }
+  },
+  "exportEmpty": {
+    "message": "暂无历史"
+  },
+  "depletionWindow": {
+    "message": "计算余额预计的平均支出天数（0 = 全部历史）"
+  },
+  "showMonthComparison": {
+    "message": "在弹窗中显示月度对比"
+  },
+  "showDepletion": {
+    "message": "在弹窗中显示“余额耗尽…”预估"
+  },
   "sectionSummaryName": {
     "message": "余额与今日花费"
   },

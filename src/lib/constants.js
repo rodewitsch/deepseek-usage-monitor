@@ -47,9 +47,11 @@ export const POPUP_SECTIONS = [
   { id: 'summary', i18n: 'sectionSummaryName' },
   { id: 'budgets', i18n: 'sectionBudgetsName' },
   { id: 'forecast', i18n: 'forecastTitle' },
+  { id: 'compare', i18n: 'sectionCompareName' },
   { id: 'chart', i18n: 'recentSpend' },
   { id: 'models', i18n: 'modelsTitle' },
   { id: 'keys', i18n: 'apiKeys' },
+  { id: 'export', i18n: 'exportTitle' },
 ];
 
 export const POPUP_SECTION_IDS = POPUP_SECTIONS.map((section) => section.id);
@@ -81,6 +83,12 @@ export const DEFAULT_SETTINGS = {
   statusNotifications: true,
   /** Rolling window used to aggregate spend, in days. */
   windowDays: 30,
+  /** Show the month-over-month block in the popup. */
+  showMonthComparison: true,
+  /** Show the "balance runs out on …" estimate in the popup. */
+  showDepletion: true,
+  /** Days of local history used for the depletion estimate (0 = whole history). */
+  depletionWindowDays: 30,
   /** Popup sections in display order. */
   popupSections: POPUP_SECTION_IDS,
   /** Popup sections the user has hidden. */
@@ -114,6 +122,8 @@ export const STORAGE_KEYS = {
   tokenSource: 'platformTokenSource',
   snapshot: 'usageSnapshot',
   lastError: 'lastError',
+  /** Accumulated day-by-day spend, kept beyond the 31-day API window. */
+  history: 'usageHistory',
   status: 'serviceStatus',
   statusNotified: 'statusNotified',
 };

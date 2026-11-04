@@ -216,6 +216,81 @@
     }
   },
 
+  "sectionCompareName": {
+    "message": "Сравнение и история"
+  },
+  "compareTitle": {
+    "message": "Сравнение"
+  },
+  "historyRange": {
+    "message": "с $from$ · записано $days$ дн.",
+    "placeholders": {
+      "from": { "content": "$1$" },
+      "days": { "content": "$2$" }
+    }
+  },
+  "compareToday": {
+    "message": "Сегодня к вчера"
+  },
+  "compareTodayNote": {
+    "message": "$values$ ($change$)",
+    "placeholders": {
+      "values": { "content": "$1$" },
+      "change": { "content": "$2$" }
+    }
+  },
+  "compareMonth": {
+    "message": "Этот месяц к прошлому"
+  },
+  "compareMonthNote": {
+    "message": "$values$ за первые $days$ дн. ($change$)",
+    "placeholders": {
+      "values": { "content": "$1$" },
+      "days": { "content": "$2$" },
+      "change": { "content": "$3$" }
+    }
+  },
+  "depletionTitle": {
+    "message": "Баланс закончится"
+  },
+  "depletionNow": {
+    "message": "Уже пуст"
+  },
+  "depletionNote": {
+    "message": "осталось около $days$ дн. при $perDay$ в день",
+    "placeholders": {
+      "days": { "content": "$1$" },
+      "perDay": { "content": "$2$" }
+    }
+  },
+  "exportTitle": {
+    "message": "Экспорт"
+  },
+  "exportCsv": {
+    "message": "CSV"
+  },
+  "exportJson": {
+    "message": "JSON"
+  },
+  "exportNote": {
+    "message": "$days$ дн. истории",
+    "placeholders": {
+      "days": { "content": "$1$" }
+    }
+  },
+  "exportEmpty": {
+    "message": "Истории пока нет"
+  },
+  "depletionWindow": {
+    "message": "Окно усреднения для оценки остатка баланса (дней, 0 = вся история)"
+  },
+  "showMonthComparison": {
+    "message": "Показывать сравнение месяцев в попапе"
+  },
+  "showDepletion": {
+    "message": "Показывать оценку «баланс закончится…» в попапе"
+  },
+
   "keyRemoveFromChart": {
     "message": "Нажмите, чтобы убрать с графика"
   },

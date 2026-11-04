@@ -81,6 +81,81 @@
       "percent": { "content": "$1" }
     }
   },
+
+  "sectionCompareName": {
+    "message": "比較と履歴"
+  },
+  "compareTitle": {
+    "message": "比較"
+  },
+  "historyRange": {
+    "message": "$from$ から · 記録 $days$ 日",
+    "placeholders": {
+      "from": { "content": "$1$" },
+      "days": { "content": "$2$" }
+    }
+  },
+  "compareToday": {
+    "message": "今日と昨日"
+  },
+  "compareTodayNote": {
+    "message": "$values$（$change$）",
+    "placeholders": {
+      "values": { "content": "$1$" },
+      "change": { "content": "$2$" }
+    }
+  },
+  "compareMonth": {
+    "message": "今月と先月"
+  },
+  "compareMonthNote": {
+    "message": "最初の $days$ 日で $values$（$change$）",
+    "placeholders": {
+      "values": { "content": "$1$" },
+      "days": { "content": "$2$" },
+      "change": { "content": "$3$" }
+    }
+  },
+  "depletionTitle": {
+    "message": "残高切れ"
+  },
+  "depletionNow": {
+    "message": "すでに空"
+  },
+  "depletionNote": {
+    "message": "1 日 $perDay$ で約 $days$ 日",
+    "placeholders": {
+      "days": { "content": "$1$" },
+      "perDay": { "content": "$2$" }
+    }
+  },
+  "exportTitle": {
+    "message": "エクスポート"
+  },
+  "exportCsv": {
+    "message": "CSV"
+  },
+  "exportJson": {
+    "message": "JSON"
+  },
+  "exportNote": {
+    "message": "$days$ 日分の履歴",
+    "placeholders": {
+      "days": { "content": "$1$" }
+    }
+  },
+  "exportEmpty": {
+    "message": "履歴はまだありません"
+  },
+  "depletionWindow": {
+    "message": "平均支出の対象期間（日、0 = 全履歴）"
+  },
+  "showMonthComparison": {
+    "message": "ポップアップに月次比較を表示"
+  },
+  "showDepletion": {
+    "message": "ポップアップに「残高切れ予測」を表示"
+  },
   "sectionSummaryName": {
     "message": "残高と今日の利用額"
   },

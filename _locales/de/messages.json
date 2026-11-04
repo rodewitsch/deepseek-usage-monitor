@@ -81,6 +81,81 @@
       "percent": { "content": "$1" }
     }
   },
+
+  "sectionCompareName": {
+    "message": "Vergleich und Verlauf"
+  },
+  "compareTitle": {
+    "message": "Vergleich"
+  },
+  "historyRange": {
+    "message": "seit $from$ · $days$ erfasste Tage",
+    "placeholders": {
+      "from": { "content": "$1$" },
+      "days": { "content": "$2$" }
+    }
+  },
+  "compareToday": {
+    "message": "Heute vs. gestern"
+  },
+  "compareTodayNote": {
+    "message": "$values$ ($change$)",
+    "placeholders": {
+      "values": { "content": "$1$" },
+      "change": { "content": "$2$" }
+    }
+  },
+  "compareMonth": {
+    "message": "Dieser Monat vs. letzter"
+  },
+  "compareMonthNote": {
+    "message": "$values$ in den ersten $days$ Tagen ($change$)",
+    "placeholders": {
+      "values": { "content": "$1$" },
+      "days": { "content": "$2$" },
+      "change": { "content": "$3$" }
+    }
+  },
+  "depletionTitle": {
+    "message": "Guthaben reicht bis"
+  },
+  "depletionNow": {
+    "message": "Bereits leer"
+  },
+  "depletionNote": {
+    "message": "noch etwa $days$ Tage bei $perDay$ pro Tag",
+    "placeholders": {
+      "days": { "content": "$1$" },
+      "perDay": { "content": "$2$" }
+    }
+  },
+  "exportTitle": {
+    "message": "Export"
+  },
+  "exportCsv": {
+    "message": "CSV"
+  },
+  "exportJson": {
+    "message": "JSON"
+  },
+  "exportNote": {
+    "message": "$days$ Tage Verlauf",
+    "placeholders": {
+      "days": { "content": "$1$" }
+    }
+  },
+  "exportEmpty": {
+    "message": "Noch kein Verlauf"
+  },
+  "depletionWindow": {
+    "message": "Zeitraum für die durchschnittliche Ausgabe (Tage, 0 = gesamter Verlauf)"
+  },
+  "showMonthComparison": {
+    "message": "Monatsvergleich im Popup anzeigen"
+  },
+  "showDepletion": {
+    "message": "Schätzung „Guthaben reicht bis…“ im Popup anzeigen"
+  },
   "sectionSummaryName": {
     "message": "Guthaben und Ausgaben heute"
   },

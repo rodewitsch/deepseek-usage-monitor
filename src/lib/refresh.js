@@ -1,9 +1,10 @@
 import { fetchUsageByKey, parseBalance } from './api.js';
 import { ENDPOINTS } from './constants.js';
 import { ApiError, localDayKey } from './format.js';
+import { mergeUsageIntoHistory } from './history.js';
 import { requestPlatformJson } from './http.js';
 import { t } from './i18n.js';
-import { getSettings, getSnapshot, saveSnapshot, clearToken } from './settings.js';
+import { getHistory, getSettings, getSnapshot, saveHistory, saveSnapshot, clearToken } from './settings.js';
 import { discoverPlatformToken } from './token.js';
 
 /**
@@ -70,7 +71,26 @@ export async function refreshUsage({ forceToken = false } = {}) {
     usage,
   };
   await saveSnapshot(snapshot, null);
+  // Accumulate the day-by-day record beyond the 31-day API window. History is
+  // a nice-to-have: a failure here must never fail the whole refresh.
+  await recordHistory(usage, snapshot.todayKey);
   return { snapshot, lastError: null };
+}
+
+/**
+ * Merges the fresh API series into the local history and persists it.
+ * Returns the merged history (or the stored one when the merge threw).
+ */
+export async function recordHistory(usage, todayKey = localDayKey(), { trusted = true } = {}) {
+  try {
+    const current = await getHistory();
+    const { history, changed } = mergeUsageIntoHistory(current, usage, { todayKey, trusted });
+    if (changed) await saveHistory(history);
+    return history;
+  } catch (error) {
+    console.warn('[DeepSeek Usage] history update failed:', error?.message || error);
+    return getHistory();
+  }
 }
 
 async function load(token, settings) {

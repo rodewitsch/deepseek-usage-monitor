@@ -81,6 +81,81 @@
       "percent": { "content": "$1" }
     }
   },
+
+  "sectionCompareName": {
+    "message": "तुलना और इतिहास"
+  },
+  "compareTitle": {
+    "message": "तुलना"
+  },
+  "historyRange": {
+    "message": "$from$ से · $days$ दिन दर्ज",
+    "placeholders": {
+      "from": { "content": "$1$" },
+      "days": { "content": "$2$" }
+    }
+  },
+  "compareToday": {
+    "message": "आज बनाम कल"
+  },
+  "compareTodayNote": {
+    "message": "$values$ ($change$)",
+    "placeholders": {
+      "values": { "content": "$1$" },
+      "change": { "content": "$2$" }
+    }
+  },
+  "compareMonth": {
+    "message": "यह महीना बनाम पिछला"
+  },
+  "compareMonthNote": {
+    "message": "पहले $days$ दिनों में $values$ ($change$)",
+    "placeholders": {
+      "values": { "content": "$1$" },
+      "days": { "content": "$2$" },
+      "change": { "content": "$3$" }
+    }
+  },
+  "depletionTitle": {
+    "message": "बैलेंस खत्म होगा"
+  },
+  "depletionNow": {
+    "message": "पहले से खाली"
+  },
+  "depletionNote": {
+    "message": "लगभग $days$ दिन बाकी, प्रतिदिन $perDay$",
+    "placeholders": {
+      "days": { "content": "$1$" },
+      "perDay": { "content": "$2$" }
+    }
+  },
+  "exportTitle": {
+    "message": "एक्सपोर्ट"
+  },
+  "exportCsv": {
+    "message": "CSV"
+  },
+  "exportJson": {
+    "message": "JSON"
+  },
+  "exportNote": {
+    "message": "$days$ दिन का इतिहास",
+    "placeholders": {
+      "days": { "content": "$1$" }
+    }
+  },
+  "exportEmpty": {
+    "message": "अभी कोई इतिहास नहीं"
+  },
+  "depletionWindow": {
+    "message": "औसत खर्च अवधि (दिन, 0 = पूरा इतिहास)"
+  },
+  "showMonthComparison": {
+    "message": "पॉपअप में मासिक तुलना दिखाएँ"
+  },
+  "showDepletion": {
+    "message": "पॉपअप में “बैलेंस खत्म होगा…” अनुमान दिखाएँ"
+  },
   "sectionSummaryName": {
     "message": "बैलेंस और आज का खर्च"
   },

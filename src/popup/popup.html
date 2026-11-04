@@ -94,6 +94,32 @@
         </section>
       </div>
 
+      <div class="section-wrap" data-section="compare">
+        <section id="compare" class="section" hidden>
+          <div class="section__head">
+            <h2 data-i18n="compareTitle">Comparison</h2>
+            <span id="history-range" class="muted"></span>
+          </div>
+          <div class="compare">
+            <div class="compare__row">
+              <span class="compare__label" data-i18n="compareToday">Today vs. yesterday</span>
+              <span id="compare-today-delta" class="compare__delta">—</span>
+            </div>
+            <span id="compare-today-note" class="compare__note"></span>
+            <div class="compare__row">
+              <span class="compare__label" data-i18n="compareMonth">This month vs. last</span>
+              <span id="compare-month-delta" class="compare__delta">—</span>
+            </div>
+            <span id="compare-month-note" class="compare__note"></span>
+            <div id="depletion-row" class="compare__row" hidden>
+              <span class="compare__label" data-i18n="depletionTitle">Balance runs out</span>
+              <span id="depletion-value" class="compare__delta">—</span>
+            </div>
+            <span id="depletion-note" class="compare__note" hidden></span>
+          </div>
+        </section>
+      </div>
+
       <div class="section-wrap" data-section="chart">
         <section class="section">
           <div class="section__head">
@@ -135,6 +161,19 @@
           <p id="key-empty" class="muted empty" data-i18n="noPerKeyUsage" hidden>
             No per-key usage in this period.
           </p>
+        </section>
+      </div>
+
+      <div class="section-wrap" data-section="export">
+        <section class="section">
+          <div class="section__head">
+            <h2 data-i18n="exportTitle">Export</h2>
+            <span id="export-note" class="muted"></span>
+          </div>
+          <div class="export-row">
+            <button id="export-csv" class="button button--small" data-i18n="exportCsv">CSV</button>
+            <button id="export-json" class="button button--small" data-i18n="exportJson">JSON</button>
+          </div>
         </section>
       </div>
     </div>

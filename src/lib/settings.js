@@ -1,4 +1,5 @@
 import { DEFAULT_SETTINGS, POPUP_SECTION_IDS, STORAGE_KEYS } from './constants.js';
+import { normaliseHistory } from './history.js';
 
 export async function getSettings() {
   const stored = await chrome.storage.local.get(STORAGE_KEYS.settings);
@@ -14,10 +15,14 @@ export function normaliseSettings(raw) {
 
   settings.refreshMinutes = clampInt(settings.refreshMinutes, 0, 1440, DEFAULT_SETTINGS.refreshMinutes);
   settings.windowDays = clampInt(settings.windowDays, 1, 90, DEFAULT_SETTINGS.windowDays);
+  // 0 keeps the whole recorded history instead of a rolling window.
+  settings.depletionWindowDays = clampInt(settings.depletionWindowDays, 0, 3650, DEFAULT_SETTINGS.depletionWindowDays);
   settings.budgetWarnPercent = clampInt(settings.budgetWarnPercent, 1, 100, DEFAULT_SETTINGS.budgetWarnPercent);
   settings.lowBalanceThreshold = clampNumber(settings.lowBalanceThreshold, 0, 1e9, DEFAULT_SETTINGS.lowBalanceThreshold);
   settings.dailyBudget = clampNumber(settings.dailyBudget, 0, 1e9, DEFAULT_SETTINGS.dailyBudget);
   settings.showDecimals = settings.showDecimals !== false;
+  settings.showMonthComparison = settings.showMonthComparison !== false;
+  settings.showDepletion = settings.showDepletion !== false;
   settings.budgetNotifications = settings.budgetNotifications !== false;
   settings.lowBalanceNotifications = settings.lowBalanceNotifications !== false;
   settings.statusNotifications = settings.statusNotifications !== false;
@@ -89,6 +94,16 @@ export async function saveSnapshot(snapshot, lastError = null) {
     [STORAGE_KEYS.snapshot]: snapshot,
     [STORAGE_KEYS.lastError]: lastError,
   });
+}
+
+/** Accumulated daily spend history (see `history.js`). */
+export async function getHistory() {
+  const stored = await chrome.storage.local.get(STORAGE_KEYS.history);
+  return normaliseHistory(stored[STORAGE_KEYS.history]);
+}
+
+export async function saveHistory(history) {
+  await chrome.storage.local.set({ [STORAGE_KEYS.history]: history });
 }
 
 export async function getTokenInfo() {

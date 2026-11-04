@@ -81,6 +81,81 @@
       "percent": { "content": "$1" }
     }
   },
+
+  "sectionCompareName": {
+    "message": "Comparaison et historique"
+  },
+  "compareTitle": {
+    "message": "Comparaison"
+  },
+  "historyRange": {
+    "message": "depuis $from$ · $days$ jours enregistrés",
+    "placeholders": {
+      "from": { "content": "$1$" },
+      "days": { "content": "$2$" }
+    }
+  },
+  "compareToday": {
+    "message": "Aujourd'hui vs. hier"
+  },
+  "compareTodayNote": {
+    "message": "$values$ ($change$)",
+    "placeholders": {
+      "values": { "content": "$1$" },
+      "change": { "content": "$2$" }
+    }
+  },
+  "compareMonth": {
+    "message": "Ce mois vs. le précédent"
+  },
+  "compareMonthNote": {
+    "message": "$values$ sur les $days$ premiers jours ($change$)",
+    "placeholders": {
+      "values": { "content": "$1$" },
+      "days": { "content": "$2$" },
+      "change": { "content": "$3$" }
+    }
+  },
+  "depletionTitle": {
+    "message": "Le solde s’épuise"
+  },
+  "depletionNow": {
+    "message": "Déjà vide"
+  },
+  "depletionNote": {
+    "message": "environ $days$ jours restants à $perDay$ par jour",
+    "placeholders": {
+      "days": { "content": "$1$" },
+      "perDay": { "content": "$2$" }
+    }
+  },
+  "exportTitle": {
+    "message": "Exporter"
+  },
+  "exportCsv": {
+    "message": "CSV"
+  },
+  "exportJson": {
+    "message": "JSON"
+  },
+  "exportNote": {
+    "message": "$days$ jours d’historique",
+    "placeholders": {
+      "days": { "content": "$1$" }
+    }
+  },
+  "exportEmpty": {
+    "message": "Pas encore d’historique"
+  },
+  "depletionWindow": {
+    "message": "Période de dépense moyenne pour l’estimation (jours, 0 = tout l’historique)"
+  },
+  "showMonthComparison": {
+    "message": "Afficher la comparaison mensuelle dans le popup"
+  },
+  "showDepletion": {
+    "message": "Afficher l’estimation « le solde s’épuise… » dans le popup"
+  },
   "sectionSummaryName": {
     "message": "Solde et dépenses du jour"
   },

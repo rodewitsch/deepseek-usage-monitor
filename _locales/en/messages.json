@@ -216,6 +216,81 @@
     }
   },
 
+  "sectionCompareName": {
+    "message": "Comparison and history"
+  },
+  "compareTitle": {
+    "message": "Comparison"
+  },
+  "historyRange": {
+    "message": "since $from$ · $days$ recorded days",
+    "placeholders": {
+      "from": { "content": "$1$" },
+      "days": { "content": "$2$" }
+    }
+  },
+  "compareToday": {
+    "message": "Today vs. yesterday"
+  },
+  "compareTodayNote": {
+    "message": "$values$ ($change$)",
+    "placeholders": {
+      "values": { "content": "$1$" },
+      "change": { "content": "$2$" }
+    }
+  },
+  "compareMonth": {
+    "message": "This month vs. last"
+  },
+  "compareMonthNote": {
+    "message": "$values$ over the first $days$ days ($change$)",
+    "placeholders": {
+      "values": { "content": "$1$" },
+      "days": { "content": "$2$" },
+      "change": { "content": "$3$" }
+    }
+  },
+  "depletionTitle": {
+    "message": "Balance runs out"
+  },
+  "depletionNow": {
+    "message": "Already empty"
+  },
+  "depletionNote": {
+    "message": "about $days$ days left at $perDay$ a day",
+    "placeholders": {
+      "days": { "content": "$1$" },
+      "perDay": { "content": "$2$" }
+    }
+  },
+  "exportTitle": {
+    "message": "Export"
+  },
+  "exportCsv": {
+    "message": "CSV"
+  },
+  "exportJson": {
+    "message": "JSON"
+  },
+  "exportNote": {
+    "message": "$days$ days of history",
+    "placeholders": {
+      "days": { "content": "$1$" }
+    }
+  },
+  "exportEmpty": {
+    "message": "No history yet"
+  },
+  "depletionWindow": {
+    "message": "Average spend window for the depletion estimate (days, 0 = all history)"
+  },
+  "showMonthComparison": {
+    "message": "Show the month-over-month comparison in the popup"
+  },
+  "showDepletion": {
+    "message": "Show the “balance runs out on…” estimate in the popup"
+  },
+
   "keyRemoveFromChart": {
     "message": "Click to remove from the chart"
   },

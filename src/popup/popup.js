@@ -1,11 +1,21 @@
 import { SERIES_COLORS, POPUP_SECTION_IDS, STATUS_PAGE_URL, USAGE_PAGE_URL } from '../lib/constants.js';
 import { evaluateBudgets } from '../lib/budget.js';
+import { exportFileName, historyToCsv, historyToJson } from '../lib/exporter.js';
 import { projectToday } from '../lib/forecast.js';
 import { currencySymbol, formatMoney, formatRelativeTime, formatTokens, localDayKey } from '../lib/format.js';
+import {
+  compareMonths,
+  compareToday,
+  dailyAverage,
+  estimateDepletion,
+  firstRecordedDay,
+  shiftDayKey,
+  sortedDays,
+} from '../lib/history.js';
 import { applyDocumentLanguage, localizeDocument, t } from '../lib/i18n.js';
 import { modelLabel } from '../lib/models.js';
 import { scrapeFromPage } from '../lib/scrape.js';
-import { getSettings, getSnapshot, saveSettings, saveSnapshot } from '../lib/settings.js';
+import { getHistory, getSettings, getSnapshot, saveSettings, saveSnapshot } from '../lib/settings.js';
 
 const el = (id) => document.getElementById(id);
 
@@ -32,6 +42,18 @@ const ui = {
   forecast: el('forecast'),
   forecastValue: el('forecast-value'),
   forecastNote: el('forecast-note'),
+  compare: el('compare'),
+  compareTodayDelta: el('compare-today-delta'),
+  compareTodayNote: el('compare-today-note'),
+  compareMonthDelta: el('compare-month-delta'),
+  compareMonthNote: el('compare-month-note'),
+  depletionRow: el('depletion-row'),
+  depletionValue: el('depletion-value'),
+  depletionNote: el('depletion-note'),
+  historyRange: el('history-range'),
+  exportCsv: el('export-csv'),
+  exportJson: el('export-json'),
+  exportNote: el('export-note'),
   budgets: el('budgets'),
   budgetList: el('budget-list'),
   keySelected: el('key-selected'),
@@ -44,6 +66,7 @@ const ui = {
 };
 
 let settings = null;
+let history = null;
 
 init();
 
@@ -55,6 +78,8 @@ async function init() {
   ui.refresh.addEventListener('click', () => refresh(true));
   ui.openOptions.addEventListener('click', () => chrome.runtime.openOptionsPage());
   ui.errorFix.addEventListener('click', () => chrome.runtime.openOptionsPage());
+  ui.exportCsv.addEventListener('click', () => exportHistory('csv'));
+  ui.exportJson.addEventListener('click', () => exportHistory('json'));
 
   ui.keyList.addEventListener('click', async (event) => {
     const item = event.target.closest('[data-key-id]');
@@ -68,7 +93,8 @@ async function init() {
 
   chrome.storage.onChanged.addListener((changes, area) => {
     if (area !== 'local') return;
-    if (changes.settings || changes.usageSnapshot || changes.lastError) render();
+    if (changes.usageHistory) history = changes.usageHistory.newValue || null;
+    if (changes.settings || changes.usageSnapshot || changes.usageHistory || changes.lastError) render();
     else if (changes.serviceStatus) renderServiceStatus(changes.serviceStatus.newValue);
   });
 
@@ -143,6 +169,7 @@ async function applyScrapedSnapshot(page) {
 async function render() {
   settings = await getSettings();
   const { snapshot, lastError } = await getSnapshot();
+  if (!history) history = await getHistory();
   const selected = selectedKeys(snapshot?.usage, settings);
 
   applyLayout(settings);
@@ -153,7 +180,9 @@ async function render() {
   renderChart(snapshot, settings, selected);
   renderModels(snapshot);
   renderForecast(snapshot, settings);
+  renderCompare(snapshot, settings);
   renderKeys(snapshot, settings, selected);
+  renderExport(snapshot);
 }
 
 /** Per-model spend for the aggregation window, plus the prompt-cache savings. */
@@ -248,6 +277,169 @@ function renderForecast(snapshot, currentSettings) {
     notes.push(t('forecastVsAverage', [`${Math.round(forecast.ratio * 100)}%`]));
   }
   ui.forecastNote.textContent = notes.join(' · ');
+}
+
+/**
+ * Today vs. yesterday and this month vs. the previous one, both from the local
+ * history, plus the "balance runs out on …" estimate. The whole block hides
+ * when there is not enough history to say anything useful.
+ */
+function renderCompare(snapshot, currentSettings) {
+  const usage = snapshot?.usage;
+  const todayKey = localDayKey();
+  const days = sortedDays(history || {});
+  const currency = history?.currency || usage?.currency || 'USD';
+  const money = (value) => formatMoney(value, currency, { decimals: currentSettings.showDecimals });
+
+  ui.compare.hidden = true;
+  ui.historyRange.textContent = '';
+  ui.depletionRow.hidden = true;
+  ui.depletionNote.hidden = true;
+  if (!days.length) return;
+
+  const today = compareToday(usage, history, todayKey);
+  const months = compareMonths(history, todayKey);
+
+  const showToday = today.comparable;
+  const showMonth = currentSettings.showMonthComparison && months.comparable;
+  const depletion = currentSettings.showDepletion
+    ? estimateDepletion(snapshot?.balance?.total, averageForDepletion(currentSettings, todayKey), todayKey)
+    : null;
+
+  if (!showToday && !showMonth && !depletion) return;
+
+  ui.compare.hidden = false;
+  ui.historyRange.textContent = t('historyRange', [
+    firstRecordedDay(history) || '—',
+    String(days.length),
+  ]);
+
+  // Today vs. yesterday.
+  ui.compareTodayDelta.parentElement.hidden = !showToday;
+  ui.compareTodayNote.hidden = !showToday;
+  if (showToday) {
+    setDelta(ui.compareTodayDelta, today.todayCost, today.yesterday, money);
+    ui.compareTodayNote.textContent = t('compareTodayNote', [
+      `${money(today.yesterday)} → ${money(today.todayCost)}`,
+      signedPercent(today.ratio),
+    ]);
+  }
+
+  // This month (so far) vs. the same days of the previous month — comparing a
+  // partial month with a whole month would always look like a drop.
+  ui.compareMonthDelta.parentElement.hidden = !showMonth;
+  ui.compareMonthNote.hidden = !showMonth;
+  if (showMonth) {
+    setDelta(ui.compareMonthDelta, months.sameDaysCurrent, months.sameDaysPrevious, money);
+    ui.compareMonthNote.textContent = t('compareMonthNote', [
+      `${money(months.sameDaysPrevious)} → ${money(months.sameDaysCurrent)}`,
+      String(Number(todayKey.slice(8, 10))),
+      signedPercent(months.sameDaysRatio),
+    ]);
+  }
+
+  // Balance depletion. A date is not "bad news" on its own: red only when it
+  // is imminent (≤ 3 days), muted otherwise. `is-up` is the red modifier here.
+  if (depletion) {
+    ui.depletionRow.hidden = false;
+    ui.depletionNote.hidden = false;
+    ui.depletionValue.textContent = depletion.depleted
+      ? t('depletionNow')
+      : formatDate(depletion.runsOutOn);
+    ui.depletionValue.classList.remove('is-up', 'is-down', 'is-flat');
+    ui.depletionValue.classList.add(depletion.daysLeft <= 3 ? 'is-up' : 'is-flat');
+    ui.depletionNote.textContent = t('depletionNote', [
+      String(depletion.daysLeft),
+      money(depletion.perDay),
+    ]);
+  }
+}
+
+/** Average daily spend over the configured depletion window (0 = all history). */
+function averageForDepletion(currentSettings, todayKey) {
+  const windowDays = Number(currentSettings.depletionWindowDays) || 0;
+  const from = windowDays > 0 ? shiftDayKey(todayKey, -windowDays) : null;
+  return dailyAverage(history, { from, to: shiftDayKey(todayKey, -1) }).average;
+}
+
+/** Colours the delta red for growth, green for a drop, muted for no change. */
+function setDelta(node, current, previous, money) {
+  const diff = (Number(current) || 0) - (Number(previous) || 0);
+  node.classList.remove('is-up', 'is-down', 'is-flat');
+  if (!previous) {
+    node.classList.add('is-flat');
+    node.textContent = money(current);
+    return;
+  }
+  node.classList.add(diff > 0 ? 'is-up' : diff < 0 ? 'is-down' : 'is-flat');
+  const sign = diff > 0 ? '+' : diff < 0 ? '−' : '';
+  node.textContent = `${sign}${money(Math.abs(diff))}`;
+}
+
+/** `1.25` → "+25%", `0.6` → "−40%", 0 → "—". */
+function signedPercent(ratio) {
+  if (!ratio) return '—';
+  const percent = Math.round((ratio - 1) * 100);
+  if (percent === 0) return '±0%';
+  return `${percent > 0 ? '+' : '−'}${Math.abs(percent)}%`;
+}
+
+/** `2026-11-24` → a locale-agnostic short date (`24 Nov 2026`). */
+function formatDate(dayKey) {
+  const [year, month, day] = String(dayKey).split('-').map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  try {
+    return date.toLocaleDateString(chrome.i18n.getUILanguage(), {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      timeZone: 'UTC',
+    });
+  } catch {
+    return dayKey;
+  }
+}
+
+/** How many days of history the export buttons can offer. */
+function renderExport(snapshot) {
+  const days = sortedDays(history || {}).length;
+  ui.exportNote.textContent = days
+    ? t('exportNote', [String(days)])
+    : t('exportEmpty');
+  ui.exportCsv.disabled = days === 0 && !snapshot?.usage;
+  ui.exportJson.disabled = ui.exportCsv.disabled;
+}
+
+/** Downloads the history as CSV or JSON through a temporary blob URL. */
+async function exportHistory(format) {
+  const { snapshot } = await getSnapshot();
+  if (!history) history = await getHistory();
+  const todayKey = localDayKey();
+  const payload =
+    format === 'csv'
+      ? historyToCsv(history, { usage: snapshot?.usage, todayKey })
+      : historyToJson(history, { usage: snapshot?.usage, balance: snapshot?.balance, todayKey });
+  const type = format === 'csv' ? 'text/csv;charset=utf-8' : 'application/json;charset=utf-8';
+
+  const blob = new Blob([payload], { type });
+  const url = URL.createObjectURL(blob);
+  try {
+    await chrome.downloads.download({
+      url,
+      filename: exportFileName(format, todayKey),
+      saveAs: false,
+    });
+  } catch (error) {
+    // `downloads` permission missing or blocked — fall back to an `<a download>`.
+    console.warn('[DeepSeek Usage] download failed, using an anchor:', error?.message || error);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = exportFileName(format, todayKey);
+    anchor.click();
+  } finally {
+    // Give the browser a moment to start the download before revoking.
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+  }
 }
 
 /** `{ id: HTMLElement }` — the wrappers that can be reordered and hidden. */
