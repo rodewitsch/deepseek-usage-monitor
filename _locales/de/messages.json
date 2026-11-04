@@ -49,6 +49,57 @@
     "message": "Einstellungen"
   },
 
+  "modelsTitle": {
+    "message": "Nach Modell"
+  },
+  "modelMeta": {
+    "message": "$tokens$ Tokens · $percent$ % der Ausgaben",
+    "placeholders": {
+      "tokens": { "content": "$1" },
+      "percent": { "content": "$2" }
+    }
+  },
+  "cacheNote": {
+    "message": "Prompt-Cache: $rate$ % Trefferquote, gespart $saved$",
+    "placeholders": {
+      "rate": { "content": "$1" },
+      "saved": { "content": "$2" }
+    }
+  },
+  "forecastTitle": {
+    "message": "Prognose für heute"
+  },
+  "forecastRemaining": {
+    "message": "noch etwa $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "forecastVsAverage": {
+    "message": "$percent$ eines Durchschnittstags",
+    "placeholders": {
+      "percent": { "content": "$1" }
+    }
+  },
+  "sectionSummaryName": {
+    "message": "Guthaben und Ausgaben heute"
+  },
+  "sectionBudgetsName": {
+    "message": "Budgets"
+  },
+  "panelLayout": {
+    "message": "Popup-Layout"
+  },
+  "layoutHelp": {
+    "message": "Wählen Sie die Blöcke, die im Popup sichtbar sein sollen, und ordnen Sie sie an. Die Kopfzeile und die Buttons unten sind immer sichtbar."
+  },
+  "moveUp": {
+    "message": "Nach oben"
+  },
+  "moveDown": {
+    "message": "Nach unten"
+  },
+
   "statusNoData": {
     "message": "Noch keine Daten"
   },

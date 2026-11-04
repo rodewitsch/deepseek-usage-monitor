@@ -49,6 +49,57 @@
     "message": "设置"
   },
 
+  "modelsTitle": {
+    "message": "按模型"
+  },
+  "modelMeta": {
+    "message": "$tokens$ 个 token · 占花费 $percent$%",
+    "placeholders": {
+      "tokens": { "content": "$1" },
+      "percent": { "content": "$2" }
+    }
+  },
+  "cacheNote": {
+    "message": "提示缓存：命中率 $rate$%，节省 $saved$",
+    "placeholders": {
+      "rate": { "content": "$1" },
+      "saved": { "content": "$2" }
+    }
+  },
+  "forecastTitle": {
+    "message": "今日预测"
+  },
+  "forecastRemaining": {
+    "message": "预计还将花费 $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "forecastVsAverage": {
+    "message": "平均日期的 $percent$",
+    "placeholders": {
+      "percent": { "content": "$1" }
+    }
+  },
+  "sectionSummaryName": {
+    "message": "余额与今日花费"
+  },
+  "sectionBudgetsName": {
+    "message": "预算"
+  },
+  "panelLayout": {
+    "message": "弹出窗口布局"
+  },
+  "layoutHelp": {
+    "message": "勾选要在弹出窗口中显示的区块并调整顺序。标题栏和底部按钮始终显示。"
+  },
+  "moveUp": {
+    "message": "上移"
+  },
+  "moveDown": {
+    "message": "下移"
+  },
+
   "statusNoData": {
     "message": "暂无数据"
   },

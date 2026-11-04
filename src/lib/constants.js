@@ -38,6 +38,22 @@ export const TOKEN_COOKIE_NAMES = [
  */
 export const WAF_COOKIE_NAMES = ['aws-waf-token', 'smidV2'];
 
+/**
+ * Popup sections, in their default order. `header` and `footer` are pinned
+ * (always visible, never reorderable) and are not part of this list.
+ * Declared before DEFAULT_SETTINGS, which uses POPUP_SECTION_IDS.
+ */
+export const POPUP_SECTIONS = [
+  { id: 'summary', i18n: 'sectionSummaryName' },
+  { id: 'budgets', i18n: 'sectionBudgetsName' },
+  { id: 'forecast', i18n: 'forecastTitle' },
+  { id: 'chart', i18n: 'recentSpend' },
+  { id: 'models', i18n: 'modelsTitle' },
+  { id: 'keys', i18n: 'apiKeys' },
+];
+
+export const POPUP_SECTION_IDS = POPUP_SECTIONS.map((section) => section.id);
+
 export const DEFAULT_SETTINGS = {
   /** What the toolbar badge shows. */
   badgeMetric: 'todayCost',
@@ -65,6 +81,10 @@ export const DEFAULT_SETTINGS = {
   statusNotifications: true,
   /** Rolling window used to aggregate spend, in days. */
   windowDays: 30,
+  /** Popup sections in display order. */
+  popupSections: POPUP_SECTION_IDS,
+  /** Popup sections the user has hidden. */
+  popupHidden: [],
 };
 
 /** Distinct colours for plotting several API keys on one chart. */

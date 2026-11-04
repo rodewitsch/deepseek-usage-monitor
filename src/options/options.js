@@ -1,6 +1,6 @@
 import { computeBadge } from '../lib/badge.js';
 import { evaluateBudgets } from '../lib/budget.js';
-import { PLATFORM_ORIGIN } from '../lib/constants.js';
+import { PLATFORM_ORIGIN, POPUP_SECTION_IDS, POPUP_SECTIONS } from '../lib/constants.js';
 import { formatMoney } from '../lib/format.js';
 import { applyDocumentLanguage, localizeDocument, t } from '../lib/i18n.js';
 import { getSettings, getSnapshot, getTokenInfo, saveSettings } from '../lib/settings.js';
@@ -36,6 +36,7 @@ const badgeKeyField = el('badge-key-field');
 const badgeKeysHint = el('badge-keys-hint');
 const keyBudgets = el('key-budgets');
 const keyBudgetsEmpty = el('key-budgets-empty');
+const layoutList = el('layout-list');
 
 let currentSettings = null;
 let currentSnapshot = null;
@@ -49,6 +50,7 @@ async function init() {
   currentSnapshot = (await getSnapshot()).snapshot;
   renderBadgeKeys();
   renderKeyBudgets();
+  renderLayout();
   applySettings(currentSettings);
   updatePreview();
   await updateSessionStatus();
@@ -76,6 +78,33 @@ async function init() {
     currentSettings = await saveSettings({ keyBudgets: next });
     renderKeyBudgets();
     updatePreview();
+    flashSaved();
+  });
+
+  layoutList.addEventListener('change', async (event) => {
+    const input = event.target.closest('[data-section-toggle]');
+    if (!input) return;
+    const id = input.dataset.sectionToggle;
+    const hidden = new Set(currentSettings.popupHidden || []);
+    if (input.checked) hidden.delete(id);
+    else hidden.add(id);
+    currentSettings = await saveSettings({ popupHidden: [...hidden] });
+    renderLayout();
+    flashSaved();
+  });
+
+  layoutList.addEventListener('click', async (event) => {
+    const button = event.target.closest('[data-move]');
+    if (!button) return;
+    const id = button.dataset.sectionId;
+    const order = [...(currentSettings.popupSections || POPUP_SECTION_IDS)];
+    const index = order.indexOf(id);
+    const delta = button.dataset.move === 'up' ? -1 : 1;
+    const target = index + delta;
+    if (index < 0 || target < 0 || target >= order.length) return;
+    [order[index], order[target]] = [order[target], order[index]];
+    currentSettings = await saveSettings({ popupSections: order });
+    renderLayout();
     flashSaved();
   });
 
@@ -148,6 +177,54 @@ function applyMetricVisibility(settings) {
 
 function usageKeys() {
   return currentSnapshot?.usage?.keys || [];
+}
+
+/** Popup layout: one row per block with a visibility toggle and move buttons. */
+function renderLayout() {
+  const order = currentSettings?.popupSections?.length
+    ? currentSettings.popupSections
+    : POPUP_SECTION_IDS;
+  const hidden = new Set(currentSettings?.popupHidden || []);
+  const labels = new Map(POPUP_SECTIONS.map((section) => [section.id, section.i18n]));
+
+  layoutList.replaceChildren();
+
+  order.forEach((id, index) => {
+    const row = document.createElement('li');
+    row.className = 'layout-row';
+
+    const toggle = document.createElement('input');
+    toggle.type = 'checkbox';
+    toggle.checked = !hidden.has(id);
+    toggle.dataset.sectionToggle = id;
+
+    const name = document.createElement('label');
+    name.className = 'layout-row__name';
+    name.append(toggle, document.createTextNode(t(labels.get(id) || id)));
+
+    const tools = document.createElement('span');
+    tools.className = 'layout-row__tools';
+
+    const up = iconButton('up', id, index === 0, 'moveUp');
+    const down = iconButton('down', id, index === order.length - 1, 'moveDown');
+    tools.append(up, down);
+
+    row.append(name, tools);
+    layoutList.append(row);
+  });
+}
+
+function iconButton(move, sectionId, disabled, labelKey) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'layout-row__move';
+  button.dataset.move = move;
+  button.dataset.sectionId = sectionId;
+  button.disabled = disabled;
+  button.title = t(labelKey);
+  button.setAttribute('aria-label', t(labelKey));
+  button.textContent = move === 'up' ? '↑' : '↓';
+  return button;
 }
 
 function renderBadgeKeys() {

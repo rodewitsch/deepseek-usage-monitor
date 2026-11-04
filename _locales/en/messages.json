@@ -49,6 +49,13 @@
     "message": "Settings"
   },
 
+  "sectionSummaryName": {
+    "message": "Balance and spend today"
+  },
+  "sectionBudgetsName": {
+    "message": "Budgets"
+  },
+
   "statusNoData": {
     "message": "No data yet"
   },
@@ -176,6 +183,39 @@
     "message": "All keys"
   },
 
+  "modelsTitle": {
+    "message": "By model"
+  },
+  "modelMeta": {
+    "message": "$tokens$ tokens · $percent$% of spend",
+    "placeholders": {
+      "tokens": { "content": "$1" },
+      "percent": { "content": "$2" }
+    }
+  },
+  "cacheNote": {
+    "message": "Prompt cache: $rate$% hit rate, saved $saved$",
+    "placeholders": {
+      "rate": { "content": "$1" },
+      "saved": { "content": "$2" }
+    }
+  },
+  "forecastTitle": {
+    "message": "Projected today"
+  },
+  "forecastRemaining": {
+    "message": "about $amount$ left",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "forecastVsAverage": {
+    "message": "$percent$ of an average day",
+    "placeholders": {
+      "percent": { "content": "$1" }
+    }
+  },
+
   "keyRemoveFromChart": {
     "message": "Click to remove from the chart"
   },
@@ -256,10 +296,21 @@
   "showDecimals": {
     "message": "Show decimals in the popup"
   },
+  "panelLayout": {
+    "message": "Popup layout"
+  },
+  "layoutHelp": {
+    "message": "Tick the blocks you want to see in the popup and reorder them. The header and the buttons at the bottom are always visible."
+  },
+  "moveUp": {
+    "message": "Move up"
+  },
+  "moveDown": {
+    "message": "Move down"
+  },
   "panelKeyBudgets": {
     "message": "Per-key daily budgets"
-  },
-  "keyBudgetsHelp": {
+  },  "keyBudgetsHelp": {
     "message": "A key budget is checked independently of the account budget: the badge uses the colour of whichever budget is closest to its limit. Leave a field empty to disable the budget for that key."
   },
   "keyBudgetsEmpty": {

@@ -49,6 +49,57 @@
     "message": "Configurações"
   },
 
+  "modelsTitle": {
+    "message": "Por modelo"
+  },
+  "modelMeta": {
+    "message": "$tokens$ tokens · $percent$% do gasto",
+    "placeholders": {
+      "tokens": { "content": "$1" },
+      "percent": { "content": "$2" }
+    }
+  },
+  "cacheNote": {
+    "message": "Cache de prompts: $rate$% de acertos, economizado $saved$",
+    "placeholders": {
+      "rate": { "content": "$1" },
+      "saved": { "content": "$2" }
+    }
+  },
+  "forecastTitle": {
+    "message": "Previsão de hoje"
+  },
+  "forecastRemaining": {
+    "message": "faltam cerca de $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "forecastVsAverage": {
+    "message": "$percent$ de um dia médio",
+    "placeholders": {
+      "percent": { "content": "$1" }
+    }
+  },
+  "sectionSummaryName": {
+    "message": "Saldo e gasto de hoje"
+  },
+  "sectionBudgetsName": {
+    "message": "Orçamentos"
+  },
+  "panelLayout": {
+    "message": "Layout do popup"
+  },
+  "layoutHelp": {
+    "message": "Marque os blocos que devem aparecer no popup e reordene-os. O cabeçalho e os botões inferiores ficam sempre visíveis."
+  },
+  "moveUp": {
+    "message": "Mover para cima"
+  },
+  "moveDown": {
+    "message": "Mover para baixo"
+  },
+
   "statusNoData": {
     "message": "Sem dados ainda"
   },

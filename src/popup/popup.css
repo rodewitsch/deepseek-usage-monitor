@@ -211,7 +211,6 @@ h2 {
   gap: 8px;
   margin-top: 12px;
 }
-
 .card {
   display: flex;
   flex-direction: column;
@@ -242,6 +241,11 @@ h2 {
 .card__hint {
   font-size: 11px;
   color: var(--muted);
+}
+
+/* Sections are reordered from the settings page; here they only stack. */
+.section-wrap {
+  display: contents;
 }
 
 .section {
@@ -410,6 +414,98 @@ h2 {
   margin: auto;
   color: var(--muted);
   font-size: 11px;
+}
+
+.model-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.model-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--bg-soft);
+}
+
+.model-item__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.model-item__name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.model-item__cost {
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+}
+
+.model-item__track {
+  height: 5px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.model-item__fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+.model-item__meta {
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.cache-note {
+  margin: 6px 0 0;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.forecast {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-soft);
+}
+
+.forecast__label {
+  flex: 1 1 100%;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.forecast__value {
+  font-size: 17px;
+  font-variant-numeric: tabular-nums;
+}
+
+.forecast__note {
+  font-size: 10.5px;
+  color: var(--muted);
 }
 
 .select {

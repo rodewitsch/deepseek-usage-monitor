@@ -1,7 +1,9 @@
-import { SERIES_COLORS, STATUS_PAGE_URL, USAGE_PAGE_URL } from '../lib/constants.js';
+import { SERIES_COLORS, POPUP_SECTION_IDS, STATUS_PAGE_URL, USAGE_PAGE_URL } from '../lib/constants.js';
 import { evaluateBudgets } from '../lib/budget.js';
+import { projectToday } from '../lib/forecast.js';
 import { currencySymbol, formatMoney, formatRelativeTime, formatTokens, localDayKey } from '../lib/format.js';
 import { applyDocumentLanguage, localizeDocument, t } from '../lib/i18n.js';
+import { modelLabel } from '../lib/models.js';
 import { scrapeFromPage } from '../lib/scrape.js';
 import { getSettings, getSnapshot, saveSettings, saveSnapshot } from '../lib/settings.js';
 
@@ -23,6 +25,13 @@ const ui = {
   chart: el('chart'),
   chartTotal: el('chart-total'),
   chartLegend: el('chart-legend'),
+  models: el('models'),
+  modelsTotal: el('models-total'),
+  modelList: el('model-list'),
+  cacheNote: el('cache-note'),
+  forecast: el('forecast'),
+  forecastValue: el('forecast-value'),
+  forecastNote: el('forecast-note'),
   budgets: el('budgets'),
   budgetList: el('budget-list'),
   keySelected: el('key-selected'),
@@ -31,6 +40,7 @@ const ui = {
   keyEmpty: el('key-empty'),
   openUsage: el('open-usage'),
   openOptions: el('open-options'),
+  layout: el('layout'),
 };
 
 let settings = null;
@@ -61,6 +71,7 @@ async function init() {
     if (changes.settings || changes.usageSnapshot || changes.lastError) render();
     else if (changes.serviceStatus) renderServiceStatus(changes.serviceStatus.newValue);
   });
+
 
   // Ask the service worker for the current status so the indicator appears
   // immediately, even when the usage snapshot is still fresh.
@@ -134,15 +145,136 @@ async function render() {
   const { snapshot, lastError } = await getSnapshot();
   const selected = selectedKeys(snapshot?.usage, settings);
 
+  applyLayout(settings);
   renderStatus(snapshot, lastError);
   await renderServiceStatus();
   renderSummary(snapshot, selected);
   renderBudgets(snapshot, settings, selected.map((key) => key.id));
   renderChart(snapshot, settings, selected);
+  renderModels(snapshot);
+  renderForecast(snapshot, settings);
   renderKeys(snapshot, settings, selected);
 }
 
-/** Selected API keys that still exist in the payload. */
+/** Per-model spend for the aggregation window, plus the prompt-cache savings. */
+function renderModels(snapshot) {
+  const usage = snapshot?.usage;
+  const stats = usage?.models;
+  const models = Array.isArray(stats?.models) ? stats.models : [];
+  const currency = usage?.currency || 'USD';
+
+  ui.modelList.replaceChildren();
+  ui.cacheNote.hidden = true;
+  ui.cacheNote.textContent = '';
+  ui.models.hidden = models.length === 0;
+  ui.modelsTotal.textContent = '';
+  if (!models.length) return;
+
+  const total = models.reduce((sum, entry) => sum + entry.cost, 0) || 1;
+  ui.modelsTotal.textContent = formatMoney(total, currency, { decimals: settings.showDecimals });
+
+  for (const entry of models) {
+    const item = document.createElement('li');
+    item.className = 'model-item';
+
+    const head = document.createElement('div');
+    head.className = 'model-item__head';
+
+    const name = document.createElement('span');
+    name.className = 'model-item__name';
+    name.textContent = modelLabel(entry.model);
+
+    const cost = document.createElement('span');
+    cost.className = 'model-item__cost';
+    cost.textContent = formatMoney(entry.cost, currency, { decimals: settings.showDecimals });
+
+    const meta = document.createElement('span');
+    meta.className = 'model-item__meta';
+    meta.textContent = t('modelMeta', [
+      formatTokens(entry.tokens),
+      String(Math.round((entry.cost / total) * 100)),
+    ]);
+
+    head.append(name, cost);
+
+    const track = document.createElement('div');
+    track.className = 'model-item__track';
+    const fill = document.createElement('div');
+    fill.className = 'model-item__fill';
+    fill.style.width = `${Math.max(1, Math.round((entry.cost / total) * 100))}%`;
+    track.append(fill);
+
+    item.append(head, track, meta);
+    ui.modelList.append(item);
+  }
+
+  const cache = stats?.cache;
+  if (cache && cache.promptTokens > 0) {
+    ui.cacheNote.hidden = false;
+    ui.cacheNote.textContent = t('cacheNote', [
+      String(Math.round(cache.hitRate * 100)),
+      formatMoney(cache.saved, currency, { decimals: settings.showDecimals }),
+    ]);
+  }
+}
+
+/** Projected spend for the whole day, from the pace so far today. */
+function renderForecast(snapshot, currentSettings) {
+  const usage = snapshot?.usage;
+  const todayCost = Number(usage?.todayCost) || 0;
+  if (!usage || !snapshot?.todayKey || snapshot.todayKey !== localDayKey() || todayCost <= 0) {
+    ui.forecast.hidden = true;
+    return;
+  }
+
+  const forecast = projectToday(todayCost, new Date(), {
+    windowCost: usage.priorDaysCost ?? Math.max(0, (usage.windowCost || 0) - todayCost),
+    windowDays: currentSettings.windowDays,
+  });
+  if (forecast.tooEarly) {
+    ui.forecast.hidden = true;
+    return;
+  }
+
+  ui.forecast.hidden = false;
+  ui.forecastValue.textContent = formatMoney(forecast.projected, usage.currency, {
+    decimals: settings.showDecimals,
+  });
+
+  const notes = [
+    t('forecastRemaining', [formatMoney(Math.max(0, forecast.projected - todayCost), usage.currency)]),
+  ];
+  if (forecast.baseline > 0 && forecast.ratio > 0) {
+    notes.push(t('forecastVsAverage', [`${Math.round(forecast.ratio * 100)}%`]));
+  }
+  ui.forecastNote.textContent = notes.join(' · ');
+}
+
+/** `{ id: HTMLElement }` — the wrappers that can be reordered and hidden. */
+function sectionWrappers() {
+  return new Map(
+    [...ui.layout.querySelectorAll('.section-wrap')].map((node) => [node.dataset.section, node]),
+  );
+}
+
+/** Applies the stored order and visibility to the popup sections. */
+function applyLayout(currentSettings) {
+  const hidden = new Set(currentSettings?.popupHidden || []);
+  const order = currentSettings?.popupSections?.length ? currentSettings.popupSections : POPUP_SECTION_IDS;
+  const wrappers = sectionWrappers();
+
+  for (const id of order) {
+    const node = wrappers.get(id);
+    if (!node) continue;
+    node.hidden = hidden.has(id);
+    ui.layout.append(node);
+  }
+  // Sections stored before an update still get appended after the known ones.
+  for (const [id, node] of wrappers) {
+    if (!order.includes(id)) node.hidden = hidden.has(id);
+  }
+}
+
 function selectedKeys(usage, currentSettings) {
   const ids = currentSettings?.selectedApiKeys || [];
   if (!usage?.keys?.length) return [];

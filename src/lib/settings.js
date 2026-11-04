@@ -1,4 +1,4 @@
-import { DEFAULT_SETTINGS, STORAGE_KEYS } from './constants.js';
+import { DEFAULT_SETTINGS, POPUP_SECTION_IDS, STORAGE_KEYS } from './constants.js';
 
 export async function getSettings() {
   const stored = await chrome.storage.local.get(STORAGE_KEYS.settings);
@@ -24,6 +24,10 @@ export function normaliseSettings(raw) {
   settings.badgeApiKeys = normaliseKeyList(settings.badgeApiKeys);
   settings.selectedApiKeys = normaliseKeyList(settings.selectedApiKeys);
   settings.keyBudgets = normaliseKeyBudgets(settings.keyBudgets);
+  settings.popupSections = normaliseSections(settings.popupSections);
+  settings.popupHidden = normaliseKeyList(settings.popupHidden).filter((id) =>
+    POPUP_SECTION_IDS.includes(id),
+  );
 
   // Migrate the single-key settings used before 1.1.
   if (settings.badgeApiKey && !settings.badgeApiKeys.length) {
@@ -42,6 +46,16 @@ export function normaliseSettings(raw) {
 function normaliseKeyList(value) {
   if (!Array.isArray(value)) return [];
   return [...new Set(value.map((id) => String(id || '').trim()).filter(Boolean))];
+}
+
+/**
+ * Popup section order: keeps only known ids, drops duplicates and appends any
+ * section missing from the stored order (e.g. added in a newer version).
+ */
+function normaliseSections(value) {
+  const stored = normaliseKeyList(value).filter((id) => POPUP_SECTION_IDS.includes(id));
+  const missing = POPUP_SECTION_IDS.filter((id) => !stored.includes(id));
+  return [...stored, ...missing];
 }
 
 /** `{ keyId: positiveBudget }`, dropping empty/zero entries. */

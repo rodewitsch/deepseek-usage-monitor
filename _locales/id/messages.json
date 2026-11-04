@@ -49,6 +49,57 @@
     "message": "Pengaturan"
   },
 
+  "modelsTitle": {
+    "message": "Per model"
+  },
+  "modelMeta": {
+    "message": "$tokens$ token · $percent$% dari pengeluaran",
+    "placeholders": {
+      "tokens": { "content": "$1" },
+      "percent": { "content": "$2" }
+    }
+  },
+  "cacheNote": {
+    "message": "Cache prompt: rasio hit $rate$%, hemat $saved$",
+    "placeholders": {
+      "rate": { "content": "$1" },
+      "saved": { "content": "$2" }
+    }
+  },
+  "forecastTitle": {
+    "message": "Perkiraan hari ini"
+  },
+  "forecastRemaining": {
+    "message": "tersisa sekitar $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "forecastVsAverage": {
+    "message": "$percent$ dari hari rata-rata",
+    "placeholders": {
+      "percent": { "content": "$1" }
+    }
+  },
+  "sectionSummaryName": {
+    "message": "Saldo dan pengeluaran hari ini"
+  },
+  "sectionBudgetsName": {
+    "message": "Anggaran"
+  },
+  "panelLayout": {
+    "message": "Tata letak popup"
+  },
+  "layoutHelp": {
+    "message": "Centang blok yang ingin ditampilkan di popup dan ubah urutannya. Header dan tombol di bawah selalu terlihat."
+  },
+  "moveUp": {
+    "message": "Naikkan"
+  },
+  "moveDown": {
+    "message": "Turunkan"
+  },
+
   "statusNoData": {
     "message": "Belum ada data"
   },

@@ -49,6 +49,57 @@
     "message": "Paramètres"
   },
 
+  "modelsTitle": {
+    "message": "Par modèle"
+  },
+  "modelMeta": {
+    "message": "$tokens$ tokens · $percent$ % des dépenses",
+    "placeholders": {
+      "tokens": { "content": "$1" },
+      "percent": { "content": "$2" }
+    }
+  },
+  "cacheNote": {
+    "message": "Cache de prompts : $rate$ % de succès, $saved$ économisés",
+    "placeholders": {
+      "rate": { "content": "$1" },
+      "saved": { "content": "$2" }
+    }
+  },
+  "forecastTitle": {
+    "message": "Prévision du jour"
+  },
+  "forecastRemaining": {
+    "message": "environ $amount$ restants",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "forecastVsAverage": {
+    "message": "$percent$ d'une journée moyenne",
+    "placeholders": {
+      "percent": { "content": "$1" }
+    }
+  },
+  "sectionSummaryName": {
+    "message": "Solde et dépenses du jour"
+  },
+  "sectionBudgetsName": {
+    "message": "Budgets"
+  },
+  "panelLayout": {
+    "message": "Disposition du popup"
+  },
+  "layoutHelp": {
+    "message": "Cochez les blocs à afficher dans le popup et réordonnez-les. L'en-tête et les boutons du bas restent toujours visibles."
+  },
+  "moveUp": {
+    "message": "Monter"
+  },
+  "moveDown": {
+    "message": "Descendre"
+  },
+
   "statusNoData": {
     "message": "Aucune donnée"
   },

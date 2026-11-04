@@ -12,12 +12,15 @@ already present in your browser for `platform.deepseek.com`.
 | | |
 |---|---|
 | **Popup** | Wallet balance (paid / bonus split), spend today + tokens, a 30-day spend chart, per-key list and a daily-budget bar. |
+| **By model** | Spend and tokens per model (`DeepSeek Chat` / `DeepSeek Reasoner`), plus prompt-cache hit rate and the money the cache saved. |
+| **Projected today** | Live forecast for the rest of the day from the pace so far, compared with the average day of the window. |
 | **Status** | DeepSeek service status from status.deepseek.com — a live indicator in the popup with a link to the status page. |
 | **Badge** | Shows one of: spend today, spend in the period, wallet balance, tokens today. Can be scoped to a single API key. |
 | **Daily budgets** | Account-wide and/or per-API-key budgets, green / orange / red badge, desktop notification on the warn and over thresholds. |
 | **Notifications** | Toggleable desktop notifications for budgets, low balance and DeepSeek service issues. |
 | **Multi-key chart** | Plot the spend of several API keys at once as a stacked per-day chart with a legend. |
 | **Settings** | Metric, key scope, auto-refresh interval, aggregation window, low-balance warning, daily budgets, decimals, notification toggles. |
+| **Popup layout** | Choose in the settings which blocks appear in the popup and in which order. |
 | **Shortcut** | `Open usage page` button opens `https://platform.deepseek.com/usage`. |
 
 ## Install
@@ -137,6 +140,10 @@ Click **Settings** in the popup (or *Options* on `chrome://extensions`).
   **orange** at/above it and **red** once the budget is reached.
 * **Per-key daily budgets** — one independent budget per API key.
 * **Warn at (% of budget)** — the orange threshold, `90` by default.
+* **Show decimals** in the popup.
+* **Popup layout** — tick the blocks you want (balance/spend, budgets, forecast,
+  chart, models, API keys) and reorder them with the arrows. The header and the
+  footer buttons are always visible.
 * **Notify** — desktop notifications, each toggleable independently:
   * budgets nearly used up / exceeded (one per day and per budget, per threshold),
   * wallet balance below the low-balance threshold (once per day),
@@ -186,6 +193,8 @@ account and for every selected key that has a budget.
 
 * `src/lib/format.js` — formatting + envelope unwrapping helpers.
 * `src/lib/api.js` — DeepSeek client and payload normalisation.
+* `src/lib/models.js` — per-model spend/tokens and prompt-cache savings.
+* `src/lib/forecast.js` — end-of-day projection from the current pace.
 * `src/lib/badge.js` — decides the badge text/colour/tooltip.
 * `src/lib/budget.js` — account and per-key budget evaluation, notification keys.
 * `src/lib/status.js` — DeepSeek service status (status.deepseek.com) fetch + normalisation.

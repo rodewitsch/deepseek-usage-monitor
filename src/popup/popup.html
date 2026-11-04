@@ -62,51 +62,82 @@
       </svg>
     </a>
 
-    <section class="cards">
-      <article class="card card--primary">
-        <span class="card__label" data-i18n="walletBalance">Wallet balance</span>
-        <strong id="balance" class="card__value">—</strong>
-        <span id="balance-detail" class="card__hint">—</span>
-      </article>
-      <article class="card">
-        <span class="card__label" data-i18n="spentToday">Spent today</span>
-        <strong id="today-cost" class="card__value">—</strong>
-        <span id="today-tokens" class="card__hint">—</span>
-      </article>
-    </section>
-
-    <section id="budgets" class="budgets" hidden>
-      <div id="budget-list" class="budget-list"></div>
-    </section>
-
-    <section class="section">
-      <div class="section__head">
-        <h2 data-i18n="recentSpend">Recent spend</h2>
-        <span id="chart-total" class="muted"></span>
+    <div id="layout" class="layout">
+      <div class="section-wrap" data-section="summary">
+        <section class="cards">
+          <article class="card card--primary">
+            <span class="card__label" data-i18n="walletBalance">Wallet balance</span>
+            <strong id="balance" class="card__value">—</strong>
+            <span id="balance-detail" class="card__hint">—</span>
+          </article>
+          <article class="card">
+            <span class="card__label" data-i18n="spentToday">Spent today</span>
+            <strong id="today-cost" class="card__value">—</strong>
+            <span id="today-tokens" class="card__hint">—</span>
+          </article>
+        </section>
       </div>
-      <div
-        id="chart"
-        class="chart"
-        role="img"
-        data-i18n-aria-label="chartAria"
-        aria-label="Daily spend for the last days"
-      ></div>
-      <div id="chart-legend" class="legend" hidden></div>
-    </section>
 
-    <section class="section">
-      <div class="section__head">
-        <h2 data-i18n="apiKeys">API keys</h2>
-        <div class="section__tools">
-          <span id="key-selected" class="muted"></span>
-          <button id="key-clear" class="link-button" data-i18n="allKeys" hidden>All keys</button>
-        </div>
+      <div class="section-wrap" data-section="budgets">
+        <section id="budgets" class="budgets" hidden>
+          <div id="budget-list" class="budget-list"></div>
+        </section>
       </div>
-      <ul id="key-list" class="key-list"></ul>
-      <p id="key-empty" class="muted empty" data-i18n="noPerKeyUsage" hidden>
-        No per-key usage in this period.
-      </p>
-    </section>
+
+      <div class="section-wrap" data-section="forecast">
+        <section id="forecast" class="section" hidden>
+          <div class="forecast">
+            <span class="forecast__label" data-i18n="forecastTitle">Projected today</span>
+            <strong id="forecast-value" class="forecast__value">—</strong>
+            <span id="forecast-note" class="forecast__note"></span>
+          </div>
+        </section>
+      </div>
+
+      <div class="section-wrap" data-section="chart">
+        <section class="section">
+          <div class="section__head">
+            <h2 data-i18n="recentSpend">Recent spend</h2>
+            <span id="chart-total" class="muted"></span>
+          </div>
+          <div
+            id="chart"
+            class="chart"
+            role="img"
+            data-i18n-aria-label="chartAria"
+            aria-label="Daily spend for the last days"
+          ></div>
+          <div id="chart-legend" class="legend" hidden></div>
+        </section>
+      </div>
+
+      <div class="section-wrap" data-section="models">
+        <section id="models" class="section" hidden>
+          <div class="section__head">
+            <h2 data-i18n="modelsTitle">By model</h2>
+            <span id="models-total" class="muted"></span>
+          </div>
+          <ul id="model-list" class="model-list"></ul>
+          <p id="cache-note" class="cache-note" hidden></p>
+        </section>
+      </div>
+
+      <div class="section-wrap" data-section="keys">
+        <section class="section">
+          <div class="section__head">
+            <h2 data-i18n="apiKeys">API keys</h2>
+            <div class="section__tools">
+              <span id="key-selected" class="muted"></span>
+              <button id="key-clear" class="link-button" data-i18n="allKeys" hidden>All keys</button>
+            </div>
+          </div>
+          <ul id="key-list" class="key-list"></ul>
+          <p id="key-empty" class="muted empty" data-i18n="noPerKeyUsage" hidden>
+            No per-key usage in this period.
+          </p>
+        </section>
+      </div>
+    </div>
 
     <footer class="footer">
       <a id="open-usage" class="button button--primary" href="https://platform.deepseek.com/usage" target="_blank" rel="noreferrer">

@@ -49,6 +49,57 @@
     "message": "सेटिंग्स"
   },
 
+  "modelsTitle": {
+    "message": "मॉडल के अनुसार"
+  },
+  "modelMeta": {
+    "message": "$tokens$ टोकन · खर्च का $percent$%",
+    "placeholders": {
+      "tokens": { "content": "$1" },
+      "percent": { "content": "$2" }
+    }
+  },
+  "cacheNote": {
+    "message": "प्रॉम्प्ट कैश: $rate$% हिट दर, $saved$ बचाए",
+    "placeholders": {
+      "rate": { "content": "$1" },
+      "saved": { "content": "$2" }
+    }
+  },
+  "forecastTitle": {
+    "message": "आज का अनुमान"
+  },
+  "forecastRemaining": {
+    "message": "लगभग $amount$ शेष",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "forecastVsAverage": {
+    "message": "औसत दिन का $percent$",
+    "placeholders": {
+      "percent": { "content": "$1" }
+    }
+  },
+  "sectionSummaryName": {
+    "message": "बैलेंस और आज का खर्च"
+  },
+  "sectionBudgetsName": {
+    "message": "बजट"
+  },
+  "panelLayout": {
+    "message": "पॉपअप लेआउट"
+  },
+  "layoutHelp": {
+    "message": "जो ब्लॉक पॉपअप में दिखाने हैं उन्हें चुनें और उनका क्रम बदलें। हेडर और नीचे के बटन हमेशा दिखते हैं।"
+  },
+  "moveUp": {
+    "message": "ऊपर करें"
+  },
+  "moveDown": {
+    "message": "नीचे करें"
+  },
+
   "statusNoData": {
     "message": "अभी कोई डेटा नहीं"
   },

@@ -9,6 +9,7 @@ import {
   unwrapEnvelope,
 } from './format.js';
 import { requestPlatformJson } from './http.js';
+import { buildModelStats } from './models.js';
 
 /**
  * Thin client for the (undocumented) DeepSeek console API.
@@ -96,7 +97,6 @@ export async function fetchUsageByKey(token, { windowDays = 30, now = new Date()
 
   const keys = new Map();
   const daily = new Map();
-  const models = new Map();
 
   const ensureKey = (identity) => {
     const id = identity.id;
@@ -121,7 +121,6 @@ export async function fetchUsageByKey(token, { windowDays = 30, now = new Date()
   for (const series of Array.isArray(amountData?.series) ? amountData.series : []) {
     const identity = normaliseApiKeyIdentity(series.api_key);
     const key = ensureKey(identity);
-    const model = series.model || 'unknown';
 
     for (const bucket of Array.isArray(series.buckets) ? series.buckets : []) {
       const day = dayKeyFromUnix(bucket.time, window.tz);
@@ -136,7 +135,6 @@ export async function fetchUsageByKey(token, { windowDays = 30, now = new Date()
       dayEntry.tokens += tokens;
       daily.set(day, dayEntry);
       key.windowTokens += tokens;
-      models.set(model, (models.get(model) || 0) + tokens);
       key.lastUsedDay = maxDay(key.lastUsedDay, day);
     }
   }
@@ -243,17 +241,37 @@ export async function fetchUsageByKey(token, { windowDays = 30, now = new Date()
   windowCost += todayCost;
   windowTokens += todayTokens;
 
+  // Spend attributed to complete days only: the "today" hourly series above is
+  // fresh, but the daily rollup may still miss it. Used for the pacing baseline.
+  const priorDaysCost = windowCost - todayCost;
+
+  const models = buildModelStats({
+    amounts: Array.isArray(amountData?.series) ? amountData.series : [],
+    costs: costBlocks.flatMap((block) =>
+      String(block?.currency || '').toUpperCase() === currency && Array.isArray(block?.series)
+        ? block.series
+        : [],
+    ),
+    todayAmounts: Array.isArray(todayAmountData?.series) ? todayAmountData.series : [],
+    todayCosts: todayBlocks
+      .filter((block) => String(block?.currency || '').toUpperCase() === todayCurrency)
+      .flatMap((block) => (Array.isArray(block?.series) ? block.series : [])),
+    dayOf: (seconds) => dayKeyFromUnix(seconds, window.tz),
+    todayKey,
+    currency,
+  });
+
   return {
     currency,
     todayCost,
     todayTokens,
     windowCost,
     windowTokens,
+    /** Spend of the days before today — basis for the daily average. */
+    priorDaysCost,
     daily: dailyList,
+    models,
     keys: [...keys.values()].sort((a, b) => b.windowCost - a.windowCost),
-    models: [...models.entries()]
-      .map(([model, tokens]) => ({ model, tokens }))
-      .sort((a, b) => b.tokens - a.tokens),
     windowStart: new Date(window.start * 1000).toISOString(),
     windowEnd: new Date(window.end * 1000).toISOString(),
     timezoneOffsetSeconds: window.tz,

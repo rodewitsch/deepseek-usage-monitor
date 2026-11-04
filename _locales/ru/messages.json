@@ -49,6 +49,13 @@
     "message": "Настройки"
   },
 
+  "sectionSummaryName": {
+    "message": "Баланс и расход сегодня"
+  },
+  "sectionBudgetsName": {
+    "message": "Бюджеты"
+  },
+
   "statusNoData": {
     "message": "Пока нет данных"
   },
@@ -176,6 +183,39 @@
     "message": "Все ключи"
   },
 
+  "modelsTitle": {
+    "message": "По моделям"
+  },
+  "modelMeta": {
+    "message": "$tokens$ токенов · $percent$% расхода",
+    "placeholders": {
+      "tokens": { "content": "$1" },
+      "percent": { "content": "$2" }
+    }
+  },
+  "cacheNote": {
+    "message": "Prompt cache: попадание $rate$%, сэкономлено $saved$",
+    "placeholders": {
+      "rate": { "content": "$1" },
+      "saved": { "content": "$2" }
+    }
+  },
+  "forecastTitle": {
+    "message": "Прогноз за сегодня"
+  },
+  "forecastRemaining": {
+    "message": "осталось примерно $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "forecastVsAverage": {
+    "message": "$percent$ от среднего дня",
+    "placeholders": {
+      "percent": { "content": "$1" }
+    }
+  },
+
   "keyRemoveFromChart": {
     "message": "Нажмите, чтобы убрать с графика"
   },
@@ -256,10 +296,21 @@
   "showDecimals": {
     "message": "Показывать копейки в попапе"
   },
+  "panelLayout": {
+    "message": "Расположение в попапе"
+  },
+  "layoutHelp": {
+    "message": "Отметьте блоки, которые нужны в попапе, и измените их порядок. Шапка и кнопки внизу показываются всегда."
+  },
+  "moveUp": {
+    "message": "Выше"
+  },
+  "moveDown": {
+    "message": "Ниже"
+  },
   "panelKeyBudgets": {
     "message": "Дневные бюджеты по ключам"
-  },
-  "keyBudgetsHelp": {
+  },  "keyBudgetsHelp": {
     "message": "Бюджет ключа проверяется независимо от бюджета аккаунта: значок берёт цвет того бюджета, который ближе всего к своему лимиту. Оставьте поле пустым, чтобы отключить бюджет для этого ключа."
   },
   "keyBudgetsEmpty": {

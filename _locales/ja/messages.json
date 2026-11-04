@@ -49,6 +49,57 @@
     "message": "設定"
   },
 
+  "modelsTitle": {
+    "message": "モデル別"
+  },
+  "modelMeta": {
+    "message": "$tokens$ トークン · 利用額の $percent$%",
+    "placeholders": {
+      "tokens": { "content": "$1" },
+      "percent": { "content": "$2" }
+    }
+  },
+  "cacheNote": {
+    "message": "プロンプトキャッシュ: ヒット率 $rate$%、$saved$ 節約",
+    "placeholders": {
+      "rate": { "content": "$1" },
+      "saved": { "content": "$2" }
+    }
+  },
+  "forecastTitle": {
+    "message": "今日の予測"
+  },
+  "forecastRemaining": {
+    "message": "残り約 $amount$",
+    "placeholders": {
+      "amount": { "content": "$1" }
+    }
+  },
+  "forecastVsAverage": {
+    "message": "平均的な日の $percent$",
+    "placeholders": {
+      "percent": { "content": "$1" }
+    }
+  },
+  "sectionSummaryName": {
+    "message": "残高と今日の利用額"
+  },
+  "sectionBudgetsName": {
+    "message": "予算"
+  },
+  "panelLayout": {
+    "message": "ポップアップのレイアウト"
+  },
+  "layoutHelp": {
+    "message": "ポップアップに表示するブロックを選び、順番を入れ替えます。ヘッダーと下部のボタンは常に表示されます。"
+  },
+  "moveUp": {
+    "message": "上へ"
+  },
+  "moveDown": {
+    "message": "下へ"
+  },
+
   "statusNoData": {
     "message": "データがありません"
   },
