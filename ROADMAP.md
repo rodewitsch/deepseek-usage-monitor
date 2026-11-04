@@ -24,6 +24,19 @@ These shape everything below and are not up for negotiation:
 
 Effort is relative to this codebase: **S** (hours), **M** (a day), **L** (multi-day).
 
+## Done
+
+| Shipped | Release | Item | Notes |
+|---|---|---|---|
+| 1.0.0 | v1.0.0 | Popup, 30-day chart, badge metrics, daily budgets, notifications, 10 locales | baseline |
+| 1.1.0 | v1.1.0 | DeepSeek service status monitor | `src/lib/status.js` |
+| 2026-11-04 | unreleased | **Milestone 1** — per-model breakdown, prompt-cache savings, end-of-day forecast | `src/lib/models.js`, `src/lib/forecast.js` (`6673630`) |
+| 2026-11-04 | unreleased | **Popup layout** — show/hide and reorder the popup blocks | settings only; `popupSections` / `popupHidden` (`6673630`) |
+
+Not done on purpose: **drag-and-drop inside the popup** was implemented and then
+removed — reordering in Settings is enough and the drag was unreliable in the
+popup panel.
+
 ---
 
 ## Milestone 1 — Analytics: models & cache savings (v1.2) ✅
