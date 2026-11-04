@@ -3,6 +3,13 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/), versioned with [SemVer](https://semver.org/).
 
+## [1.2.0](https://github.com/rodewitsch/deepseek-usage-monitor/compare/v1.1.0...v1.2.0) (2026-11-04)
+
+
+### Added
+
+* **popup:** model breakdown, cache savings, forecast and layout ([6673630](https://github.com/rodewitsch/deepseek-usage-monitor/commit/66736308399ebd336122f519fda800e108456a2e))
+
 ## [1.1.0](https://github.com/rodewitsch/deepseek-usage-monitor/compare/v1.0.4...v1.1.0) (2026-11-03)
 
 
