@@ -3,6 +3,14 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/), versioned with [SemVer](https://semver.org/).
 
+## [1.3.0](https://github.com/rodewitsch/deepseek-usage-monitor/compare/v1.2.0...v1.3.0) (2026-11-04)
+
+
+### Added
+
+* local history, comparisons, depletion estimate and export ([3f1b9a9](https://github.com/rodewitsch/deepseek-usage-monitor/commit/3f1b9a960c1a46a7ee751cfea882ac51d599df53))
+* **popup:** move usage/settings actions into the header as icons ([cbe3960](https://github.com/rodewitsch/deepseek-usage-monitor/commit/cbe396076cc9c03419f50d38b699263e2b318959))
+
 ## [1.2.0](https://github.com/rodewitsch/deepseek-usage-monitor/compare/v1.1.0...v1.2.0) (2026-11-04)
 
 
