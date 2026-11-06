@@ -111,6 +111,30 @@
             <input id="status-notifications" type="checkbox" />
             <span data-i18n="notifyStatus">Notify when DeepSeek has service issues</span>
           </label>
+          <label class="field field--checkbox">
+            <input id="pace-alerts" type="checkbox" />
+            <span data-i18n="notifyPace">Warn when the pace so far will exceed the budget before midnight</span>
+          </label>
+          <label class="field field--checkbox">
+            <input id="spike-alerts" type="checkbox" />
+            <span data-i18n="notifySpike">Warn when a day's spend is far above the recent average</span>
+          </label>
+          <label class="field">
+            <span class="field__label" data-i18n="spikeRatioLabel">Spike threshold (times the average)</span>
+            <input id="spike-ratio" type="number" min="1" max="10" step="0.5" />
+          </label>
+          <label class="field field--checkbox">
+            <input id="new-key-alerts" type="checkbox" />
+            <span data-i18n="notifyNewKey">Notify when a new API key appears</span>
+          </label>
+          <label class="field">
+            <span class="field__label" data-i18n="inactiveKeyDaysLabel">Notify about keys unused for (days, 0 = off)</span>
+            <input id="inactive-key-days" type="number" min="0" max="365" step="1" />
+          </label>
+          <label class="field field--checkbox">
+            <input id="inactive-key-highlight" type="checkbox" />
+            <span data-i18n="inactiveKeyHighlight">Mark unused keys in the popup key list</span>
+          </label>
         </div>
       </section>
 

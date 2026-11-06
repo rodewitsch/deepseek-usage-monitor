@@ -620,6 +620,86 @@
       "threshold": { "content": "$2" }
     }
   },
+  "notifyPace": {
+    "message": "Prévenir si le rythme actuel dépassera le budget avant minuit"
+  },
+  "notifySpike": {
+    "message": "Prévenir quand une journée dépasse largement la moyenne récente"
+  },
+  "spikeRatioLabel": {
+    "message": "Seuil de pic (multiple de la moyenne)"
+  },
+  "notifyNewKey": {
+    "message": "Prévenir quand une nouvelle clé API apparaît"
+  },
+  "inactiveKeyDaysLabel": {
+    "message": "Prévenir des clés inutilisées depuis (jours, 0 = non)"
+  },
+  "inactiveKeyHighlight": {
+    "message": "Marquer les clés inutilisées dans la liste du popup"
+  },
+  "notifyPaceTitle": {
+    "message": "Le budget sera dépassé aujourd’hui$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1$" }
+    }
+  },
+  "notifyPaceMessage": {
+    "message": "$spent$ dépensés sur $budget$ ; à ce rythme environ $projected$ ($percent$%) à minuit, ~$hours$ h restantes.",
+    "placeholders": {
+      "spent": { "content": "$1$" },
+      "budget": { "content": "$2$" },
+      "projected": { "content": "$3$" },
+      "percent": { "content": "$4$" },
+      "hours": { "content": "$5$" }
+    }
+  },
+  "notifySpikeTitle": {
+    "message": "Pic de dépense$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1$" }
+    }
+  },
+  "notifySpikeMessage": {
+    "message": "Aujourd’hui $spent$ — $ratio$ la moyenne quotidienne récente de $average$.",
+    "placeholders": {
+      "spent": { "content": "$1$" },
+      "ratio": { "content": "$2$" },
+      "average": { "content": "$3$" }
+    }
+  },
+  "notifyNewKeyTitle": {
+    "message": "Nouvelle clé API détectée"
+  },
+  "notifyNewKeyMessage": {
+    "message": "Une nouvelle clé « $name$ » est apparue dans l’utilisation.",
+    "placeholders": {
+      "name": { "content": "$1$" }
+    }
+  },
+  "notifyInactiveKeyTitle": {
+    "message": "Clé API inutilisée"
+  },
+  "notifyInactiveKeyMessage": {
+    "message": "« $name$ » n’a pas été utilisée depuis $days$ jours.",
+    "placeholders": {
+      "name": { "content": "$1$" },
+      "days": { "content": "$2$" }
+    }
+  },
+  "keyIdleBadge": {
+    "message": "inactive $days$ j",
+    "placeholders": {
+      "days": { "content": "$1$" }
+    }
+  },
+  "keyIdleTitle": {
+    "message": "Inutilisée depuis $days$ jours",
+    "placeholders": {
+      "days": { "content": "$1$" }
+    }
+  },
+
 
   "errorNoSession": {
     "message": "Aucune session DeepSeek trouvée. Ouvrez platform.deepseek.com et connectez-vous."

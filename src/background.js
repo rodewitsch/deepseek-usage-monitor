@@ -1,10 +1,18 @@
+import { alertNoticeKey, detectSpikes, forecastBudgetBreach, trackKeys } from './lib/alerts.js';
 import { computeBadge } from './lib/badge.js';
 import { budgetNoticeKey, evaluateBudgets } from './lib/budget.js';
 import { STORAGE_KEYS, WAF_COOKIE_NAMES } from './lib/constants.js';
+import { localDayKey } from './lib/format.js';
 import { t } from './lib/i18n.js';
 import { refreshUsage } from './lib/refresh.js';
 import { refreshFromPage } from './lib/scrape.js';
-import { getSettings, getSnapshot } from './lib/settings.js';
+import {
+  getHistory,
+  getKeyRegistry,
+  getSettings,
+  getSnapshot,
+  saveKeyRegistry,
+} from './lib/settings.js';
 import { fetchServiceStatus, statusHasTrouble } from './lib/status.js';
 import { delay } from './lib/waf.js';
 
@@ -117,9 +125,7 @@ async function refreshAndPaint({ forceToken = false } = {}) {
     const result = await refreshUsage({ forceToken });
 
     if (!result.lastError) {
-      await paintBadge(computeBadge(withErrorKind(result.snapshot, null), settings));
-      await notifyBudget(result.snapshot, settings);
-      await notifyLowBalance(result.snapshot, settings);
+      await afterSuccessfulRefresh(result.snapshot, settings);
       return result;
     }
 
@@ -131,9 +137,7 @@ async function refreshAndPaint({ forceToken = false } = {}) {
         await delay(WAF_RENEW_WAIT);
         const retried = await refreshUsage({ forceToken: true });
         if (!retried.lastError) {
-          await paintBadge(computeBadge(withErrorKind(retried.snapshot, null), settings));
-          await notifyBudget(retried.snapshot, settings);
-          await notifyLowBalance(retried.snapshot, settings);
+          await afterSuccessfulRefresh(retried.snapshot, settings);
           return retried;
         }
       }
@@ -176,7 +180,21 @@ async function updateBadge() {
 }
 
 /**
- * Desktop notification when today's spend crosses a budget threshold.
+ * Everything that should happen after a refresh that produced real numbers:
+ * paint the badge, then run every notification rule. Each rule is independent
+ * and swallows its own errors — a failed alert must never fail the refresh.
+ */
+async function afterSuccessfulRefresh(snapshot, settings) {
+  await paintBadge(computeBadge(withErrorKind(snapshot, null), settings));
+  await notifyBudget(snapshot, settings);
+  await notifyLowBalance(snapshot, settings);
+  await notifyPace(snapshot, settings);
+  await notifySpikes(snapshot, settings);
+  await notifyKeys(snapshot, settings);
+}
+
+/**
+ * Desktop notification when a budget is nearly used up or exceeded.
  * Fires once per day and per budget scope (account, or one API key) for the
  * warn level and once for the over level.
  */
@@ -284,6 +302,149 @@ async function notifyLowBalance(snapshot, settings) {
 
   const kept = notified.filter((entry) => entry.startsWith(dayKey));
   await chrome.storage.local.set({ notified: [...kept, marker] });
+}
+
+/**
+ * Pace alert: the day is still under its budget, but at the current rate it
+ * will be over before midnight. Fires once per day and per scope.
+ */
+async function notifyPace(snapshot, settings) {
+  if (!settings.paceAlerts) return;
+
+  const keyIds =
+    settings.badgeMetric === 'balance'
+      ? []
+      : Array.isArray(settings.badgeApiKeys)
+        ? settings.badgeApiKeys
+        : [];
+  const breach = forecastBudgetBreach(snapshot?.usage, settings, keyIds, new Date());
+  if (!breach) return;
+
+  const dayKey = snapshot?.todayKey || localDayKey();
+  const marker = alertNoticeKey(dayKey, 'pace', breach.scope);
+  if (!(await claimNotice(marker, dayKey))) return;
+
+  const currency = snapshot?.usage?.currency || 'USD';
+  const money = (value) => `${currency} ${Number(value).toFixed(2)}`;
+  const suffix = breach.name ? t('notifyForKey', [breach.name]) : '';
+
+  await safeNotify(marker, {
+    title: t('notifyPaceTitle', [suffix]),
+    message: t('notifyPaceMessage', [
+      money(breach.spent),
+      money(breach.budget),
+      money(breach.projected),
+      String(Math.round(breach.percent)),
+      String(Math.max(1, Math.round(breach.hoursLeft))),
+    ]),
+    priority: 1,
+  });
+}
+
+/**
+ * Spike alert: today (or one key) is several times its own rolling average.
+ * Today is excluded from the baseline, so the alert does not dilute itself.
+ */
+async function notifySpikes(snapshot, settings) {
+  if (!settings.spikeAlerts) return;
+
+  const history = await getHistory();
+  const dayKey = snapshot?.todayKey || localDayKey();
+  const spikes = detectSpikes(history, snapshot?.usage, dayKey, {
+    ratio: settings.spikeRatio,
+  });
+
+  const currency = snapshot?.usage?.currency || 'USD';
+  const money = (value) => `${currency} ${Number(value).toFixed(2)}`;
+  const found = [];
+  if (spikes.account) found.push(spikes.account);
+  found.push(...spikes.keys);
+
+  for (const spike of found) {
+    const marker = alertNoticeKey(dayKey, 'spike', spike.scope);
+    if (!(await claimNotice(marker, dayKey))) continue;
+    const suffix = spike.name ? t('notifyForKey', [spike.name]) : '';
+    await safeNotify(marker, {
+      title: t('notifySpikeTitle', [suffix]),
+      message: t('notifySpikeMessage', [
+        money(spike.spent),
+        `${spike.ratio.toFixed(1)}x`,
+        money(spike.average),
+      ]),
+      priority: 2,
+    });
+  }
+}
+
+/**
+ * Key lifecycle alerts: a brand-new API key, or a key that has been idle for
+ * longer than the configured number of days (paid-for but unused).
+ */
+async function notifyKeys(snapshot, settings) {
+  const usage = snapshot?.usage;
+  if (!usage) return;
+
+  const dayKey = snapshot?.todayKey || localDayKey();
+  const known = await getKeyRegistry();
+  // A first ever refresh must not announce every existing key as "new".
+  const firstRun = Object.keys(known).length === 0;
+
+  const result = trackKeys(known, usage, dayKey, {
+    inactiveDays: Number(settings.inactiveKeyDays) || 0,
+    newKeys: !firstRun && settings.newKeyAlerts,
+  });
+
+  await saveKeyRegistry(result.registry);
+
+  for (const key of result.newKeys) {
+    const marker = alertNoticeKey(dayKey, 'new-key', key.id);
+    if (!(await claimNotice(marker, dayKey))) continue;
+    await safeNotify(marker, {
+      title: t('notifyNewKeyTitle'),
+      message: t('notifyNewKeyMessage', [key.name]),
+      priority: 1,
+    });
+  }
+
+  // Inactive keys are reported at most once per day each, and only when the
+  // user asked for the alert (inactiveKeyDays > 0).
+  for (const key of result.inactiveKeys) {
+    const marker = alertNoticeKey(dayKey, 'inactive-key', key.id);
+    if (!(await claimNotice(marker, dayKey))) continue;
+    await safeNotify(marker, {
+      title: t('notifyInactiveKeyTitle'),
+      message: t('notifyInactiveKeyMessage', [key.name, String(key.days)]),
+      priority: 0,
+    });
+  }
+}
+
+/**
+ * Atomically-ish claims a notification marker for the day. Returns false when
+ * the same marker was already used, so a rule cannot notify twice for one day.
+ * Old markers are dropped on every write to keep the list short.
+ */
+async function claimNotice(marker, dayKey) {
+  const { notified = [] } = await chrome.storage.local.get('notified');
+  if (notified.includes(marker)) return false;
+  const kept = notified.filter((entry) => entry.startsWith(dayKey));
+  await chrome.storage.local.set({ notified: [...kept, marker] });
+  return true;
+}
+
+/** Creates a notification, swallowing failures (a missing icon, a rate cap…). */
+async function safeNotify(id, { title, message, priority = 1 }) {
+  try {
+    await chrome.notifications.create(id, {
+      type: 'basic',
+      iconUrl: chrome.runtime.getURL('icons/icon128.png'),
+      title,
+      message,
+      priority,
+    });
+  } catch (error) {
+    console.warn('[DeepSeek Usage] notification failed:', error?.message || error);
+  }
 }
 
 /**

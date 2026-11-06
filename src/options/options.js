@@ -24,6 +24,12 @@ const fields = {
   budgetNotifications: { input: el('budget-notifications'), setting: 'budgetNotifications' },
   lowBalanceNotifications: { input: el('low-balance-notifications'), setting: 'lowBalanceNotifications' },
   statusNotifications: { input: el('status-notifications'), setting: 'statusNotifications' },
+  paceAlerts: { input: el('pace-alerts'), setting: 'paceAlerts' },
+  spikeAlerts: { input: el('spike-alerts'), setting: 'spikeAlerts' },
+  spikeRatio: { input: el('spike-ratio'), setting: 'spikeRatio' },
+  newKeyAlerts: { input: el('new-key-alerts'), setting: 'newKeyAlerts' },
+  inactiveKeyDays: { input: el('inactive-key-days'), setting: 'inactiveKeyDays' },
+  inactiveKeyHighlight: { input: el('inactive-key-highlight'), setting: 'inactiveKeyHighlight' },
   showDecimals: { input: el('show-decimals'), setting: 'showDecimals' },
   showMonthComparison: { input: el('show-month-comparison'), setting: 'showMonthComparison' },
   showDepletion: { input: el('show-depletion'), setting: 'showDepletion' },
@@ -168,6 +174,12 @@ function applySettings(settings) {
   fields.budgetNotifications.input.checked = settings.budgetNotifications;
   fields.lowBalanceNotifications.input.checked = settings.lowBalanceNotifications;
   fields.statusNotifications.input.checked = settings.statusNotifications;
+  fields.paceAlerts.input.checked = settings.paceAlerts;
+  fields.spikeAlerts.input.checked = settings.spikeAlerts;
+  fields.spikeRatio.input.value = settings.spikeRatio;
+  fields.newKeyAlerts.input.checked = settings.newKeyAlerts;
+  fields.inactiveKeyDays.input.value = settings.inactiveKeyDays;
+  fields.inactiveKeyHighlight.input.checked = settings.inactiveKeyHighlight;
   fields.showDecimals.input.checked = settings.showDecimals;
   fields.showMonthComparison.input.checked = settings.showMonthComparison;
   fields.showDepletion.input.checked = settings.showDepletion;

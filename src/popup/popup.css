@@ -673,6 +673,17 @@ h2 {
   text-transform: uppercase;
 }
 
+/* Idle keys are a warning, not an accent: amber, and the whole row is dimmed
+   so an unused key does not compete with the ones that are actually spending. */
+.key-item.is-idle {
+  opacity: 0.72;
+}
+
+.key-item.is-idle .key-item__badge {
+  background: color-mix(in srgb, #d97706 18%, transparent);
+  color: #b45309;
+}
+
 .empty {
   padding: 8px 0;
   text-align: center;

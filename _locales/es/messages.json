@@ -620,6 +620,86 @@
       "threshold": { "content": "$2" }
     }
   },
+  "notifyPace": {
+    "message": "Avisar si el ritmo actual superará el presupuesto antes de medianoche"
+  },
+  "notifySpike": {
+    "message": "Avisar cuando el gasto del día supere mucho la media reciente"
+  },
+  "spikeRatioLabel": {
+    "message": "Umbral de pico (veces la media)"
+  },
+  "notifyNewKey": {
+    "message": "Avisar cuando aparezca una nueva clave de API"
+  },
+  "inactiveKeyDaysLabel": {
+    "message": "Avisar sobre claves sin usar durante (días, 0 = no)"
+  },
+  "inactiveKeyHighlight": {
+    "message": "Marcar las claves sin usar en la lista del popup"
+  },
+  "notifyPaceTitle": {
+    "message": "Hoy se superará el presupuesto$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1$" }
+    }
+  },
+  "notifyPaceMessage": {
+    "message": "Gastado $spent$ de $budget$; a este ritmo unos $projected$ ($percent$%) a medianoche, quedan ~$hours$ h.",
+    "placeholders": {
+      "spent": { "content": "$1$" },
+      "budget": { "content": "$2$" },
+      "projected": { "content": "$3$" },
+      "percent": { "content": "$4$" },
+      "hours": { "content": "$5$" }
+    }
+  },
+  "notifySpikeTitle": {
+    "message": "Pico de gasto$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1$" }
+    }
+  },
+  "notifySpikeMessage": {
+    "message": "Hoy $spent$ — $ratio$ de la media diaria reciente de $average$.",
+    "placeholders": {
+      "spent": { "content": "$1$" },
+      "ratio": { "content": "$2$" },
+      "average": { "content": "$3$" }
+    }
+  },
+  "notifyNewKeyTitle": {
+    "message": "Nueva clave de API detectada"
+  },
+  "notifyNewKeyMessage": {
+    "message": "Ha aparecido una nueva clave «$name$» en el uso.",
+    "placeholders": {
+      "name": { "content": "$1$" }
+    }
+  },
+  "notifyInactiveKeyTitle": {
+    "message": "Clave de API sin usar"
+  },
+  "notifyInactiveKeyMessage": {
+    "message": "«$name$» no se usa desde hace $days$ días.",
+    "placeholders": {
+      "name": { "content": "$1$" },
+      "days": { "content": "$2$" }
+    }
+  },
+  "keyIdleBadge": {
+    "message": "inactiva $days$ d",
+    "placeholders": {
+      "days": { "content": "$1$" }
+    }
+  },
+  "keyIdleTitle": {
+    "message": "Sin usar durante $days$ días",
+    "placeholders": {
+      "days": { "content": "$1$" }
+    }
+  },
+
 
   "errorNoSession": {
     "message": "No se encontró una sesión de DeepSeek. Abre platform.deepseek.com e inicia sesión."

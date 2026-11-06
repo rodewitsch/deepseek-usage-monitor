@@ -24,6 +24,14 @@ export function normaliseSettings(raw) {
   settings.showMonthComparison = settings.showMonthComparison !== false;
   settings.showDepletion = settings.showDepletion !== false;
   settings.budgetNotifications = settings.budgetNotifications !== false;
+  settings.paceAlerts = settings.paceAlerts !== false;
+  settings.spikeAlerts = settings.spikeAlerts !== false;
+  settings.newKeyAlerts = settings.newKeyAlerts !== false;
+  settings.inactiveKeyHighlight = settings.inactiveKeyHighlight !== false;
+  // A multiplier below 1 would flag every day; 10x is a generous ceiling.
+  settings.spikeRatio = clampNumber(settings.spikeRatio, 1, 10, DEFAULT_SETTINGS.spikeRatio);
+  // 0 disables the inactive-key alert entirely.
+  settings.inactiveKeyDays = clampInt(settings.inactiveKeyDays, 0, 365, DEFAULT_SETTINGS.inactiveKeyDays);
   settings.lowBalanceNotifications = settings.lowBalanceNotifications !== false;
   settings.statusNotifications = settings.statusNotifications !== false;
   settings.badgeApiKeys = normaliseKeyList(settings.badgeApiKeys);
@@ -104,6 +112,18 @@ export async function getHistory() {
 
 export async function saveHistory(history) {
   await chrome.storage.local.set({ [STORAGE_KEYS.history]: history });
+}
+
+/** API keys seen so far, keyed by id (see `trackKeys()` in `alerts.js`). */
+export async function getKeyRegistry() {
+  const stored = await chrome.storage.local.get(STORAGE_KEYS.keyRegistry);
+  const raw = stored[STORAGE_KEYS.keyRegistry];
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return {};
+  return raw;
+}
+
+export async function saveKeyRegistry(registry) {
+  await chrome.storage.local.set({ [STORAGE_KEYS.keyRegistry]: registry });
 }
 
 export async function getTokenInfo() {

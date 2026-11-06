@@ -34,6 +34,7 @@ Effort is relative to this codebase: **S** (hours), **M** (a day), **L** (multi-
 | 2026-11-04 | unreleased | **Popup layout** — show/hide and reorder the popup blocks | settings only; `popupSections` / `popupHidden` (`6673630`) |
 | 2026-11-04 | unreleased | **Milestone 2** — local history, month/today comparison, balance depletion, CSV/JSON export | `src/lib/history.js`, `src/lib/exporter.js` |
 | 2026-11-04 | v1.3.0 | **Header actions** — usage page, refresh and settings moved into the header as icon buttons (the footer is gone) | `popup.html`, `.header__actions` |
+| 2026-11-06 | unreleased | **Milestone 3** — budget pace alert, spend-spike detection, new/inactive key alerts | `src/lib/alerts.js` |
 
 Not done on purpose: **drag-and-drop inside the popup** was implemented and then
 removed — reordering in Settings is enough and the drag was unreliable in the
@@ -71,14 +72,17 @@ this is mostly normalisation + UI.
 Known limit: the per-model split is only known for the current API window, so
 older days in the CSV carry day totals but empty model columns.
 
-## Milestone 3 — Smarter alerts (v1.4)
+## Milestone 3 — Smarter alerts (v1.4) ✅
 
-- [ ] **Budget forecast notification** — warn when the current pace will
-      exceed the budget before midnight, not only after the fact. *(P0, S)*
-- [ ] **Spike detection** — notify when a day's spend is well above the rolling
-      average (guards against runaway loops / leaked keys). *(P1, M)*
-- [ ] **New / inactive key alerts** — notify on a newly appeared API key, or a
-      key unused for N days. *(P2, S)*
+- [x] **Budget forecast notification** — warn when the current pace will
+      exceed the budget before midnight, not only after the fact. *(P0, S)* —
+      `forecastBudgetBreach()`; once per day per scope.
+- [x] **Spike detection** — notify when a day's spend is well above the rolling
+      average (guards against runaway loops / leaked keys). *(P1, M)* —
+      `detectSpikes()`, threshold configurable, today excluded from the baseline.
+- [x] **New / inactive key alerts** — notify on a newly appeared API key, or a
+      key unused for N days. *(P2, S)* — `trackKeys()` + `apiKeyRegistry`;
+      idle keys are also marked in the popup key list.
 
 ## Milestone 4 — UX & platform (v1.5)
 

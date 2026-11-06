@@ -620,6 +620,86 @@
       "threshold": { "content": "$2" }
     }
   },
+  "notifyPace": {
+    "message": "Peringatkan jika laju saat ini akan melewati anggaran sebelum tengah malam"
+  },
+  "notifySpike": {
+    "message": "Peringatkan bila pengeluaran hari itu jauh di atas rata-rata terkini"
+  },
+  "spikeRatioLabel": {
+    "message": "Ambang lonjakan (kali rata-rata)"
+  },
+  "notifyNewKey": {
+    "message": "Beri tahu saat kunci API baru muncul"
+  },
+  "inactiveKeyDaysLabel": {
+    "message": "Beri tahu tentang kunci yang tidak dipakai selama (hari, 0 = mati)"
+  },
+  "inactiveKeyHighlight": {
+    "message": "Tandai kunci yang tidak dipakai di daftar popup"
+  },
+  "notifyPaceTitle": {
+    "message": "Anggaran akan terlampaui hari ini$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1$" }
+    }
+  },
+  "notifyPaceMessage": {
+    "message": "Terpakai $spent$ dari $budget$; dengan laju ini sekitar $projected$ ($percent$%) saat tengah malam, sisa ~$hours$ jam.",
+    "placeholders": {
+      "spent": { "content": "$1$" },
+      "budget": { "content": "$2$" },
+      "projected": { "content": "$3$" },
+      "percent": { "content": "$4$" },
+      "hours": { "content": "$5$" }
+    }
+  },
+  "notifySpikeTitle": {
+    "message": "Lonjakan pengeluaran$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1$" }
+    }
+  },
+  "notifySpikeMessage": {
+    "message": "Hari ini $spent$ — $ratio$ dari rata-rata harian $average$.",
+    "placeholders": {
+      "spent": { "content": "$1$" },
+      "ratio": { "content": "$2$" },
+      "average": { "content": "$3$" }
+    }
+  },
+  "notifyNewKeyTitle": {
+    "message": "Kunci API baru terdeteksi"
+  },
+  "notifyNewKeyMessage": {
+    "message": "Kunci baru “$name$” muncul dalam penggunaan Anda.",
+    "placeholders": {
+      "name": { "content": "$1$" }
+    }
+  },
+  "notifyInactiveKeyTitle": {
+    "message": "Kunci API tidak dipakai"
+  },
+  "notifyInactiveKeyMessage": {
+    "message": "“$name$” tidak dipakai selama $days$ hari.",
+    "placeholders": {
+      "name": { "content": "$1$" },
+      "days": { "content": "$2$" }
+    }
+  },
+  "keyIdleBadge": {
+    "message": "menganggur $days$ h",
+    "placeholders": {
+      "days": { "content": "$1$" }
+    }
+  },
+  "keyIdleTitle": {
+    "message": "Tidak dipakai selama $days$ hari",
+    "placeholders": {
+      "days": { "content": "$1$" }
+    }
+  },
+
 
   "errorNoSession": {
     "message": "Sesi DeepSeek tidak ditemukan. Buka platform.deepseek.com dan masuk."

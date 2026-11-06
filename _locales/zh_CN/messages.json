@@ -620,6 +620,86 @@
       "threshold": { "content": "$2" }
     }
   },
+  "notifyPace": {
+    "message": "当按当前速率会在午夜前超出预算时提醒"
+  },
+  "notifySpike": {
+    "message": "当某天支出远高于近期平均时提醒"
+  },
+  "spikeRatioLabel": {
+    "message": "突增阈值（平均值的倍数）"
+  },
+  "notifyNewKey": {
+    "message": "出现新 API 密钥时通知"
+  },
+  "inactiveKeyDaysLabel": {
+    "message": "通知长期未使用的密钥（天，0 = 关闭）"
+  },
+  "inactiveKeyHighlight": {
+    "message": "在弹窗密钥列表中标记未使用的密钥"
+  },
+  "notifyPaceTitle": {
+    "message": "今日预算将被超出$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1$" }
+    }
+  },
+  "notifyPaceMessage": {
+    "message": "已用 $spent$ / $budget$；按此速率午夜将约 $projected$（$percent$%），还剩约 $hours$ 小时。",
+    "placeholders": {
+      "spent": { "content": "$1$" },
+      "budget": { "content": "$2$" },
+      "projected": { "content": "$3$" },
+      "percent": { "content": "$4$" },
+      "hours": { "content": "$5$" }
+    }
+  },
+  "notifySpikeTitle": {
+    "message": "支出突增$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1$" }
+    }
+  },
+  "notifySpikeMessage": {
+    "message": "今日 $spent$ — 为近期日均 $average$ 的 $ratio$。",
+    "placeholders": {
+      "spent": { "content": "$1$" },
+      "ratio": { "content": "$2$" },
+      "average": { "content": "$3$" }
+    }
+  },
+  "notifyNewKeyTitle": {
+    "message": "检测到新 API 密钥"
+  },
+  "notifyNewKeyMessage": {
+    "message": "使用数据中出现新密钥“$name$”。",
+    "placeholders": {
+      "name": { "content": "$1$" }
+    }
+  },
+  "notifyInactiveKeyTitle": {
+    "message": "API 密钥未使用"
+  },
+  "notifyInactiveKeyMessage": {
+    "message": "“$name$”已 $days$ 天未使用。",
+    "placeholders": {
+      "name": { "content": "$1$" },
+      "days": { "content": "$2$" }
+    }
+  },
+  "keyIdleBadge": {
+    "message": "闲置 $days$ 天",
+    "placeholders": {
+      "days": { "content": "$1$" }
+    }
+  },
+  "keyIdleTitle": {
+    "message": "已 $days$ 天未使用",
+    "placeholders": {
+      "days": { "content": "$1$" }
+    }
+  },
+
 
   "errorNoSession": {
     "message": "未找到 DeepSeek 会话。请打开 platform.deepseek.com 并登录。"

@@ -22,6 +22,7 @@ explains exactly what the extension does with your data.
 | DeepSeek session token (from your existing login) | To call the same API endpoints the DeepSeek web console calls | Stored in `chrome.storage.local`; sent only to `platform.deepseek.com` |
 | Wallet balance, spend, tokens, per-API-key usage | To show them in the popup and on the toolbar badge | Stored in `chrome.storage.local`; never transmitted elsewhere |
 | Accumulated daily spend history (and the CSV/JSON file you export) | To compare months/days and estimate the depletion date beyond the 31-day API window | Stored in `chrome.storage.local`; exports are written to your Downloads folder only when you click the button |
+| API key ids/names with first-seen and last-used dates | To warn about new keys and keys that have gone unused | Stored in `chrome.storage.local`; never transmitted elsewhere |
 | Your extension settings (metric, selected keys, refresh interval, budgets) | To remember your preferences | Stored in `chrome.storage.local` |
 | `deepseek.com` cookies (`aws-waf-token`, `smidV2`), **read-only** | To detect the session/AWS WAF state | Not stored, not transmitted; only read in place |
 

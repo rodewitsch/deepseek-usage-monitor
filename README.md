@@ -21,6 +21,7 @@ already present in your browser for `platform.deepseek.com`.
 | **Badge** | Shows one of: spend today, spend in the period, wallet balance, tokens today. Can be scoped to a single API key. |
 | **Daily budgets** | Account-wide and/or per-API-key budgets, green / orange / red badge, desktop notification on the warn and over thresholds. |
 | **Notifications** | Toggleable desktop notifications for budgets, low balance and DeepSeek service issues. |
+| **Smarter alerts** | Warn *before* the budget is exceeded (current pace × remaining hours), on spend spikes far above the recent average, and on new or long-unused API keys. |
 | **Multi-key chart** | Plot the spend of several API keys at once as a stacked per-day chart with a legend. |
 | **Settings** | Metric, key scope, auto-refresh interval, aggregation window, low-balance warning, daily budgets, decimals, notification toggles. |
 | **Popup layout** | Choose in the settings which blocks appear in the popup and in which order. |
@@ -48,6 +49,7 @@ npm run release          # bump version (package.json + manifest.json), CHANGELO
 npm run release:minor    # force a minor bump
 
 node tools/history-check.mjs   # history / comparison / export asserts
+node tools/alerts-check.mjs    # pace / spike / key-lifecycle asserts
 node tools/models-check.mjs    # model split + forecast asserts
 node tools/locale-parity.cjs   # every locale has the same key set as en
 ```

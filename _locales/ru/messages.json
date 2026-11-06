@@ -620,6 +620,86 @@
       "threshold": { "content": "$2" }
     }
   },
+  "notifyPace": {
+    "message": "Предупреждать, если текущий темп приведёт к перерасходу бюджета до полуночи"
+  },
+  "notifySpike": {
+    "message": "Предупреждать, если расход за день сильно выше среднего"
+  },
+  "spikeRatioLabel": {
+    "message": "Порог всплеска (во сколько раз выше среднего)"
+  },
+  "notifyNewKey": {
+    "message": "Уведомлять о появлении нового API-ключа"
+  },
+  "inactiveKeyDaysLabel": {
+    "message": "Уведомлять о неиспользуемых ключах (дней, 0 = выкл.)"
+  },
+  "inactiveKeyHighlight": {
+    "message": "Отмечать неиспользуемые ключи в списке попапа"
+  },
+  "notifyPaceTitle": {
+    "message": "Сегодня бюджет будет превышен$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1$" }
+    }
+  },
+  "notifyPaceMessage": {
+    "message": "Потрачено $spent$ из $budget$; при текущем темпе к полуночи будет около $projected$ ($percent$%), осталось ~$hours$ ч.",
+    "placeholders": {
+      "spent": { "content": "$1$" },
+      "budget": { "content": "$2$" },
+      "projected": { "content": "$3$" },
+      "percent": { "content": "$4$" },
+      "hours": { "content": "$5$" }
+    }
+  },
+  "notifySpikeTitle": {
+    "message": "Всплеск расхода$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1$" }
+    }
+  },
+  "notifySpikeMessage": {
+    "message": "Сегодня $spent$ — $ratio$ от среднего за день $average$.",
+    "placeholders": {
+      "spent": { "content": "$1$" },
+      "ratio": { "content": "$2$" },
+      "average": { "content": "$3$" }
+    }
+  },
+  "notifyNewKeyTitle": {
+    "message": "Обнаружен новый API-ключ"
+  },
+  "notifyNewKeyMessage": {
+    "message": "В статистике появился новый ключ «$name$».",
+    "placeholders": {
+      "name": { "content": "$1$" }
+    }
+  },
+  "notifyInactiveKeyTitle": {
+    "message": "API-ключ не используется"
+  },
+  "notifyInactiveKeyMessage": {
+    "message": "Ключ «$name$» не использовался $days$ дн.",
+    "placeholders": {
+      "name": { "content": "$1$" },
+      "days": { "content": "$2$" }
+    }
+  },
+  "keyIdleBadge": {
+    "message": "простой $days$ дн.",
+    "placeholders": {
+      "days": { "content": "$1$" }
+    }
+  },
+  "keyIdleTitle": {
+    "message": "Не использовался $days$ дн.",
+    "placeholders": {
+      "days": { "content": "$1$" }
+    }
+  },
+
 
   "errorNoSession": {
     "message": "Сессия DeepSeek не найдена. Откройте platform.deepseek.com и войдите."

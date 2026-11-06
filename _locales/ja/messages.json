@@ -620,6 +620,86 @@
       "threshold": { "content": "$2" }
     }
   },
+  "notifyPace": {
+    "message": "このペースでは深夜までに予算を超える場合に通知します"
+  },
+  "notifySpike": {
+    "message": "その日の支出が直近の平均を大きく上回る場合に通知します"
+  },
+  "spikeRatioLabel": {
+    "message": "急増のしきい値（平均の倍率）"
+  },
+  "notifyNewKey": {
+    "message": "新しい API キーが現れたときに通知します"
+  },
+  "inactiveKeyDaysLabel": {
+    "message": "未使用キーの通知（日数、0 = オフ）"
+  },
+  "inactiveKeyHighlight": {
+    "message": "ポップアップのキー一覧で未使用キーを強調表示"
+  },
+  "notifyPaceTitle": {
+    "message": "本日予算を超える見込みです$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1$" }
+    }
+  },
+  "notifyPaceMessage": {
+    "message": "$budget$ 中 $spent$ 使用。このペースでは深夜に約 $projected$（$percent$%）、残り約 $hours$ 時間。",
+    "placeholders": {
+      "spent": { "content": "$1$" },
+      "budget": { "content": "$2$" },
+      "projected": { "content": "$3$" },
+      "percent": { "content": "$4$" },
+      "hours": { "content": "$5$" }
+    }
+  },
+  "notifySpikeTitle": {
+    "message": "支出の急増$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1$" }
+    }
+  },
+  "notifySpikeMessage": {
+    "message": "本日 $spent$ — 直近の1日平均 $average$ の $ratio$。",
+    "placeholders": {
+      "spent": { "content": "$1$" },
+      "ratio": { "content": "$2$" },
+      "average": { "content": "$3$" }
+    }
+  },
+  "notifyNewKeyTitle": {
+    "message": "新しい API キーを検出"
+  },
+  "notifyNewKeyMessage": {
+    "message": "利用状況に新しいキー「$name$」が現れました。",
+    "placeholders": {
+      "name": { "content": "$1$" }
+    }
+  },
+  "notifyInactiveKeyTitle": {
+    "message": "API キーが未使用"
+  },
+  "notifyInactiveKeyMessage": {
+    "message": "「$name$」は $days$ 日間使用されていません。",
+    "placeholders": {
+      "name": { "content": "$1$" },
+      "days": { "content": "$2$" }
+    }
+  },
+  "keyIdleBadge": {
+    "message": "未使用 $days$ 日",
+    "placeholders": {
+      "days": { "content": "$1$" }
+    }
+  },
+  "keyIdleTitle": {
+    "message": "$days$ 日間未使用",
+    "placeholders": {
+      "days": { "content": "$1$" }
+    }
+  },
+
 
   "errorNoSession": {
     "message": "DeepSeek のセッションが見つかりません。platform.deepseek.com を開いてサインインしてください。"

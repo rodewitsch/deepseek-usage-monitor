@@ -78,6 +78,18 @@ export const DEFAULT_SETTINGS = {
   budgetWarnPercent: 90,
   /** Desktop notification when a budget is nearly used up or exceeded. */
   budgetNotifications: true,
+  /** Warn when the pace so far will exceed the budget before midnight. */
+  paceAlerts: true,
+  /** Warn when a day's spend is far above the rolling average. */
+  spikeAlerts: true,
+  /** Multiplier over the rolling average that counts as a spike. */
+  spikeRatio: 3,
+  /** Notify when a new API key appears in the usage data. */
+  newKeyAlerts: true,
+  /** Notify when a key has not been used for this many days (0 = off). */
+  inactiveKeyDays: 14,
+  /** Keys unused for this long are highlighted in the popup key list. */
+  inactiveKeyHighlight: true,
   /** Desktop notification when the wallet balance drops below the threshold. */
   lowBalanceNotifications: true,
   /** Desktop notification when DeepSeek has service issues (status page). */
@@ -125,6 +137,8 @@ export const STORAGE_KEYS = {
   lastError: 'lastError',
   /** Accumulated day-by-day spend, kept beyond the 31-day API window. */
   history: 'usageHistory',
+  /** API keys seen so far: `{ [id]: {name, firstSeen, lastSeen, lastUsedDay} }`. */
+  keyRegistry: 'apiKeyRegistry',
   status: 'serviceStatus',
   statusNotified: 'statusNotified',
 };

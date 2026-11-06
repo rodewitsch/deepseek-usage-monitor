@@ -15,7 +15,7 @@ import {
 import { applyDocumentLanguage, localizeDocument, t } from '../lib/i18n.js';
 import { modelLabel } from '../lib/models.js';
 import { scrapeFromPage } from '../lib/scrape.js';
-import { getHistory, getSettings, getSnapshot, saveSettings, saveSnapshot } from '../lib/settings.js';
+import { getHistory, getKeyRegistry, getSettings, getSnapshot, saveSettings, saveSnapshot } from '../lib/settings.js';
 
 const el = (id) => document.getElementById(id);
 
@@ -67,6 +67,7 @@ const ui = {
 
 let settings = null;
 let history = null;
+let keyRegistry = null;
 
 init();
 
@@ -94,7 +95,16 @@ async function init() {
   chrome.storage.onChanged.addListener((changes, area) => {
     if (area !== 'local') return;
     if (changes.usageHistory) history = changes.usageHistory.newValue || null;
-    if (changes.settings || changes.usageSnapshot || changes.usageHistory || changes.lastError) render();
+    if (changes.apiKeyRegistry) keyRegistry = changes.apiKeyRegistry.newValue || null;
+    if (
+      changes.settings ||
+      changes.usageSnapshot ||
+      changes.usageHistory ||
+      changes.apiKeyRegistry ||
+      changes.lastError
+    ) {
+      render();
+    }
     else if (changes.serviceStatus) renderServiceStatus(changes.serviceStatus.newValue);
   });
 
@@ -170,6 +180,7 @@ async function render() {
   settings = await getSettings();
   const { snapshot, lastError } = await getSnapshot();
   if (!history) history = await getHistory();
+  if (!keyRegistry) keyRegistry = await getKeyRegistry();
   const selected = selectedKeys(snapshot?.usage, settings);
 
   applyLayout(settings);
@@ -753,6 +764,7 @@ function renderKeys(snapshot, currentSettings, selected) {
   const usage = snapshot?.usage;
   const keys = usage?.keys || [];
   const selectedIds = new Set(selected.map((key) => key.id));
+  const todayKey = localDayKey();
 
   ui.keySelected.textContent = selectedIds.size ? t('keysCountSelected', [String(selectedIds.size)]) : '';
   ui.keyClear.hidden = selectedIds.size === 0;
@@ -766,8 +778,11 @@ function renderKeys(snapshot, currentSettings, selected) {
 
   keys.forEach((key, index) => {
     const isSelected = selectedIds.has(key.id);
+    // "Idle" uses the stored registry, not just the current window: a key that
+    // disappeared from the API payload entirely is the most idle of all.
+    const idleDays = idleDaysFor(key.id, currentSettings, snapshot, todayKey);
     const item = document.createElement('li');
-    item.className = `key-item${isSelected ? ' is-selected' : ''}`;
+    item.className = `key-item${isSelected ? ' is-selected' : ''}${idleDays > 0 ? ' is-idle' : ''}`;
     item.dataset.keyId = key.id;
     item.title = isSelected ? t('keyRemoveFromChart') : t('keyPlot');
 
@@ -781,6 +796,14 @@ function renderKeys(snapshot, currentSettings, selected) {
     const name = document.createElement('span');
     name.className = 'key-item__name';
     name.textContent = key.name;
+
+    if (idleDays > 0) {
+      const idle = document.createElement('span');
+      idle.className = 'key-item__badge';
+      idle.textContent = t('keyIdleBadge', [String(idleDays)]);
+      idle.title = t('keyIdleTitle', [String(idleDays)]);
+      name.append(' ', idle);
+    }
 
     const meta = document.createElement('span');
     meta.className = 'key-item__meta';
@@ -798,4 +821,34 @@ function renderKeys(snapshot, currentSettings, selected) {
     item.append(marker, name, meta, cost);
     ui.keyList.append(item);
   });
+}
+
+/**
+ * How many days a key has been idle, or 0 when it is active enough (or when
+ * the highlight is switched off). Uses the registry first, then the current
+ * payload's `lastUsedDay`, so the badge appears even before a full history.
+ */
+function idleDaysFor(keyId, currentSettings, snapshot, todayKey) {
+  if (!currentSettings.inactiveKeyHighlight) return 0;
+  const threshold = Number(currentSettings.inactiveKeyDays) || 0;
+  if (!(threshold > 0)) return 0;
+
+  const key = snapshot?.usage?.keys?.find((entry) => entry.id === keyId);
+  const lastUsed = keyRegistry?.[keyId]?.lastUsedDay || key?.lastUsedDay || null;
+  if (!lastUsed) return 0;
+
+  // Spend today means the key is obviously alive, whatever the registry says.
+  if ((Number(key?.todayCost) || 0) > 0) return 0;
+
+  const days = dayDistance(lastUsed, todayKey);
+  return days >= threshold ? days : 0;
+}
+
+/** Whole days between two `YYYY-MM-DD` keys (UTC math, no DST surprises). */
+function dayDistance(fromDay, toDay) {
+  const toMs = (day) => {
+    const [year, month, dayOfMonth] = String(day).split('-').map(Number);
+    return Date.UTC(year, month - 1, dayOfMonth);
+  };
+  return Math.round((toMs(toDay) - toMs(fromDay)) / 86400000);
 }

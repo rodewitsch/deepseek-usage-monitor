@@ -620,6 +620,86 @@
       "threshold": { "content": "$2" }
     }
   },
+  "notifyPace": {
+    "message": "चेतावनी दें अगर मौजूदा गति से आधी रात तक बजट पार हो जाएगा"
+  },
+  "notifySpike": {
+    "message": "चेतावनी दें जब दिन का खर्च हालिया औसत से काफी ज़्यादा हो"
+  },
+  "spikeRatioLabel": {
+    "message": "स्पाइक सीमा (औसत का गुना)"
+  },
+  "notifyNewKey": {
+    "message": "नई API कुंजी दिखने पर सूचित करें"
+  },
+  "inactiveKeyDaysLabel": {
+    "message": "अप्रयुक्त कुंजियों के बारे में सूचित करें (दिन, 0 = बंद)"
+  },
+  "inactiveKeyHighlight": {
+    "message": "पॉपअप सूची में अप्रयुक्त कुंजियाँ चिह्नित करें"
+  },
+  "notifyPaceTitle": {
+    "message": "आज बजट पार हो जाएगा$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1$" }
+    }
+  },
+  "notifyPaceMessage": {
+    "message": "$budget$ में से $spent$ खर्च; इस गति से आधी रात तक लगभग $projected$ ($percent$%), ~$hours$ घंटे बाकी।",
+    "placeholders": {
+      "spent": { "content": "$1$" },
+      "budget": { "content": "$2$" },
+      "projected": { "content": "$3$" },
+      "percent": { "content": "$4$" },
+      "hours": { "content": "$5$" }
+    }
+  },
+  "notifySpikeTitle": {
+    "message": "खर्च में उछाल$suffix$",
+    "placeholders": {
+      "suffix": { "content": "$1$" }
+    }
+  },
+  "notifySpikeMessage": {
+    "message": "आज $spent$ — हालिया दैनिक औसत $average$ का $ratio$।",
+    "placeholders": {
+      "spent": { "content": "$1$" },
+      "ratio": { "content": "$2$" },
+      "average": { "content": "$3$" }
+    }
+  },
+  "notifyNewKeyTitle": {
+    "message": "नई API कुंजी मिली"
+  },
+  "notifyNewKeyMessage": {
+    "message": "उपयोग में नई कुंजी “$name$” दिखी।",
+    "placeholders": {
+      "name": { "content": "$1$" }
+    }
+  },
+  "notifyInactiveKeyTitle": {
+    "message": "API कुंजी अप्रयुक्त"
+  },
+  "notifyInactiveKeyMessage": {
+    "message": "“$name$” $days$ दिनों से उपयोग नहीं हुई।",
+    "placeholders": {
+      "name": { "content": "$1$" },
+      "days": { "content": "$2$" }
+    }
+  },
+  "keyIdleBadge": {
+    "message": "निष्क्रिय $days$ दिन",
+    "placeholders": {
+      "days": { "content": "$1$" }
+    }
+  },
+  "keyIdleTitle": {
+    "message": "$days$ दिनों से उपयोग नहीं हुई",
+    "placeholders": {
+      "days": { "content": "$1$" }
+    }
+  },
+
 
   "errorNoSession": {
     "message": "कोई DeepSeek सत्र नहीं मिला। platform.deepseek.com खोलें और साइन इन करें।"

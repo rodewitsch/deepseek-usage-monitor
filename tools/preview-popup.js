@@ -40,6 +40,7 @@ const snapshot = {
     keys: [
       { id: 'k1', name: 'Production', todayCost: 3.1, windowCost: 50, todayTokens: 9000, windowTokens: 300000, dailyCost: { [today]: 3.1 }, lastUsedDay: today },
       { id: 'k2', name: 'Playground', todayCost: 1.1, windowCost: 21.5, todayTokens: 3300, windowTokens: 200000, dailyCost: { [today]: 1.1 }, lastUsedDay: today },
+      { id: 'k3', name: 'Old staging', todayCost: 0, windowCost: 0, todayTokens: 0, windowTokens: 0, dailyCost: {}, lastUsedDay: shiftDayKey(today, -23) },
     ],
     windowStart: new Date().toISOString(),
     windowEnd: new Date().toISOString(),
@@ -62,7 +63,16 @@ const settings = {
   depletionWindowDays: 30,
 };
 
-const storage = { settings, usageSnapshot: snapshot, usageHistory: { currency: 'USD', days, keys: {} } };
+const storage = {
+  settings,
+  usageSnapshot: snapshot,
+  usageHistory: { currency: 'USD', days, keys: {} },
+  apiKeyRegistry: {
+    k1: { name: 'Production', firstSeen: shiftDayKey(today, -40), lastSeen: today, lastUsedDay: today },
+    k2: { name: 'Playground', firstSeen: shiftDayKey(today, -40), lastSeen: today, lastUsedDay: today },
+    k3: { name: 'Old staging', firstSeen: shiftDayKey(today, -40), lastSeen: today, lastUsedDay: shiftDayKey(today, -23) },
+  },
+};
 
 const messages = JSON.parse(await (await fetch('/_locales/en/messages.json')).text());
 
