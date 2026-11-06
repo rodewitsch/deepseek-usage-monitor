@@ -3,6 +3,13 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/), versioned with [SemVer](https://semver.org/).
 
+## [1.4.0](https://github.com/rodewitsch/deepseek-usage-monitor/compare/v1.3.0...v1.4.0) (2026-11-06)
+
+
+### Added
+
+* **alerts:** budget pace, spend spikes and key lifecycle alerts ([38a6f77](https://github.com/rodewitsch/deepseek-usage-monitor/commit/38a6f77e95b263322cf758d2fcd413354bb34caa))
+
 ## [1.3.0](https://github.com/rodewitsch/deepseek-usage-monitor/compare/v1.2.0...v1.3.0) (2026-11-04)
 
 
