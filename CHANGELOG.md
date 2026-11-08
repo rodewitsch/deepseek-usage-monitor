@@ -3,6 +3,13 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/), versioned with [SemVer](https://semver.org/).
 
+### [1.4.1](https://github.com/rodewitsch/deepseek-usage-monitor/compare/v1.4.0...v1.4.1) (2026-11-08)
+
+
+### Fixed
+
+* **popup:** keep API key rows on one line and honour money settings ([4fac9a3](https://github.com/rodewitsch/deepseek-usage-monitor/commit/4fac9a3189efa50e000f1d64a53c2b2d7e68b234))
+
 ## [1.4.0](https://github.com/rodewitsch/deepseek-usage-monitor/compare/v1.3.0...v1.4.0) (2026-11-06)
 
 
