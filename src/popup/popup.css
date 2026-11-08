@@ -618,7 +618,7 @@ h2 {
 
 .key-item {
   display: grid;
-  grid-template-columns: 8px 1fr auto auto;
+  grid-template-columns: 8px minmax(0, 1fr) max-content max-content;
   align-items: center;
   gap: 8px;
   padding: 7px 9px;
@@ -645,6 +645,7 @@ h2 {
 }
 
 .key-item__name {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -655,14 +656,23 @@ h2 {
 .key-item__meta {
   font-size: 10.5px;
   color: var(--muted);
+  white-space: nowrap;
 }
 
 .key-item__cost {
   font-variant-numeric: tabular-nums;
   font-size: 12px;
+  white-space: nowrap;
+}
+
+/* A key that spent nothing in the window must not read like the biggest one. */
+.key-item.is-zero .key-item__cost {
+  color: var(--muted);
+  font-weight: 400;
 }
 
 .key-item__badge {
+  display: inline-block;
   padding: 1px 5px;
   border-radius: 999px;
   background: var(--accent-soft);

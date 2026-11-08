@@ -808,15 +808,24 @@ function renderKeys(snapshot, currentSettings, selected) {
     const meta = document.createElement('span');
     meta.className = 'key-item__meta';
     const budget = Number(currentSettings.keyBudgets?.[key.id]) || 0;
-    const today = formatMoney(key.todayCost, usage.currency);
+    const today = formatMoney(key.todayCost, usage.currency, { decimals: currentSettings.showDecimals });
     meta.textContent =
       budget > 0
-        ? t('keyTodayMetaBudget', [today, formatMoney(budget, usage.currency)])
+        ? t('keyTodayMetaBudget', [
+            today,
+            formatMoney(budget, usage.currency, { decimals: currentSettings.showDecimals }),
+          ])
         : t('keyTodayMeta', [today]);
 
     const cost = document.createElement('span');
     cost.className = 'key-item__cost';
-    cost.textContent = formatMoney(key.windowCost, usage.currency);
+    cost.textContent = formatMoney(key.windowCost, usage.currency, {
+      decimals: currentSettings.showDecimals,
+    });
+
+    // A key without spend in the window gets a dimmed amount instead of the
+    // same bold `$0.00` as a key that actually costs money.
+    if (!(Number(key.windowCost) > 0)) item.classList.add('is-zero');
 
     item.append(marker, name, meta, cost);
     ui.keyList.append(item);
