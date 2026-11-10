@@ -12,7 +12,8 @@ import {
   shiftDayKey,
   sortedDays,
 } from '../lib/history.js';
-import { applyDocumentLanguage, loadCatalog, localizeDocument, t } from '../lib/i18n.js';
+import { applyDocumentLanguage, localizeDocument, t } from '../lib/i18n.js';
+import { ensureCatalog } from '../lib/locales.js';
 import { modelLabel } from '../lib/models.js';
 import { scrapeFromPage } from '../lib/scrape.js';
 import { getKeyRegistry, getSettings, getSnapshot, saveSettings, saveSnapshot } from '../lib/settings.js';
@@ -70,37 +71,15 @@ let settings = null;
 let history = null;
 let keyRegistry = null;
 
-/**
- * Feeds `i18n.js` the active catalog. `t()` renders templates itself because
- * Chrome drops the space that follows a substituted value; having the original
- * message text (with its `$markers$` and spacing) is what makes that possible,
- * and it also keeps the declaration order of `placeholders` correct.
- * Best-effort: on failure `t()` falls back to `getMessage`.
- */
-async function loadPlaceholderDeclarations() {
-  try {
-    const locale = chrome.i18n.getUILanguage().replace('-', '_');
-    const response = await fetch(chrome.runtime.getURL(`_locales/${locale}/messages.json`));
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    loadCatalog(await response.json());
-  } catch (error) {
-    // `en` (the fallback locale) may be requested for a regional UI language
-    // such as `en-GB`, so a miss here is expected and harmless.
-    try {
-      const response = await fetch(chrome.runtime.getURL('_locales/en/messages.json'));
-      if (response.ok) loadCatalog(await response.json());
-    } catch {
-      console.warn('[DeepSeek Usage] catalog unavailable:', error?.message || error);
-    }
-  }
-}
-
 init();
 
 async function init() {
+  // `t()` renders templates itself because Chrome drops the space that
+  // follows a substituted value, so the catalog must be registered before the
+  // first label is written.
+  ensureCatalog();
   applyDocumentLanguage();
   localizeDocument();
-  loadPlaceholderDeclarations();
   ui.openUsage.href = USAGE_PAGE_URL;
   ui.status.href = STATUS_PAGE_URL;
   ui.refresh.addEventListener('click', () => refresh(true));

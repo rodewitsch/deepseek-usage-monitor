@@ -4,6 +4,7 @@ import { budgetNoticeKey, evaluateBudgets } from './lib/budget.js';
 import { STORAGE_KEYS, WAF_COOKIE_NAMES } from './lib/constants.js';
 import { localDayKey, normaliseNotificationText } from './lib/format.js';
 import { t } from './lib/i18n.js';
+import { ensureCatalog } from './lib/locales.js';
 import { refreshUsage } from './lib/refresh.js';
 import { refreshFromPage } from './lib/scrape.js';
 import {
@@ -119,7 +120,10 @@ async function refreshAndPaint({ forceToken = false } = {}) {
     if (scraped.snapshot) {
       await paintBadge(computeBadge(withErrorKind(scraped.snapshot, null), settings));
       // Per-day and per-key figures exist only in the API — keep trying for
-      // them in the background when the scrape looked complete.
+      // them in the background when the scrape looked complete. The alerts
+      // still run: they are de-duplicated per day, so the API refresh below
+      // does not announce the same thing twice.
+      await afterSuccessfulRefresh(scraped.snapshot, settings);
     }
 
     // 2. Ask the console API. The WAF token comes from the browser's cookies
@@ -202,6 +206,7 @@ async function afterSuccessfulRefresh(snapshot, settings) {
  */
 async function notifyBudget(snapshot, settings) {
   if (!settings.budgetNotifications) return;
+  ensureCatalog();
 
   const keyIds =
     settings.badgeMetric === 'balance'
@@ -269,6 +274,7 @@ async function notifyBudget(snapshot, settings) {
  */
 async function notifyLowBalance(snapshot, settings) {
   if (!settings.lowBalanceNotifications) return;
+  ensureCatalog();
 
   const threshold = Number(settings.lowBalanceThreshold) || 0;
   const total = Number(snapshot?.balance?.total);
@@ -299,6 +305,7 @@ async function notifyLowBalance(snapshot, settings) {
  */
 async function notifyPace(snapshot, settings) {
   if (!settings.paceAlerts) return;
+  ensureCatalog();
 
   const keyIds =
     settings.badgeMetric === 'balance'
@@ -336,6 +343,7 @@ async function notifyPace(snapshot, settings) {
  */
 async function notifySpikes(snapshot, settings) {
   if (!settings.spikeAlerts) return;
+  ensureCatalog();
 
   const ledger = snapshot?.ledger || null;
   if (!ledger) return;
@@ -373,6 +381,7 @@ async function notifySpikes(snapshot, settings) {
 async function notifyKeys(snapshot, settings) {
   const usage = snapshot?.usage;
   if (!usage) return;
+  ensureCatalog();
 
   const dayKey = snapshot?.todayKey || localDayKey();
   const known = await getKeyRegistry();
@@ -465,7 +474,10 @@ async function checkStatus() {
       (await chrome.storage.local.get(STORAGE_KEYS.status))[STORAGE_KEYS.status] || null;
     await chrome.storage.local.set({ [STORAGE_KEYS.status]: current });
 
-    if (settings.statusNotifications) await notifyStatus(previous, current);
+    if (settings.statusNotifications) {
+      ensureCatalog();
+      await notifyStatus(previous, current);
+    }
     return result;
   })();
   try {
