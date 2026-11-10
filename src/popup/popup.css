@@ -353,12 +353,33 @@ h2 {
   color: var(--muted);
 }
 
+/*
+ * "since 2026-10-06 · 35 recorded days" (comparison header) and
+ * "35 days of history" (export header) sit inside a flex header. A shrinkable
+ * flex item wraps its own text mid-sentence and drops the leading space.
+ * `flex: none` + `white-space: nowrap` keeps each label on one line; the header
+ * gap still separates it from the <h2>.
+ *
+ * Note: missing spaces *around substituted values* ("about0days") are NOT a CSS
+ * problem — Chrome's i18n trims them. See `tools/fix-i18n-spaces.mjs`.
+ */
+#history-range,
+#export-note {
+  flex: none;
+  white-space: nowrap;
+}
+
 .section__head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
   margin-bottom: 6px;
+}
+
+.section__head #history-range,
+.section__head #export-note {
+  font-size: 11px;
 }
 
 .section__tools {
@@ -544,11 +565,18 @@ h2 {
 .compare {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 9px 10px;
+  gap: 10px;
+  padding: 10px;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--bg-soft);
+}
+
+/* One metric = the headline row plus its explanatory note right under it. */
+.compare__item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .compare__row {
@@ -556,10 +584,6 @@ h2 {
   align-items: baseline;
   justify-content: space-between;
   gap: 8px;
-}
-
-.compare__row + .compare__row {
-  margin-top: 2px;
 }
 
 .compare__label {
@@ -588,6 +612,7 @@ h2 {
 
 .compare__note {
   font-size: 10.5px;
+  line-height: 1.45;
   color: var(--muted);
 }
 

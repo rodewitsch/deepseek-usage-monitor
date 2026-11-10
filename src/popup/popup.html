@@ -135,21 +135,27 @@
             <span id="history-range" class="muted"></span>
           </div>
           <div class="compare">
-            <div class="compare__row">
-              <span class="compare__label" data-i18n="compareToday">Today vs. yesterday</span>
-              <span id="compare-today-delta" class="compare__delta">—</span>
+            <div class="compare__item">
+              <div class="compare__row">
+                <span class="compare__label" data-i18n="compareToday">Today vs. yesterday</span>
+                <span id="compare-today-delta" class="compare__delta">—</span>
+              </div>
+              <span id="compare-today-note" class="compare__note"></span>
             </div>
-            <span id="compare-today-note" class="compare__note"></span>
-            <div class="compare__row">
-              <span class="compare__label" data-i18n="compareMonth">This month vs. last</span>
-              <span id="compare-month-delta" class="compare__delta">—</span>
+            <div class="compare__item">
+              <div class="compare__row">
+                <span class="compare__label" data-i18n="compareMonth">This month vs. last</span>
+                <span id="compare-month-delta" class="compare__delta">—</span>
+              </div>
+              <span id="compare-month-note" class="compare__note"></span>
             </div>
-            <span id="compare-month-note" class="compare__note"></span>
-            <div id="depletion-row" class="compare__row" hidden>
-              <span class="compare__label" data-i18n="depletionTitle">Balance runs out</span>
-              <span id="depletion-value" class="compare__delta">—</span>
+            <div id="depletion-row" class="compare__item" hidden>
+              <div class="compare__row">
+                <span class="compare__label" data-i18n="depletionTitle">Balance runs out</span>
+                <span id="depletion-value" class="compare__delta">—</span>
+              </div>
+              <span id="depletion-note" class="compare__note"></span>
             </div>
-            <span id="depletion-note" class="compare__note" hidden></span>
           </div>
         </section>
       </div>

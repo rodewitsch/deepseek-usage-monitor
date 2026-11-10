@@ -12,10 +12,10 @@ import {
   shiftDayKey,
   sortedDays,
 } from '../lib/history.js';
-import { applyDocumentLanguage, localizeDocument, t } from '../lib/i18n.js';
+import { applyDocumentLanguage, loadCatalog, localizeDocument, t } from '../lib/i18n.js';
 import { modelLabel } from '../lib/models.js';
 import { scrapeFromPage } from '../lib/scrape.js';
-import { getHistory, getKeyRegistry, getSettings, getSnapshot, saveSettings, saveSnapshot } from '../lib/settings.js';
+import { getKeyRegistry, getSettings, getSnapshot, saveSettings, saveSnapshot } from '../lib/settings.js';
 
 const el = (id) => document.getElementById(id);
 
@@ -66,14 +66,41 @@ const ui = {
 };
 
 let settings = null;
+/** Day-by-day ledger built from the API (`snapshot.ledger`) — never stored. */
 let history = null;
 let keyRegistry = null;
+
+/**
+ * Feeds `i18n.js` the active catalog. `t()` renders templates itself because
+ * Chrome drops the space that follows a substituted value; having the original
+ * message text (with its `$markers$` and spacing) is what makes that possible,
+ * and it also keeps the declaration order of `placeholders` correct.
+ * Best-effort: on failure `t()` falls back to `getMessage`.
+ */
+async function loadPlaceholderDeclarations() {
+  try {
+    const locale = chrome.i18n.getUILanguage().replace('-', '_');
+    const response = await fetch(chrome.runtime.getURL(`_locales/${locale}/messages.json`));
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    loadCatalog(await response.json());
+  } catch (error) {
+    // `en` (the fallback locale) may be requested for a regional UI language
+    // such as `en-GB`, so a miss here is expected and harmless.
+    try {
+      const response = await fetch(chrome.runtime.getURL('_locales/en/messages.json'));
+      if (response.ok) loadCatalog(await response.json());
+    } catch {
+      console.warn('[DeepSeek Usage] catalog unavailable:', error?.message || error);
+    }
+  }
+}
 
 init();
 
 async function init() {
   applyDocumentLanguage();
   localizeDocument();
+  loadPlaceholderDeclarations();
   ui.openUsage.href = USAGE_PAGE_URL;
   ui.status.href = STATUS_PAGE_URL;
   ui.refresh.addEventListener('click', () => refresh(true));
@@ -94,12 +121,10 @@ async function init() {
 
   chrome.storage.onChanged.addListener((changes, area) => {
     if (area !== 'local') return;
-    if (changes.usageHistory) history = changes.usageHistory.newValue || null;
     if (changes.apiKeyRegistry) keyRegistry = changes.apiKeyRegistry.newValue || null;
     if (
       changes.settings ||
       changes.usageSnapshot ||
-      changes.usageHistory ||
       changes.apiKeyRegistry ||
       changes.lastError
     ) {
@@ -179,7 +204,7 @@ async function applyScrapedSnapshot(page) {
 async function render() {
   settings = await getSettings();
   const { snapshot, lastError } = await getSnapshot();
-  if (!history) history = await getHistory();
+  history = snapshot?.ledger || null;
   if (!keyRegistry) keyRegistry = await getKeyRegistry();
   const selected = selectedKeys(snapshot?.usage, settings);
 
@@ -291,9 +316,9 @@ function renderForecast(snapshot, currentSettings) {
 }
 
 /**
- * Today vs. yesterday and this month vs. the previous one, both from the local
- * history, plus the "balance runs out on …" estimate. The whole block hides
- * when there is not enough history to say anything useful.
+ * Today vs. yesterday and this month vs. the previous one, both from the
+ * API-built ledger, plus the "balance runs out on …" estimate. The whole block
+ * hides when the ledger has nothing to compare.
  */
 function renderCompare(snapshot, currentSettings) {
   const usage = snapshot?.usage;
@@ -305,7 +330,6 @@ function renderCompare(snapshot, currentSettings) {
   ui.compare.hidden = true;
   ui.historyRange.textContent = '';
   ui.depletionRow.hidden = true;
-  ui.depletionNote.hidden = true;
   if (!days.length) return;
 
   const today = compareToday(usage, history, todayKey);
@@ -323,37 +347,37 @@ function renderCompare(snapshot, currentSettings) {
   ui.historyRange.textContent = t('historyRange', [
     firstRecordedDay(history) || '—',
     String(days.length),
-  ]);
+  ]).trim();
 
   // Today vs. yesterday.
-  ui.compareTodayDelta.parentElement.hidden = !showToday;
-  ui.compareTodayNote.hidden = !showToday;
+  ui.compareTodayDelta.closest('.compare__item').hidden = !showToday;
   if (showToday) {
     setDelta(ui.compareTodayDelta, today.todayCost, today.yesterday, money);
+    // No baseline (yesterday spent nothing) → nothing to compare against, so
+    // the "(±0%)"/"(—)" tail would only be noise.
+    const change = today.ratio ? signedPercent(today.ratio) : '';
     ui.compareTodayNote.textContent = t('compareTodayNote', [
       `${money(today.yesterday)} → ${money(today.todayCost)}`,
-      signedPercent(today.ratio),
-    ]);
+      change || '—',
+    ]).trim();
   }
 
   // This month (so far) vs. the same days of the previous month — comparing a
   // partial month with a whole month would always look like a drop.
-  ui.compareMonthDelta.parentElement.hidden = !showMonth;
-  ui.compareMonthNote.hidden = !showMonth;
+  ui.compareMonthDelta.closest('.compare__item').hidden = !showMonth;
   if (showMonth) {
     setDelta(ui.compareMonthDelta, months.sameDaysCurrent, months.sameDaysPrevious, money);
     ui.compareMonthNote.textContent = t('compareMonthNote', [
       `${money(months.sameDaysPrevious)} → ${money(months.sameDaysCurrent)}`,
       String(Number(todayKey.slice(8, 10))),
       signedPercent(months.sameDaysRatio),
-    ]);
+    ]).trim();
   }
 
   // Balance depletion. A date is not "bad news" on its own: red only when it
   // is imminent (≤ 3 days), muted otherwise. `is-up` is the red modifier here.
   if (depletion) {
     ui.depletionRow.hidden = false;
-    ui.depletionNote.hidden = false;
     ui.depletionValue.textContent = depletion.depleted
       ? t('depletionNow')
       : formatDate(depletion.runsOutOn);
@@ -362,11 +386,11 @@ function renderCompare(snapshot, currentSettings) {
     ui.depletionNote.textContent = t('depletionNote', [
       String(depletion.daysLeft),
       money(depletion.perDay),
-    ]);
+    ]).trim();
   }
 }
 
-/** Average daily spend over the configured depletion window (0 = all history). */
+/** Average daily spend over the configured depletion window (0 = whole ledger). */
 function averageForDepletion(currentSettings, todayKey) {
   const windowDays = Number(currentSettings.depletionWindowDays) || 0;
   const from = windowDays > 0 ? shiftDayKey(todayKey, -windowDays) : null;
@@ -387,11 +411,10 @@ function setDelta(node, current, previous, money) {
   node.textContent = `${sign}${money(Math.abs(diff))}`;
 }
 
-/** `1.25` → "+25%", `0.6` → "−40%", 0 → "—". */
+/** `1.25` → "+25%", `0.6` → "−40%", no change → "±0%". */
 function signedPercent(ratio) {
-  if (!ratio) return '—';
-  const percent = Math.round((ratio - 1) * 100);
-  if (percent === 0) return '±0%';
+  const percent = Math.round((Number(ratio) - 1) * 100);
+  if (!Number.isFinite(percent) || percent === 0) return '±0%';
   return `${percent > 0 ? '+' : '−'}${Math.abs(percent)}%`;
 }
 
@@ -411,7 +434,7 @@ function formatDate(dayKey) {
   }
 }
 
-/** How many days of history the export buttons can offer. */
+/** How many days of the ledger the export buttons can offer. */
 function renderExport(snapshot) {
   const days = sortedDays(history || {}).length;
   ui.exportNote.textContent = days
@@ -424,12 +447,12 @@ function renderExport(snapshot) {
 /** Downloads the history as CSV or JSON through a temporary blob URL. */
 async function exportHistory(format) {
   const { snapshot } = await getSnapshot();
-  if (!history) history = await getHistory();
+  const ledger = snapshot?.ledger || null;
   const todayKey = localDayKey();
   const payload =
     format === 'csv'
-      ? historyToCsv(history, { usage: snapshot?.usage, todayKey })
-      : historyToJson(history, { usage: snapshot?.usage, balance: snapshot?.balance, todayKey });
+      ? historyToCsv(ledger, { usage: snapshot?.usage, todayKey })
+      : historyToJson(ledger, { usage: snapshot?.usage, balance: snapshot?.balance, todayKey });
   const type = format === 'csv' ? 'text/csv;charset=utf-8' : 'application/json;charset=utf-8';
 
   const blob = new Blob([payload], { type });

@@ -65,8 +65,8 @@ const settings = {
 
 const storage = {
   settings,
-  usageSnapshot: snapshot,
-  usageHistory: { currency: 'USD', days, keys: {} },
+  // The ledger now rides inside the snapshot (`ledger.js` builds it from the API).
+  usageSnapshot: { ...snapshot, ledger: { currency: 'USD', days, keys: {} } },
   apiKeyRegistry: {
     k1: { name: 'Production', firstSeen: shiftDayKey(today, -40), lastSeen: today, lastUsedDay: today },
     k2: { name: 'Playground', firstSeen: shiftDayKey(today, -40), lastSeen: today, lastUsedDay: today },
@@ -78,24 +78,22 @@ const messages = JSON.parse(await (await fetch('/_locales/en/messages.json')).te
 
 window.chrome = {
   i18n: {
-    getMessage: (key, substitutions) => {
-      const entry = messages[key];
-      if (!entry?.message) return key;
-      const args = [].concat(substitutions || []);
-      // Chrome substitutes `$name$` placeholders, in the order of `placeholders`.
-      const names = Object.keys(entry.placeholders || {});
-      return entry.message.replace(/\$([A-Za-z_][A-Za-z0-9_]*)\$/g, (match, name) => {
-        const index = names.indexOf(name);
-        return index >= 0 && index < args.length ? String(args[index]) : match;
-      });
-    },
+    // Only the template form is used by `i18n.js`: it substitutes the values
+    // itself because Chrome eats the space that follows a marker. Returning the
+    // raw message here keeps the preview on the same code path as the product,
+    // so the preview cannot look better than the real popup.
+    getMessage: (key) => messages[key]?.message || '',
     getUILanguage: () => 'en-US',
   },
   storage: {
     local: { get: async (keys) => Object.fromEntries([].concat(keys || Object.keys(storage)).map((k) => [k, storage[k]])), set: async () => {} },
     onChanged: { addListener() {} },
   },
-  runtime: { sendMessage: async () => ({}), openOptionsPage() {}, getURL: (p) => p },
+  runtime: {
+    sendMessage: async () => ({}),
+    openOptionsPage() {},
+    getURL: (p) => `/${p}`,
+  },
   downloads: { download: async () => {} },
 };
 
