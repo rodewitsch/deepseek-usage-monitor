@@ -125,6 +125,25 @@ export function toNumber(value) {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
+/**
+ * Cleans a string before it is handed to `chrome.notifications`.
+ *
+ * On Windows the toast is rendered by the OS, not by Chrome, and text crossing
+ * that boundary sometimes arrives re-encoded: non-ASCII characters (Cyrillic in
+ * a localized message, a key name with emoji…) show up as U+FFFD boxes. NFC
+ * normalisation plus a scrub of replacement/invisible characters gives the
+ * shell a payload it can decode unambiguously.
+ */
+export function normaliseNotificationText(value) {
+  const text = String(value ?? '')
+    .normalize('NFC')
+    // U+FFFD, zero-width joiners/spaces and BOM carry no meaning here.
+    .replace(/[\uFFFD\u200B-\u200F\u202A-\u202E\u2060\uFEFF]/g, '')
+    // Control characters break the toast markup.
+    .replace(/[\u0000-\u001F\u007F]/g, ' ');
+  return text.replace(/\s+/g, ' ').trim();
+}
+
 /** `api_key` may be a plain string or `{ name, tracking_id }`. */
 export function normaliseApiKeyIdentity(raw) {
   if (!raw) return { id: 'unknown', name: 'Unknown key' };
