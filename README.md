@@ -14,7 +14,7 @@ already present in your browser for `platform.deepseek.com`.
 | **Popup** | Wallet balance (paid / bonus split), spend today + tokens, a 30-day spend chart, per-key list and a daily-budget bar. |
 | **By model** | Spend and tokens per model (`DeepSeek Chat` / `DeepSeek Reasoner`), plus prompt-cache hit rate and the money the cache saved. |
 | **Projected today** | Live forecast for the rest of the day from the pace so far, compared with the average day of the window. |
-| **Comparison** | Today vs. yesterday and this month vs. the same days of the previous month, from a local day-by-day history that outlives the 31-day API window. |
+| **Comparison** | Today vs. yesterday and this month vs. the same days of the previous month, computed from a day-by-day ledger the API serves on demand. |
 | **Balance depletion** | “Balance runs out on …” — wallet balance divided by the average daily spend (window configurable). |
 | **Export** | One-click CSV (day / key / model) or JSON download of the stored history. |
 | **Status** | DeepSeek service status from status.deepseek.com — a live indicator in the popup with a link to the status page. |
@@ -123,9 +123,18 @@ headers, so it is fetched by the service worker only.
 
 Quirks that are handled in `src/lib/api.js` / `src/lib/http.js`:
 
+* Errors come back in **two** independent envelopes: `{ code, msg }` and, inside
+  it, `{ data: { biz_code, biz_msg, biz_data } }`. A failed request can carry
+  `code: 0` with a non-zero `biz_code`, so checking the outer `code` alone
+  silently looks like success with empty data. `unwrapEnvelope` checks both.
 * `start`/`end` must be **day-aligned** (`00:00 UTC of that day`), `tz` is the
   caller's UTC offset in seconds. Arbitrary seconds → `biz_code 1 INVALID_PARAM`.
-* Windows longer than 31 days are rejected.
+* Windows longer than 31 days are rejected — measured against the live API:
+  `31` returns `biz_code 0` with 31 daily buckets, while `90` and `365` return
+  `biz_code 1 INVALID_PARAM` and `biz_data: null`. The limit is per *request*,
+  not per *range*: a window starting several months ago is served normally, so
+  the full ledger is assembled by walking backwards in 30-day chunks
+  (`src/lib/ledger.js`) instead of being accumulated in storage.
 * A multi-day window returns **daily** buckets; a single day returns **hourly**
   buckets (24). "Today" is therefore fetched separately for accuracy.
 * Buckets are stamped at the *previous* UTC-18:00 with `tz=10800`, so the day

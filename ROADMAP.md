@@ -12,8 +12,11 @@ These shape everything below and are not up for negotiation:
   (`localStorage.userToken`) and never stores secrets.
 - **Read-only WAF handling** — the `aws-waf-token` cookie is never forged; a
   stale challenge only needs the user to open `platform.deepseek.com` once.
-- **Console API limits** — usage windows are max **31 days** and day-aligned;
-  longer history must be accumulated locally.
+- **Console API limits** — a single usage window is max **31 days** and
+  day-aligned (verified live: 31 → `biz_code 0`, 90/365 → `biz_code 1
+  INVALID_PARAM`, while the outer `code` stays `0`). The limit is per request,
+  not per range: older periods are served normally, so history is fetched in
+  30-day chunks rather than stored.
 - **Plain JS, MV3, no build step** — load unpacked / build with `npm run build`.
 
 ## Legend
@@ -57,15 +60,18 @@ this is mostly normalisation + UI.
 
 ## Milestone 2 — History & projections (v1.3) ✅
 
-- [x] **Local history accumulation** — persist the daily total (and per-key
-      daily totals) to `chrome.storage.local`, so charts can cover more than
-      the 31-day API window. *(P1, M)* — `src/lib/history.js`, merged on every
-      successful refresh into `usageHistory`.
+- [x] **History accumulation** — originally persisted the daily total (and
+      per-key daily totals) to `chrome.storage.local` so charts could cover more
+      than one API window. *(P1, M)* — later replaced by on-demand chunks: see
+      "Ledger from the API" below.
 - [x] **Month-over-month / today-vs-yesterday comparison** — built on top of
-      the accumulated history. *(P1, S after history)* — "Comparison" popup
-      block, compared like-for-like (same day-of-month slice).
+      that ledger. *(P1, S after history)* — "Comparison" popup block, compared
+      like-for-like (same day-of-month slice).
 - [x] **"Balance runs out on …"** — balance ÷ average daily spend → estimated
-      depletion date. *(P0, S)* — average window configurable (0 = all history).
+      depletion date. *(P0, S)* — average window configurable (0 = whole ledger).
+- [x] **Ledger from the API** — the 31-day cap is per *request*, not per
+      *range*, so `src/lib/ledger.js` fetches ~1 year in 30-day chunks and
+      nothing is stored. A fresh install sees full history immediately. *(P0, M)*
 - [x] **CSV/JSON export** — one button in the popup exporting day/key/model
       spend. *(P1, S)* — `src/lib/exporter.js`.
 
@@ -105,7 +111,9 @@ older days in the CSV carry day totals but empty model columns.
 
 ## Icebox / blocked
 
-- **History > 31 days without local storage** — blocked by the console API.
+- **History > 31 days without local storage** — *solved*: the API serves any
+  31-day window in the past, so `ledger.js` walks backwards in chunks and
+  nothing is accumulated locally.
 - **Auto-renewal of the WAF challenge** — would require running DeepSeek's JS
   on their page; deliberately out of scope.
 - **Invoice / payment data** — not exposed by the known endpoints.

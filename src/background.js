@@ -2,12 +2,11 @@ import { alertNoticeKey, detectSpikes, forecastBudgetBreach, trackKeys } from '.
 import { computeBadge } from './lib/badge.js';
 import { budgetNoticeKey, evaluateBudgets } from './lib/budget.js';
 import { STORAGE_KEYS, WAF_COOKIE_NAMES } from './lib/constants.js';
-import { localDayKey } from './lib/format.js';
+import { localDayKey, normaliseNotificationText } from './lib/format.js';
 import { t } from './lib/i18n.js';
 import { refreshUsage } from './lib/refresh.js';
 import { refreshFromPage } from './lib/scrape.js';
 import {
-  getHistory,
   getKeyRegistry,
   getSettings,
   getSnapshot,
@@ -26,6 +25,9 @@ let refreshing = null;
 let statusChecking = null;
 
 chrome.runtime.onInstalled.addListener(async () => {
+  // The ledger is read from the API now, so a stored history from ≤ 1.4.1 is
+  // dead weight — drop it instead of leaving megabytes behind forever.
+  await chrome.storage.local.remove(STORAGE_KEYS.legacyHistory).catch(() => {});
   await scheduleAlarm();
   await ensureStatusAlarm();
   await updateBadge();
@@ -247,17 +249,11 @@ async function notifyBudget(snapshot, settings) {
             money(budget.remaining),
           ]);
 
-    try {
-      await chrome.notifications.create(key, {
-        type: 'basic',
-        iconUrl: chrome.runtime.getURL('icons/icon128.png'),
-        title,
-        message,
-        priority: budget.status === 'over' ? 2 : 1,
-      });
-    } catch (error) {
-      console.warn('[DeepSeek Usage] notification failed:', error.message);
-    }
+    await createNotification(key, {
+      title,
+      message,
+      priority: budget.status === 'over' ? 2 : 1,
+    });
   }
 
   if (!added.length) return;
@@ -284,21 +280,14 @@ async function notifyLowBalance(snapshot, settings) {
   if (notified.includes(marker)) return;
 
   const currency = snapshot.balance.currency || 'USD';
-  try {
-    await chrome.notifications.create(marker, {
-      type: 'basic',
-      iconUrl: chrome.runtime.getURL('icons/icon128.png'),
-      title: t('notifyLowBalanceTitle'),
-      message: t('notifyLowBalanceMessage', [
-        `${currency} ${total.toFixed(2)}`,
-        `${currency} ${threshold.toFixed(2)}`,
-      ]),
-      priority: 2,
-    });
-  } catch (error) {
-    console.warn('[DeepSeek Usage] notification failed:', error.message);
-    return;
-  }
+  await createNotification(marker, {
+    title: t('notifyLowBalanceTitle'),
+    message: t('notifyLowBalanceMessage', [
+      `${currency} ${total.toFixed(2)}`,
+      `${currency} ${threshold.toFixed(2)}`,
+    ]),
+    priority: 2,
+  });
 
   const kept = notified.filter((entry) => entry.startsWith(dayKey));
   await chrome.storage.local.set({ notified: [...kept, marker] });
@@ -348,9 +337,10 @@ async function notifyPace(snapshot, settings) {
 async function notifySpikes(snapshot, settings) {
   if (!settings.spikeAlerts) return;
 
-  const history = await getHistory();
+  const ledger = snapshot?.ledger || null;
+  if (!ledger) return;
   const dayKey = snapshot?.todayKey || localDayKey();
-  const spikes = detectSpikes(history, snapshot?.usage, dayKey, {
+  const spikes = detectSpikes(ledger, snapshot?.usage, dayKey, {
     ratio: settings.spikeRatio,
   });
 
@@ -432,19 +422,31 @@ async function claimNotice(marker, dayKey) {
   return true;
 }
 
-/** Creates a notification, swallowing failures (a missing icon, a rate cap…). */
-async function safeNotify(id, { title, message, priority = 1 }) {
+/**
+ * Windows renders `chrome.notifications` through the system toast, and text
+ * that crosses that boundary is not always encoded correctly: non-ASCII
+ * characters (Cyrillic in the title, an API key name…) arrive as U+FFFD boxes.
+ * Every notification therefore goes through this one place, which normalises
+ * the strings first so the payload handed to the OS is always clean UTF-8.
+ */
+async function createNotification(id, { title, message, priority = 1 }) {
+  const options = {
+    type: 'basic',
+    iconUrl: chrome.runtime.getURL('icons/icon128.png'),
+    title: normaliseNotificationText(title),
+    message: normaliseNotificationText(message),
+    priority,
+  };
   try {
-    await chrome.notifications.create(id, {
-      type: 'basic',
-      iconUrl: chrome.runtime.getURL('icons/icon128.png'),
-      title,
-      message,
-      priority,
-    });
+    await chrome.notifications.create(id, options);
   } catch (error) {
     console.warn('[DeepSeek Usage] notification failed:', error?.message || error);
   }
+}
+
+/** Creates a notification, swallowing failures (a missing icon, a rate cap…). */
+async function safeNotify(id, { title, message, priority = 1 }) {
+  await createNotification(id, { title, message, priority });
 }
 
 /**
@@ -477,20 +479,13 @@ async function checkStatus() {
 async function notifyStatus(previous, current) {
   const prevTrouble = hasIssues(previous);
   const currTrouble = hasIssues(current);
-  const iconUrl = chrome.runtime.getURL('icons/icon128.png');
 
   if (prevTrouble && !currTrouble) {
-    try {
-      await chrome.notifications.create('dsum-status-recovered', {
-        type: 'basic',
-        iconUrl,
-        title: t('notifyStatusRecoveredTitle'),
-        message: t('notifyStatusRecoveredMessage'),
-        priority: 0,
-      });
-    } catch (error) {
-      console.warn('[DeepSeek Usage] notification failed:', error.message);
-    }
+    await createNotification('dsum-status-recovered', {
+      title: t('notifyStatusRecoveredTitle'),
+      message: t('notifyStatusRecoveredMessage'),
+      priority: 0,
+    });
     await chrome.storage.local.set({ [STORAGE_KEYS.statusNotified]: { ids: [] } });
     return;
   }
@@ -508,17 +503,11 @@ async function notifyStatus(previous, current) {
       incident.kind === 'maintenance'
         ? t('notifyStatusMaintenanceTitle')
         : t('notifyStatusTitle');
-    try {
-      await chrome.notifications.create(`dsum-status-${incident.id}`, {
-        type: 'basic',
-        iconUrl,
-        title,
-        message: incident.summary || incident.title,
-        priority: 2,
-      });
-    } catch (error) {
-      console.warn('[DeepSeek Usage] notification failed:', error.message);
-    }
+    await createNotification(`dsum-status-${incident.id}`, {
+      title,
+      message: incident.summary || incident.title,
+      priority: 2,
+    });
   }
 
   if (added.length) {

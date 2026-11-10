@@ -100,7 +100,7 @@ export const DEFAULT_SETTINGS = {
   showMonthComparison: true,
   /** Show the "balance runs out on …" estimate in the popup. */
   showDepletion: true,
-  /** Days of local history used for the depletion estimate (0 = whole history). */
+  /** Days of the ledger used for the depletion estimate (0 = whole ledger). */
   depletionWindowDays: 30,
   /** Popup sections in display order. */
   popupSections: POPUP_SECTION_IDS,
@@ -135,8 +135,11 @@ export const STORAGE_KEYS = {
   tokenSource: 'platformTokenSource',
   snapshot: 'usageSnapshot',
   lastError: 'lastError',
-  /** Accumulated day-by-day spend, kept beyond the 31-day API window. */
-  history: 'usageHistory',
+  /**
+   * Legacy key from the stored-history era (up to 1.4.1). The ledger is now
+   * read from the API, so this is only referenced to delete it on upgrade.
+   */
+  legacyHistory: 'usageHistory',
   /** API keys seen so far: `{ [id]: {name, firstSeen, lastSeen, lastUsedDay} }`. */
   keyRegistry: 'apiKeyRegistry',
   status: 'serviceStatus',

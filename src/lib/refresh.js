@@ -1,11 +1,14 @@
 import { fetchUsageByKey, parseBalance } from './api.js';
 import { ENDPOINTS } from './constants.js';
 import { ApiError, localDayKey } from './format.js';
-import { mergeUsageIntoHistory } from './history.js';
 import { requestPlatformJson } from './http.js';
 import { t } from './i18n.js';
-import { getHistory, getSettings, getSnapshot, saveHistory, saveSnapshot, clearToken } from './settings.js';
+import { fetchLedger } from './ledger.js';
+import { getSettings, getSnapshot, saveSnapshot, clearToken } from './settings.js';
 import { discoverPlatformToken } from './token.js';
+
+/** How far back the ledger reaches (in days). */
+export const LEDGER_DAYS = 365;
 
 /**
  * Fetches balance + usage and persists one snapshot object.
@@ -70,26 +73,31 @@ export async function refreshUsage({ forceToken = false } = {}) {
     balance: parseBalance(balancePayload),
     usage,
   };
+
+  // The day-by-day ledger is read from the API in 31-day chunks (see
+  // `ledger.js`), so nothing is accumulated locally. A failure here must never
+  // fail the whole refresh — the snapshot is already usable without it.
+  snapshot.ledger = await buildLedger(token, snapshot.todayKey);
+
   await saveSnapshot(snapshot, null);
-  // Accumulate the day-by-day record beyond the 31-day API window. History is
-  // a nice-to-have: a failure here must never fail the whole refresh.
-  await recordHistory(usage, snapshot.todayKey);
   return { snapshot, lastError: null };
 }
 
 /**
- * Merges the fresh API series into the local history and persists it.
- * Returns the merged history (or the stored one when the merge threw).
+ * Builds the ledger for the last year, falling back to whatever the previous
+ * snapshot holds when the API refuses mid-way.
+ *
+ * @param {string} token
+ * @param {string} todayKey
+ * @returns {Promise<{currency: string|null, days: object, keys: object} | null>}
  */
-export async function recordHistory(usage, todayKey = localDayKey(), { trusted = true } = {}) {
+export async function buildLedger(token, todayKey = localDayKey()) {
   try {
-    const current = await getHistory();
-    const { history, changed } = mergeUsageIntoHistory(current, usage, { todayKey, trusted });
-    if (changed) await saveHistory(history);
-    return history;
+    return await fetchLedger(token, { days: LEDGER_DAYS, todayKey });
   } catch (error) {
-    console.warn('[DeepSeek Usage] history update failed:', error?.message || error);
-    return getHistory();
+    console.warn('[DeepSeek Usage] ledger build failed:', error?.message || error);
+    const previous = await getSnapshot();
+    return previous.snapshot?.ledger || null;
   }
 }
 

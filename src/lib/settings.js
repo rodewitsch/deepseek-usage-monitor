@@ -1,5 +1,4 @@
 import { DEFAULT_SETTINGS, POPUP_SECTION_IDS, STORAGE_KEYS } from './constants.js';
-import { normaliseHistory } from './history.js';
 
 export async function getSettings() {
   const stored = await chrome.storage.local.get(STORAGE_KEYS.settings);
@@ -102,16 +101,6 @@ export async function saveSnapshot(snapshot, lastError = null) {
     [STORAGE_KEYS.snapshot]: snapshot,
     [STORAGE_KEYS.lastError]: lastError,
   });
-}
-
-/** Accumulated daily spend history (see `history.js`). */
-export async function getHistory() {
-  const stored = await chrome.storage.local.get(STORAGE_KEYS.history);
-  return normaliseHistory(stored[STORAGE_KEYS.history]);
-}
-
-export async function saveHistory(history) {
-  await chrome.storage.local.set({ [STORAGE_KEYS.history]: history });
 }
 
 /** API keys seen so far, keyed by id (see `trackKeys()` in `alerts.js`). */

@@ -1,148 +1,14 @@
 /**
- * Local daily history.
+ * Day-by-day spend maths: comparisons, averages and depletion estimates.
  *
- * The console API only serves a 31-day, day-aligned window, so anything longer
- * has to be accumulated here. Every successful refresh merges the API's daily
- * series into `history.days` (a day is overwritten, never summed — the API is
- * the source of truth while a day is still inside the window) and the result
- * is persisted to `chrome.storage.local`. Days older than the API window stay
- * in the record, which is the whole point of the module.
+ * The ledger these functions operate on is built from the API by `ledger.js`
+ * and lives in `snapshot.ledger` — nothing is accumulated in storage, so a
+ * fresh install has the full history on its very first refresh.
  *
- * Per-key daily totals live under `history.keys` so a future chart can plot a
- * key over the full history. The current currency is remembered as well: mixing
- * USD and CNY rows in one chart would be meaningless.
+ * Shape: `{ currency, days: { 'YYYY-MM-DD': { cost, tokens } }, keys: { id: { day: cost } } }`
  */
 
 const DAY_MS = 86400000;
-
-export const HISTORY_KEY = 'usageHistory';
-/** Hard cap on retained days (~5 years) — a safety net, not a product limit. */
-export const HISTORY_MAX_DAYS = 1830;
-
-/** Fresh, empty history object. */
-export function emptyHistory() {
-  return { currency: null, days: {}, keys: {}, updatedAt: null };
-}
-
-/** Normalises whatever is stored (or `undefined`) into a complete shape. */
-export function normaliseHistory(raw) {
-  const history = emptyHistory();
-  if (!raw || typeof raw !== 'object') return history;
-
-  history.currency = typeof raw.currency === 'string' && raw.currency ? raw.currency : null;
-  history.updatedAt = Number(raw.updatedAt) || null;
-
-  for (const [date, day] of Object.entries(raw.days || {})) {
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !day || typeof day !== 'object') continue;
-    history.days[date] = {
-      cost: Number(day.cost) || 0,
-      tokens: Number(day.tokens) || 0,
-    };
-  }
-
-  for (const [id, series] of Object.entries(raw.keys || {})) {
-    if (!series || typeof series !== 'object') continue;
-    const cleaned = {};
-    for (const [date, cost] of Object.entries(series)) {
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) continue;
-      const value = Number(cost) || 0;
-      if (value) cleaned[date] = value;
-    }
-    if (Object.keys(cleaned).length) history.keys[String(id)] = cleaned;
-  }
-
-  return history;
-}
-
-/**
- * Merges one refresh into the history.
- *
- * @param {object} history      current (normalised) history
- * @param {object} usage        the `usage` object from `refreshUsage()`
- * @param {object} options
- * @param {string} options.todayKey  today as `YYYY-MM-DD` in the machine's zone
- * @param {number} [options.now]     timestamp used for `updatedAt`
- * @param {boolean} [options.trusted] true when the numbers come from the API;
- *        scraped page values may only fill days the history does not know yet.
- * @returns {{history: object, changed: boolean, addedDays: string[], firstDay: string|null}}
- */
-export function mergeUsageIntoHistory(history, usage, { todayKey, now = Date.now(), trusted = true } = {}) {
-  const next = normaliseHistory(history);
-  const currency = usage?.currency || next.currency || 'USD';
-  const before = snapshotFingerprint(next);
-
-  // A currency switch invalidates the stored costs (they are amounts, not
-  // ratios). Keep nothing rather than silently mixing two currencies.
-  if (next.currency && next.currency !== currency) {
-    next.days = {};
-    next.keys = {};
-  }
-  next.currency = currency;
-
-  const daily = Array.isArray(usage?.daily) ? usage.daily : [];
-  for (const day of daily) {
-    if (!day?.date) continue;
-    const cost = Number(day.cost) || 0;
-    const tokens = Number(day.tokens) || 0;
-    const known = next.days[day.date];
-
-    if (!trusted && known) continue;
-    // The page only knows the current window total; do not let it blank a day.
-    if (!trusted && cost === 0 && tokens === 0) continue;
-
-    next.days[day.date] = { cost, tokens };
-  }
-
-  const keys = Array.isArray(usage?.keys) ? usage.keys : [];
-  for (const key of keys) {
-    if (!key?.id) continue;
-    const series = next.keys[key.id] || {};
-    for (const [date, cost] of Object.entries(key.dailyCost || {})) {
-      if (!trusted && series[date]) continue;
-      const value = Number(cost) || 0;
-      if (value) series[date] = value;
-    }
-    if (Object.keys(series).length) next.keys[key.id] = series;
-  }
-
-  const trimmed = trimHistory(next);
-  trimmed.updatedAt = now;
-
-  const firstDay = firstRecordedDay(trimmed);
-  const addedDays = sortedDays(trimmed).filter(
-    (date) => !before.days[date] || before.days[date] !== fingerprintDay(trimmed.days[date]),
-  );
-  return {
-    history: trimmed,
-    changed: snapshotFingerprint(trimmed).fingerprint !== before.fingerprint || before.firstDay !== firstDay,
-    addedDays,
-    firstDay,
-  };
-}
-
-/**
- * Keeps only the newest `HISTORY_MAX_DAYS` days. Key series are trimmed to the
- * remaining range too, so the record cannot grow through abandoned keys.
- */
-export function trimHistory(history) {
-  const days = sortedDays(history);
-  if (days.length > HISTORY_MAX_DAYS) {
-    const cutoff = days[days.length - HISTORY_MAX_DAYS];
-    for (const date of days) {
-      if (date < cutoff) delete history.days[date];
-    }
-  }
-
-  const oldest = firstRecordedDay(history);
-  if (!oldest) return history;
-  for (const [id, series] of Object.entries(history.keys)) {
-    for (const date of Object.keys(series)) {
-      if (date < oldest) delete series[date];
-    }
-    if (!Object.keys(series).length) delete history.keys[id];
-  }
-  return history;
-}
 
 /** `YYYY-MM-DD` keys, ascending. */
 export function sortedDays(history) {
@@ -296,20 +162,4 @@ export function estimateDepletion(balance, average, todayKey) {
     depleted: false,
     perDay,
   };
-}
-
-function snapshotFingerprint(history) {
-  const days = {};
-  for (const date of sortedDays(history)) days[date] = fingerprintDay(history.days[date]);
-  return {
-    days,
-    keys: JSON.stringify(Object.entries(history.keys).sort()),
-    currency: history.currency,
-    firstDay: firstRecordedDay(history),
-    fingerprint: `${history.currency}|${JSON.stringify(days)}|${Object.keys(history.keys).length}`,
-  };
-}
-
-function fingerprintDay(day) {
-  return `${Number(day?.cost) || 0}:${Number(day?.tokens) || 0}`;
 }

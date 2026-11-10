@@ -1,19 +1,17 @@
-// Sanity checks for the Milestone 2 helpers: history accumulation, month /
-// today comparisons, the depletion estimate and the CSV/JSON exporters.
+// Sanity checks for the ledger maths: day / month comparisons, the depletion
+// estimate, the API-chunk merge and the CSV/JSON exporters.
 // No DOM, no chrome.* — plain module calls.
 import assert from 'node:assert/strict';
 import {
   compareMonths,
   compareToday,
   dailyAverage,
-  emptyHistory,
   estimateDepletion,
-  mergeUsageIntoHistory,
   monthStart,
-  normaliseHistory,
   shiftDayKey,
   sumHistoryCost,
 } from '../src/lib/history.js';
+import { fetchLedger, mergeCostPayload, MAX_WINDOW_DAYS } from '../src/lib/ledger.js';
 import { exportFileName, historyToCsv, historyToJson, keysToCsv } from '../src/lib/exporter.js';
 
 // --- day arithmetic -------------------------------------------------------
@@ -25,54 +23,109 @@ assert.equal(monthStart('2026-11-04', 0), '2026-11-01');
 assert.equal(monthStart('2026-11-04', 1), '2026-10-01');
 assert.equal(monthStart('2026-01-15', 1), '2025-12-01');
 
-// --- history merge --------------------------------------------------------
-let history = emptyHistory();
+// --- ledger merge ---------------------------------------------------------
+// Mirrors the real payload: several (api_key, model) series in one currency
+// block, all of which must be summed. Buckets are NOT deduplicated by time.
+const TZ = 10800;
+const at = (dayKey) => Math.floor(Date.parse(`${dayKey}T00:00:00Z`) / 1000) - TZ;
 
-const usageDay1 = {
-  currency: 'USD',
-  daily: [
-    { date: '2026-11-02', cost: 2, tokens: 100 },
-    { date: '2026-11-03', cost: 3, tokens: 200 },
-    { date: '2026-11-04', cost: 4, tokens: 300 },
-  ],
-  keys: [{ id: 'k1', dailyCost: { '2026-11-02': 2, '2026-11-04': 1 } }],
+const payload = {
+  code: 0,
+  data: {
+    biz_code: 0,
+    biz_data: {
+      data: [
+        {
+          currency: 'USD',
+          series: [
+            {
+              api_key: { tracking_id: 'k1', name: 'one' },
+              model: 'deepseek-chat',
+              buckets: [
+                { time: at('2026-11-02'), cost: '1.5' },
+                { time: at('2026-11-03'), cost: '2' },
+                { time: at('2026-11-04'), cost: '0' }, // zero days are ignored
+              ],
+            },
+            {
+              api_key: { tracking_id: 'k1', name: 'one' },
+              model: 'deepseek-reasoner',
+              buckets: [
+                { time: at('2026-11-02'), cost: '0.5' }, // same day, other model
+                { time: at('2026-11-04'), cost: '4' },
+              ],
+            },
+            {
+              api_key: { tracking_id: 'k2', name: 'two' },
+              model: 'deepseek-chat',
+              buckets: [{ time: at('2026-11-04'), cost: '1' }],
+            },
+          ],
+        },
+        {
+          // A second currency block must be ignored, not mixed in.
+          currency: 'CNY',
+          series: [
+            {
+              api_key: { tracking_id: 'k1', name: 'one' },
+              model: 'deepseek-chat',
+              buckets: [{ time: at('2026-11-04'), cost: '999' }],
+            },
+          ],
+        },
+      ],
+    },
+  },
 };
 
-let merged = mergeUsageIntoHistory(history, usageDay1, { todayKey: '2026-11-04', now: 1000 });
-assert.equal(merged.changed, true);
-assert.equal(merged.firstDay, '2026-11-02');
-history = merged.history;
-assert.equal(Object.keys(history.days).length, 3);
-assert.equal(history.days['2026-11-03'].cost, 3);
+const ledger = { currency: null, days: {}, keys: {} };
+mergeCostPayload(ledger, payload, TZ);
 
-// Re-merging the same payload changes nothing (no duplicate writes).
-const again = mergeUsageIntoHistory(history, usageDay1, { todayKey: '2026-11-04' });
-assert.equal(again.changed, false);
+assert.equal(ledger.currency, 'USD', 'first currency wins');
+assert.equal(ledger.days['2026-11-02'].cost, 2, 'two models on one day are summed');
+assert.equal(ledger.days['2026-11-04'].cost, 5, 'per-key series are summed, CNY ignored');
+assert.equal(ledger.days['2026-11-03'].cost, 2);
+assert.equal(ledger.keys.k1['2026-11-02'], 2);
+assert.equal(ledger.keys.k2['2026-11-04'], 1);
 
-// Later refreshes overwrite a known day (the API is the source of truth) and
-// add new ones; days that leave the API window must SURVIVE.
-const usageDay2 = {
-  currency: 'USD',
-  daily: [{ date: '2026-11-04', cost: 6, tokens: 450 }],
-  keys: [],
+// The merge is additive by design: chunks never overlap, so nothing dedupes.
+const twice = { currency: null, days: {}, keys: {} };
+mergeCostPayload(twice, payload, TZ);
+mergeCostPayload(twice, payload, TZ);
+assert.equal(twice.days['2026-11-04'].cost, 10, 'merge is additive (chunks never overlap)');
+
+// --- chunking contract ----------------------------------------------------
+assert.equal(MAX_WINDOW_DAYS, 31, 'the console rejects windows longer than 31 days');
+
+// `fetchLedger` must stay within the limit for every chunk it asks for.
+const requested = [];
+const originalFetch = globalThis.fetch;
+globalThis.fetch = async (url) => {
+  const params = new URL(url).searchParams;
+  requested.push({ start: Number(params.get('start')), end: Number(params.get('end')) });
+  return {
+    status: 200,
+    ok: true,
+    text: async () => JSON.stringify({ code: 0, data: { biz_code: 0, biz_data: { data: [] } } }),
+  };
 };
-merged = mergeUsageIntoHistory(history, usageDay2, { todayKey: '2026-11-05' });
-history = merged.history;
-assert.equal(history.days['2026-11-04'].cost, 6, 'today is refreshed');
-assert.equal(history.days['2026-11-02'].cost, 2, 'old days are kept');
+try {
+  await fetchLedger('token', { days: 120, todayKey: '2026-11-10' });
+} finally {
+  globalThis.fetch = originalFetch;
+}
 
-// Untrusted (scraped) numbers may not overwrite known days.
-const scraped = { currency: 'USD', daily: [{ date: '2026-11-04', cost: 99 }], keys: [] };
-history = mergeUsageIntoHistory(history, scraped, { todayKey: '2026-11-04', trusted: false }).history;
-assert.equal(history.days['2026-11-04'].cost, 6, 'scraped value ignored for a known day');
-
-// A currency switch drops the old amounts instead of mixing currencies.
-history = mergeUsageIntoHistory(history, { currency: 'CNY', daily: [], keys: [] }).history;
-assert.equal(Object.keys(history.days).length, 0);
-assert.equal(history.currency, 'CNY');
+assert.equal(requested.length, 4, '120 days → 4 chunks of 30');
+for (const { start, end } of requested) {
+  const span = (end - start) / 86400;
+  assert.ok(span <= MAX_WINDOW_DAYS, `chunk span ${span} exceeds the console limit`);
+  assert.ok(span > 1, 'each chunk is a real range');
+}
+// Newest chunk first, so a deep failure cannot hide recent data.
+assert.ok(requested[0].end > requested[3].end, 'chunks are walked from newest to oldest');
 
 // --- aggregates -----------------------------------------------------------
-const sample = normaliseHistory({
+const sample = {
   currency: 'USD',
   days: {
     '2026-10-31': { cost: 10, tokens: 1 },
@@ -81,7 +134,7 @@ const sample = normaliseHistory({
     '2026-11-03': { cost: 15, tokens: 1 },
     '2026-11-04': { cost: 10, tokens: 1 },
   },
-});
+};
 assert.equal(sumHistoryCost(sample, { from: '2026-11-01', to: '2026-11-04' }), 30);
 assert.equal(dailyAverage(sample).days, 5);
 assert.equal(dailyAverage(sample).average, 8); // 40 / 5, quiet day counts
@@ -89,8 +142,6 @@ assert.equal(dailyAverage(sample, { from: '2026-11-01' }).average, 7.5);
 assert.equal(dailyAverage(sample).spendDays, 4);
 
 // --- comparisons ----------------------------------------------------------
-// 2026-11-04: this month 30 over 4 days; October 1..4 had 10 on the 31st only
-// → the same-days slice is null, the full month is 10.
 const months = compareMonths(sample, '2026-11-04');
 assert.equal(months.current, 30);
 assert.equal(months.previous, 10);
@@ -98,12 +149,11 @@ assert.equal(months.sameDaysUntil, '2026-10-04');
 assert.equal(months.sameDaysPrevious, 0, 'no spend in Oct 1..4');
 assert.equal(months.sameDaysComparable, false);
 
-// A month boundary: on the 3rd of a 31-day month, no overflow into next month.
 const march = compareMonths(
-  normaliseHistory({
+  {
     currency: 'USD',
     days: { '2026-02-01': { cost: 4 }, '2026-03-01': { cost: 8 }, '2026-03-02': { cost: 8 } },
-  }),
+  },
   '2026-03-02',
 );
 assert.equal(march.sameDaysUntil, '2026-02-02');
@@ -115,7 +165,7 @@ assert.equal(today.delta, -5);
 assert.equal(today.comparable, true);
 
 // No yesterday → not comparable instead of a bogus 100 % drop.
-const noYesterday = compareToday({ todayCost: 10 }, emptyHistory(), '2026-11-04');
+const noYesterday = compareToday({ todayCost: 10 }, { days: {} }, '2026-11-04');
 assert.equal(noYesterday.comparable, false);
 assert.equal(noYesterday.yesterday, null);
 
@@ -128,11 +178,11 @@ assert.equal(estimateDepletion(0, 8, '2026-11-04').depleted, true);
 assert.equal(estimateDepletion(100, 0, '2026-11-04'), null, 'no average → no estimate');
 
 // --- export ---------------------------------------------------------------
-const exportHistoryData = normaliseHistory({
+const exportHistoryData = {
   currency: 'USD',
   days: { '2026-11-03': { cost: 1.5, tokens: 10 }, '2026-11-04': { cost: 2, tokens: 20 } },
   keys: { k1: { '2026-11-03': 1.5, '2026-11-04': 2 } },
-});
+};
 const exportUsage = {
   currency: 'USD',
   windowCost: 3.5,
@@ -171,4 +221,4 @@ assert.ok(quoted.includes('"a,""b"""'), quoted);
 
 assert.equal(exportFileName('csv', '2026-11-04'), 'deepseek-usage-2026-11-04.csv');
 
-console.log('history/export checks passed');
+console.log('ledger/export checks passed');
