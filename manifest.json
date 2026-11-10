@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "__MSG_extName__",
   "short_name": "DeepSeek Usage",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "__MSG_extDescription__",
   "author": "Rodevich Dmitry",
   "default_locale": "ru",

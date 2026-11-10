@@ -3,6 +3,19 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/), versioned with [SemVer](https://semver.org/).
 
+## [1.5.0](https://github.com/rodewitsch/deepseek-usage-monitor/compare/v1.4.1...v1.5.0) (2026-11-10)
+
+
+### Added
+
+* **history:** read the day-by-day ledger from the API instead of storing it ([df8b9b8](https://github.com/rodewitsch/deepseek-usage-monitor/commit/df8b9b8f94c326d9a456229c715a2d008cb038c6))
+
+
+### Fixed
+
+* **i18n:** render message templates ourselves so substituted values keep their spaces ([700dce0](https://github.com/rodewitsch/deepseek-usage-monitor/commit/700dce0730cb15208523adc9ce88c693af0c1cd9))
+* **notifications:** scrub re-encoded characters before the toast is shown ([a8894a8](https://github.com/rodewitsch/deepseek-usage-monitor/commit/a8894a8c3081e1e3d30ca65fe3289c3b4a98d810))
+
 ### [1.4.1](https://github.com/rodewitsch/deepseek-usage-monitor/compare/v1.4.0...v1.4.1) (2026-11-08)
 
 
