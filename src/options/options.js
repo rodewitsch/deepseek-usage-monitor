@@ -33,6 +33,7 @@ const fields = {
   showDecimals: { input: el('show-decimals'), setting: 'showDecimals' },
   showMonthComparison: { input: el('show-month-comparison'), setting: 'showMonthComparison' },
   showDepletion: { input: el('show-depletion'), setting: 'showDepletion' },
+  wafTabRenew: { input: el('waf-tab-renew'), setting: 'wafTabRenew' },
 };
 
 const preview = el('badge-preview');
@@ -183,6 +184,7 @@ function applySettings(settings) {
   fields.showDecimals.input.checked = settings.showDecimals;
   fields.showMonthComparison.input.checked = settings.showMonthComparison;
   fields.showDepletion.input.checked = settings.showDepletion;
+  fields.wafTabRenew.input.checked = settings.wafTabRenew;
   applyMetricVisibility(settings);
 }
 

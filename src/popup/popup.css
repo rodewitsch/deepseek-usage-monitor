@@ -93,6 +93,22 @@ h2 {
   font-size: 11px;
 }
 
+/* The status line wraps, so the retry control must not stretch the header. */
+.brand__status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 4px;
+  margin: 0;
+  font-size: 11px;
+}
+
+.brand__status .link-button {
+  margin-left: 0;
+  color: var(--accent, #4d6bfe);
+  font-size: 11px;
+}
+
 .icon-button {
   display: flex;
   align-items: center;
@@ -269,6 +285,12 @@ h2 {
 .card__value {
   font-size: 20px;
   font-variant-numeric: tabular-nums;
+}
+
+/* "Unknown" must not look like a number: same size, no emphasis. */
+.card__value.is-unknown {
+  color: var(--muted);
+  font-weight: 500;
 }
 
 .card__hint {

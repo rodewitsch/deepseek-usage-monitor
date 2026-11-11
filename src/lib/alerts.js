@@ -83,7 +83,12 @@ function pickBudgetTarget(usage, settings, keyIds) {
     const key = findKey(usage, id);
     const budget = Number(keyBudgets[id]) || 0;
     if (budget > 0) {
-      return { scope: `key:${id}`, name: key?.name || id, budget, spent: Number(key?.todayCost) || 0 };
+      return {
+        scope: `key:${id}`,
+        name: key?.name || id,
+        budget,
+        spent: unknownToNull(key?.todayCost),
+      };
     }
   }
 
@@ -93,7 +98,18 @@ function pickBudgetTarget(usage, settings, keyIds) {
   }
 
   // Whole account: the account budget is the user's own "this is too much".
-  return { scope: 'account', name: '', budget: Number(settings?.dailyBudget) || 0, spent: Number(usage.todayCost) || 0 };
+  return {
+    scope: 'account',
+    name: '',
+    budget: Number(settings?.dailyBudget) || 0,
+    spent: unknownToNull(usage.todayCost),
+  };
+}
+
+/** `null`/`undefined` = unknown today. Everything else is a number. */
+function unknownToNull(value) {
+  if (value === null || value === undefined) return null;
+  return Number(value) || 0;
 }
 
 /**
@@ -127,6 +143,8 @@ export function detectSpikes(history, usage, todayKey, options = {}) {
   if (!(average > 0)) return { account: null, keys: [] };
 
   const check = (cost, scope, name) => {
+    // Unknown (null) is not zero: no spike report for a missing number.
+    if (cost === null || cost === undefined) return null;
     const spent = Number(cost) || 0;
     if (spent < minCost) return null;
     const dayRatio = spent / average;

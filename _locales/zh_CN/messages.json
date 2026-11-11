@@ -8,7 +8,6 @@
   "actionTitle": {
     "message": "DeepSeek Usage Monitor"
   },
-
   "popupTitle": {
     "message": "DeepSeek Usage Monitor"
   },
@@ -48,22 +47,29 @@
   "settings": {
     "message": "设置"
   },
-
   "modelsTitle": {
     "message": "按模型"
   },
   "modelMeta": {
     "message": "$tokens$ 个 token · 占花费 $percent$%",
     "placeholders": {
-      "tokens": { "content": "$1" },
-      "percent": { "content": "$2" }
+      "tokens": {
+        "content": "$1"
+      },
+      "percent": {
+        "content": "$2"
+      }
     }
   },
   "cacheNote": {
     "message": "提示缓存：命中率 $rate$%，节省 $saved$",
     "placeholders": {
-      "rate": { "content": "$1" },
-      "saved": { "content": "$2" }
+      "rate": {
+        "content": "$1"
+      },
+      "saved": {
+        "content": "$2"
+      }
     }
   },
   "forecastTitle": {
@@ -72,16 +78,19 @@
   "forecastRemaining": {
     "message": "预计还将花费 $amount$",
     "placeholders": {
-      "amount": { "content": "$1" }
+      "amount": {
+        "content": "$1"
+      }
     }
   },
   "forecastVsAverage": {
     "message": "平均日期的 $percent$",
     "placeholders": {
-      "percent": { "content": "$1" }
+      "percent": {
+        "content": "$1"
+      }
     }
   },
-
   "sectionCompareName": {
     "message": "对比与历史"
   },
@@ -91,8 +100,12 @@
   "historyRange": {
     "message": "自 $from$ · 已记录 $days$ 天",
     "placeholders": {
-      "from": { "content": "$1$" },
-      "days": { "content": "$2$" }
+      "from": {
+        "content": "$1$"
+      },
+      "days": {
+        "content": "$2$"
+      }
     }
   },
   "compareToday": {
@@ -101,8 +114,12 @@
   "compareTodayNote": {
     "message": "$values$（$change$）",
     "placeholders": {
-      "values": { "content": "$1$" },
-      "change": { "content": "$2$" }
+      "values": {
+        "content": "$1$"
+      },
+      "change": {
+        "content": "$2$"
+      }
     }
   },
   "compareMonth": {
@@ -111,9 +128,15 @@
   "compareMonthNote": {
     "message": "前 $days$ 天 $values$（$change$）",
     "placeholders": {
-      "values": { "content": "$1$" },
-      "days": { "content": "$2$" },
-      "change": { "content": "$3$" }
+      "values": {
+        "content": "$1$"
+      },
+      "days": {
+        "content": "$2$"
+      },
+      "change": {
+        "content": "$3$"
+      }
     }
   },
   "depletionTitle": {
@@ -125,8 +148,12 @@
   "depletionNote": {
     "message": "按每天 $perDay$ 约剩 $days$ 天",
     "placeholders": {
-      "days": { "content": "$1$" },
-      "perDay": { "content": "$2$" }
+      "days": {
+        "content": "$1$"
+      },
+      "perDay": {
+        "content": "$2$"
+      }
     }
   },
   "exportTitle": {
@@ -141,14 +168,16 @@
   "exportNote": {
     "message": "$days$ 天历史",
     "placeholders": {
-      "days": { "content": "$1$" }
+      "days": {
+        "content": "$1$"
+      }
     }
   },
   "exportEmpty": {
     "message": "暂无历史"
   },
   "depletionWindow": {
-    "message": "计算余额预计的平均支出天数（0 = 全部历史）"
+    "message": "平均支出窗口（天，0 = 全部）"
   },
   "showMonthComparison": {
     "message": "在弹窗中显示月度对比"
@@ -174,32 +203,39 @@
   "moveDown": {
     "message": "下移"
   },
-
   "statusNoData": {
     "message": "暂无数据"
   },
   "statusUpdated": {
     "message": "$ago$ 更新",
     "placeholders": {
-      "ago": { "content": "$1" }
+      "ago": {
+        "content": "$1"
+      }
     }
   },
   "statusUpdatedInteractive": {
     "message": "$ago$ 更新",
     "placeholders": {
-      "ago": { "content": "$1" }
+      "ago": {
+        "content": "$1"
+      }
     }
   },
   "statusYesterday": {
     "message": "$ago$ · 昨天",
     "placeholders": {
-      "ago": { "content": "$1" }
+      "ago": {
+        "content": "$1"
+      }
     }
   },
   "statusStale": {
-    "message": "缓存数据 $ago$ — 访问 platform.deepseek.com 后将自动更新",
+    "message": "缓存数据（$ago$）— 需要续期会话",
     "placeholders": {
-      "ago": { "content": "$1" }
+      "ago": {
+        "content": "$1"
+      }
     }
   },
   "signInPrompt": {
@@ -211,40 +247,55 @@
   "balancePaidBonus": {
     "message": "充值 $paid$ · 赠送 $bonus$",
     "placeholders": {
-      "paid": { "content": "$1" },
-      "bonus": { "content": "$2" }
+      "paid": {
+        "content": "$1"
+      },
+      "bonus": {
+        "content": "$2"
+      }
     }
   },
   "tokensCount": {
     "message": "$count$ 个 token",
     "placeholders": {
-      "count": { "content": "$1" }
+      "count": {
+        "content": "$1"
+      }
     }
   },
   "tokensScope": {
     "message": "$tokens$ · $scope$",
     "placeholders": {
-      "tokens": { "content": "$1" },
-      "scope": { "content": "$2" }
+      "tokens": {
+        "content": "$1"
+      },
+      "scope": {
+        "content": "$2"
+      }
     }
   },
   "keysCount": {
     "message": "$count$ 个密钥",
     "placeholders": {
-      "count": { "content": "$1" }
+      "count": {
+        "content": "$1"
+      }
     }
   },
   "keysCountSelected": {
     "message": "已选 $count$ 个",
     "placeholders": {
-      "count": { "content": "$1" }
+      "count": {
+        "content": "$1"
+      }
     }
   },
-
   "budgetDailyScope": {
     "message": "每日预算 · $scope$",
     "placeholders": {
-      "scope": { "content": "$1" }
+      "scope": {
+        "content": "$1"
+      }
     }
   },
   "budgetAccount": {
@@ -253,7 +304,9 @@
   "budgetForSelection": {
     "message": "仅限 $name$",
     "placeholders": {
-      "name": { "content": "$1" }
+      "name": {
+        "content": "$1"
+      }
     }
   },
   "budgetForSelectionFallback": {
@@ -262,46 +315,64 @@
   "budgetWarnMark": {
     "message": "预警阈值 $percent$%",
     "placeholders": {
-      "percent": { "content": "$1" }
+      "percent": {
+        "content": "$1"
+      }
     }
   },
   "budgetSpentLeft": {
     "message": "已花 $spent$ · 预算 $budget$ 剩余 $left$",
     "placeholders": {
-      "spent": { "content": "$1" },
-      "left": { "content": "$2" },
-      "budget": { "content": "$3" }
+      "spent": {
+        "content": "$1"
+      },
+      "left": {
+        "content": "$2"
+      },
+      "budget": {
+        "content": "$3"
+      }
     }
   },
   "budgetSpentOver": {
     "message": "已花 $spent$ · 超出 $over$",
     "placeholders": {
-      "spent": { "content": "$1" },
-      "over": { "content": "$2" }
+      "spent": {
+        "content": "$1"
+      },
+      "over": {
+        "content": "$2"
+      }
     }
   },
-
   "chartEmpty": {
     "message": "该时段内没有用量"
   },
   "chartTotal": {
     "message": "$days$ 天共 $amount$",
     "placeholders": {
-      "amount": { "content": "$1" },
-      "days": { "content": "$2" }
+      "amount": {
+        "content": "$1"
+      },
+      "days": {
+        "content": "$2"
+      }
     }
   },
   "chartTooltipDay": {
     "message": "$date$：$amount$",
     "placeholders": {
-      "date": { "content": "$1" },
-      "amount": { "content": "$2" }
+      "date": {
+        "content": "$1"
+      },
+      "amount": {
+        "content": "$2"
+      }
     }
   },
   "chartSeriesAllKeys": {
     "message": "全部密钥"
   },
-
   "keyRemoveFromChart": {
     "message": "点击从图表中移除"
   },
@@ -311,17 +382,22 @@
   "keyTodayMeta": {
     "message": "今日 $today$",
     "placeholders": {
-      "today": { "content": "$1" }
+      "today": {
+        "content": "$1"
+      }
     }
   },
   "keyTodayMetaBudget": {
     "message": "今日 $today$ / $budget$",
     "placeholders": {
-      "today": { "content": "$1" },
-      "budget": { "content": "$2" }
+      "today": {
+        "content": "$1"
+      },
+      "budget": {
+        "content": "$2"
+      }
     }
   },
-
   "optionsTitle": {
     "message": "DeepSeek Usage Monitor — 设置"
   },
@@ -394,7 +470,9 @@
   "keyBudgetAria": {
     "message": "$name$ 的每日预算",
     "placeholders": {
-      "name": { "content": "$1" }
+      "name": {
+        "content": "$1"
+      }
     }
   },
   "keyBudgetOff": {
@@ -433,14 +511,20 @@
   "previewClosestBudget": {
     "message": "最接近的预算已用 $percent$%（$status$）",
     "placeholders": {
-      "percent": { "content": "$1" },
-      "status": { "content": "$2" }
+      "percent": {
+        "content": "$1"
+      },
+      "status": {
+        "content": "$2"
+      }
     }
   },
   "sessionDetected": {
     "message": "已检测到会话（$source$）。",
     "placeholders": {
-      "source": { "content": "$1" }
+      "source": {
+        "content": "$1"
+      }
     }
   },
   "sessionMissing": {
@@ -452,13 +536,14 @@
   "sourceCookie": {
     "message": "cookie $name$",
     "placeholders": {
-      "name": { "content": "$1" }
+      "name": {
+        "content": "$1"
+      }
     }
   },
   "sourcePage": {
     "message": "页面存储"
   },
-
   "badgeNoData": {
     "message": "DeepSeek 用量 — 暂无数据，点击刷新"
   },
@@ -468,49 +553,75 @@
   "badgeTitle": {
     "message": "DeepSeek$scope$：$label$",
     "placeholders": {
-      "scope": { "content": "$1" },
-      "label": { "content": "$2" }
+      "scope": {
+        "content": "$1"
+      },
+      "label": {
+        "content": "$2"
+      }
     }
   },
   "badgeLabelBalance": {
     "message": "余额 $amount$",
     "placeholders": {
-      "amount": { "content": "$1" }
+      "amount": {
+        "content": "$1"
+      }
     }
   },
   "badgeLabelPeriod": {
     "message": "$days$ 天花费 $amount$",
     "placeholders": {
-      "days": { "content": "$1" },
-      "amount": { "content": "$2" }
+      "days": {
+        "content": "$1"
+      },
+      "amount": {
+        "content": "$2"
+      }
     }
   },
   "badgeLabelTodayTokens": {
     "message": "今日 $count$ token",
     "placeholders": {
-      "count": { "content": "$1" }
+      "count": {
+        "content": "$1"
+      }
     }
   },
   "badgeLabelTodayCost": {
     "message": "今日 $amount$",
     "placeholders": {
-      "amount": { "content": "$1" }
+      "amount": {
+        "content": "$1"
+      }
     }
   },
   "badgeScopeKey": {
     "message": " · $name$",
     "placeholders": {
-      "name": { "content": "$1" }
+      "name": {
+        "content": "$1"
+      }
     }
   },
   "budgetLine": {
     "message": "$scope$$percent$% · 每日预算 $amount$（$state$，$left$）",
     "placeholders": {
-      "scope": { "content": "$1" },
-      "percent": { "content": "$2" },
-      "amount": { "content": "$3" },
-      "state": { "content": "$4" },
-      "left": { "content": "$5" }
+      "scope": {
+        "content": "$1"
+      },
+      "percent": {
+        "content": "$2"
+      },
+      "amount": {
+        "content": "$3"
+      },
+      "state": {
+        "content": "$4"
+      },
+      "left": {
+        "content": "$5"
+      }
     }
   },
   "budgetStateOver": {
@@ -525,52 +636,74 @@
   "budgetLeft": {
     "message": "剩余 $amount$",
     "placeholders": {
-      "amount": { "content": "$1" }
+      "amount": {
+        "content": "$1"
+      }
     }
   },
   "budgetOverBy": {
     "message": "超出 $amount$",
     "placeholders": {
-      "amount": { "content": "$1" }
+      "amount": {
+        "content": "$1"
+      }
     }
   },
-
   "notifyTitleOver": {
     "message": "已超出每日预算$suffix$",
     "placeholders": {
-      "suffix": { "content": "$1" }
+      "suffix": {
+        "content": "$1"
+      }
     }
   },
   "notifyTitleWarn": {
     "message": "每日预算即将用尽$suffix$",
     "placeholders": {
-      "suffix": { "content": "$1" }
+      "suffix": {
+        "content": "$1"
+      }
     }
   },
   "notifyForKey": {
     "message": "（$name$）",
     "placeholders": {
-      "name": { "content": "$1" }
+      "name": {
+        "content": "$1"
+      }
     }
   },
   "notifyMessageOver": {
     "message": "今日已花 $spent$，预算 $budget$（$percent$%）",
     "placeholders": {
-      "spent": { "content": "$1" },
-      "budget": { "content": "$2" },
-      "percent": { "content": "$3" }
+      "spent": {
+        "content": "$1"
+      },
+      "budget": {
+        "content": "$2"
+      },
+      "percent": {
+        "content": "$3"
+      }
     }
   },
   "notifyMessageWarn": {
     "message": "今日已花 $spent$，预算 $budget$（$percent$%），剩余 $left$",
     "placeholders": {
-      "spent": { "content": "$1" },
-      "budget": { "content": "$2" },
-      "percent": { "content": "$3" },
-      "left": { "content": "$4" }
+      "spent": {
+        "content": "$1"
+      },
+      "budget": {
+        "content": "$2"
+      },
+      "percent": {
+        "content": "$3"
+      },
+      "left": {
+        "content": "$4"
+      }
     }
   },
-
   "openStatusPage": {
     "message": "Open the DeepSeek status page"
   },
@@ -616,8 +749,12 @@
   "notifyLowBalanceMessage": {
     "message": "Balance is $balance$ (below the $threshold$ threshold).",
     "placeholders": {
-      "balance": { "content": "$1" },
-      "threshold": { "content": "$2" }
+      "balance": {
+        "content": "$1"
+      },
+      "threshold": {
+        "content": "$2"
+      }
     }
   },
   "notifyPace": {
@@ -641,31 +778,51 @@
   "notifyPaceTitle": {
     "message": "今日预算将被超出$suffix$",
     "placeholders": {
-      "suffix": { "content": "$1$" }
+      "suffix": {
+        "content": "$1$"
+      }
     }
   },
   "notifyPaceMessage": {
     "message": "已用 $spent$ / $budget$；按此速率午夜将约 $projected$（$percent$%），还剩约 $hours$ 小时。",
     "placeholders": {
-      "spent": { "content": "$1$" },
-      "budget": { "content": "$2$" },
-      "projected": { "content": "$3$" },
-      "percent": { "content": "$4$" },
-      "hours": { "content": "$5$" }
+      "spent": {
+        "content": "$1$"
+      },
+      "budget": {
+        "content": "$2$"
+      },
+      "projected": {
+        "content": "$3$"
+      },
+      "percent": {
+        "content": "$4$"
+      },
+      "hours": {
+        "content": "$5$"
+      }
     }
   },
   "notifySpikeTitle": {
     "message": "支出突增$suffix$",
     "placeholders": {
-      "suffix": { "content": "$1$" }
+      "suffix": {
+        "content": "$1$"
+      }
     }
   },
   "notifySpikeMessage": {
     "message": "今日 $spent$ — 为近期日均 $average$ 的 $ratio$。",
     "placeholders": {
-      "spent": { "content": "$1$" },
-      "ratio": { "content": "$2$" },
-      "average": { "content": "$3$" }
+      "spent": {
+        "content": "$1$"
+      },
+      "ratio": {
+        "content": "$2$"
+      },
+      "average": {
+        "content": "$3$"
+      }
     }
   },
   "notifyNewKeyTitle": {
@@ -674,7 +831,9 @@
   "notifyNewKeyMessage": {
     "message": "使用数据中出现新密钥“$name$”。",
     "placeholders": {
-      "name": { "content": "$1$" }
+      "name": {
+        "content": "$1$"
+      }
     }
   },
   "notifyInactiveKeyTitle": {
@@ -683,25 +842,62 @@
   "notifyInactiveKeyMessage": {
     "message": "“$name$”已 $days$ 天未使用。",
     "placeholders": {
-      "name": { "content": "$1$" },
-      "days": { "content": "$2$" }
+      "name": {
+        "content": "$1$"
+      },
+      "days": {
+        "content": "$2$"
+      }
     }
   },
   "keyIdleBadge": {
     "message": "闲置 $days$ 天",
     "placeholders": {
-      "days": { "content": "$1$" }
+      "days": {
+        "content": "$1$"
+      }
     }
   },
   "keyIdleTitle": {
     "message": "已 $days$ 天未使用",
     "placeholders": {
-      "days": { "content": "$1$" }
+      "days": {
+        "content": "$1$"
+      }
     }
   },
-
-
   "errorNoSession": {
     "message": "未找到 DeepSeek 会话。请打开 platform.deepseek.com 并登录。"
+  },
+  "statusLastKnown": {
+    "message": "最后已知数据（$ago$）",
+    "placeholders": {
+      "ago": {
+        "content": "$1"
+      }
+    }
+  },
+  "todayUnknownHint": {
+    "message": "暂时无法获取"
+  },
+  "badgeTodayUnknown": {
+    "message": "DeepSeek Usage — 今日支出未知，点击刷新"
+  },
+  "wafTabRenew": {
+    "message": "自动续期控制台会话"
+  },
+  "wafTabRenewHint": {
+    "message": "会话令牌过期时，在后台标签页中打开 platform.deepseek.com 几秒钟后自动关闭。关闭此项时，只有您亲自打开控制台后数据才会更新。"
+  },
+  "renewSession": {
+    "message": "续期会话"
+  },
+  "budgetUnknown": {
+    "message": "今日支出未知 · 预算 $budget$",
+    "placeholders": {
+      "budget": {
+        "content": "$1"
+      }
+    }
   }
 }

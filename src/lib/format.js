@@ -6,8 +6,11 @@ export function currencySymbol(currency) {
   return CURRENCY_SYMBOL[currency] || (currency ? `${currency} ` : '');
 }
 
-/** 0.01234 -> "0.0123", 1.5 -> "1.50" */
+/** 0.01234 -> "0.0123", 1.5 -> "1.50", null/undefined -> "—" (unknown, not zero) */
 export function formatMoney(value, currency, { decimals = true } = {}) {
+  // `Number(null)` is 0, which would render an unknown amount as a confident
+  // "$0.00" — exactly the bug that made a failed refresh look like a cheap day.
+  if (value === null || value === undefined || value === '') return '—';
   const amount = Number(value);
   if (!Number.isFinite(amount)) return '—';
   const symbol = currencySymbol(currency);

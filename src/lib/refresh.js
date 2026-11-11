@@ -110,7 +110,14 @@ async function load(token, settings) {
   return { balancePayload, usage };
 }
 
-/** Keeps the previous numbers visible, but never shows a stale "today". */
+/**
+ * Keeps the previous numbers visible instead of blanking them.
+ *
+ * "Today" is the one figure that must NOT survive a failed refresh: a value
+ * from hours ago shown as today's spend is worse than no value at all. It is
+ * therefore replaced with `null` (the UI renders "—") rather than with `0`,
+ * which used to be indistinguishable from a genuinely empty day.
+ */
 async function failWith(error) {
   const normalised = normaliseError(error);
   console.warn('[DeepSeek Usage] refresh failed:', normalised.message);
@@ -119,7 +126,13 @@ async function failWith(error) {
     ? {
         ...previous.snapshot,
         usage: previous.snapshot.usage
-          ? { ...previous.snapshot.usage, todayCost: 0, todayTokens: 0 }
+          ? {
+              ...previous.snapshot.usage,
+              todayCost: null,
+              todayTokens: null,
+              todayUnknown: true,
+              stale: true,
+            }
           : null,
         stale: true,
       }

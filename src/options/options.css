@@ -79,6 +79,33 @@ h2 {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 12px;
+  /* Labels of different lengths were putting the inputs at different heights,
+     which looked broken. Rows now line up on a shared label track / control
+     track, so every input in a row starts on the same baseline. */
+  align-items: end;
+}
+
+/**
+ * A column of related controls (checkboxes with long labels, a checkbox plus
+ * its hint). Inside a 3-column grid, labels of different lengths used to push
+ * their inputs to different heights, which looked broken.
+ */
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.group--first {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+/* A hint that belongs to the checkbox above it: indented to the label's text
+   edge and pulled closer so it reads as one block, not as a new row. */
+.group__hint {
+  margin: -2px 0 0 24px;
 }
 
 .field {
@@ -94,9 +121,21 @@ h2 {
 
 .field--checkbox {
   flex-direction: row;
-  align-items: center;
+  /* `flex-start` keeps the box on the first line of a wrapping label. */
+  align-items: flex-start;
   gap: 8px;
   font-size: 13px;
+  line-height: 1.45;
+  cursor: pointer;
+}
+
+.field--checkbox input[type='checkbox'] {
+  flex: 0 0 auto;
+  /* Nudge the box onto the first text line instead of its centre. */
+  width: 16px;
+  height: 16px;
+  margin: 1px 0 0;
+  accent-color: var(--accent);
 }
 
 select,
@@ -115,6 +154,7 @@ input[type='number'] {
 
 .field__hint {
   font-size: 11.5px;
+  line-height: 1.45;
   color: var(--muted);
 }
 

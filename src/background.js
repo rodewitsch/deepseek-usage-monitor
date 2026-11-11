@@ -12,9 +12,10 @@ import {
   getSettings,
   getSnapshot,
   saveKeyRegistry,
+  saveSnapshot,
 } from './lib/settings.js';
 import { fetchServiceStatus, statusHasTrouble } from './lib/status.js';
-import { delay } from './lib/waf.js';
+import { consumedRenewTab, delay, ensureWafToken } from './lib/waf.js';
 
 const ALARM_NAME = 'dsum-refresh';
 const STATUS_ALARM_NAME = 'dsum-status';
@@ -53,6 +54,9 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 // not trigger three refresh rounds.
 let tabRefreshTimer = null;
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  // A tab opened by `ensureWafToken()` must never schedule a refresh: it would
+  // feed straight back into `refreshAndPaint()`, which may open another one.
+  if (consumedRenewTab(tabId)) return;
   if (changeInfo.status !== 'complete') return;
   if (!tab?.url?.includes('platform.deepseek.com')) return;
   clearTimeout(tabRefreshTimer);
@@ -135,11 +139,14 @@ async function refreshAndPaint({ forceToken = false } = {}) {
       return result;
     }
 
-    // 3. WAF block → renew the token by reloading a console tab the user
-    //    already has open (never creating one), then try once more.
+    // 3. WAF block → renew the token. With `wafTabRenew` enabled a short-lived
+    //    background tab is used (the challenge only runs in a real document);
+    //    otherwise an already-open console tab is reloaded, as before.
     if (result.lastError.kind === 'waf') {
-      const reloaded = await reloadConsoleTab();
-      if (reloaded) {
+      const renewed = settings.wafTabRenew
+        ? await ensureWafToken({ timeoutMs: WAF_RENEW_WAIT })
+        : await reloadConsoleTab();
+      if (renewed) {
         await delay(WAF_RENEW_WAIT);
         const retried = await refreshUsage({ forceToken: true });
         if (!retried.lastError) {
@@ -150,9 +157,12 @@ async function refreshAndPaint({ forceToken = false } = {}) {
     }
 
     // 4. API still unavailable → keep whatever the page gave us and report a
-    //    WAF block as "cached", not as an error the user has to fix.
+    //    WAF block as "cached", not as an error the user has to fix. The
+    //    resolved state is WRITTEN, not just painted: a stale `kind:'waf'` in
+    //    storage used to keep the popup saying "cached data" for hours.
     const effective = result.lastError.kind === 'waf' ? null : result.lastError;
     const snapshot = scraped.snapshot || result.snapshot;
+    if (snapshot) await saveSnapshot(snapshot, effective);
     await paintBadge(computeBadge(withErrorKind(snapshot, effective), settings));
     return { snapshot, lastError: effective, cached: Boolean(scraped.snapshot) };
   })();
@@ -160,13 +170,16 @@ async function refreshAndPaint({ forceToken = false } = {}) {
     return await refreshing;
   } finally {
     refreshing = null;
+    // A queued follow-up from `tabs.onUpdated` would otherwise re-enter
+    // `refreshAndPaint` right after this round finished.
+    clearTimeout(tabRefreshTimer);
   }
 }
 
 /**
  * Reloads an already-open console tab so its JavaScript challenge renews the
  * WAF token. Returns `false` when no console tab exists — the extension never
- * creates one.
+ * creates one here (that is `ensureWafToken()`, opt-in via `wafTabRenew`).
  */
 async function reloadConsoleTab() {
   try {

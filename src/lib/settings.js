@@ -33,6 +33,9 @@ export function normaliseSettings(raw) {
   settings.inactiveKeyDays = clampInt(settings.inactiveKeyDays, 0, 365, DEFAULT_SETTINGS.inactiveKeyDays);
   settings.lowBalanceNotifications = settings.lowBalanceNotifications !== false;
   settings.statusNotifications = settings.statusNotifications !== false;
+  // Opt-in: opening a background tab is visible behaviour, so it must be
+  // something the user chose (see `ensureWafToken()` in waf.js).
+  settings.wafTabRenew = settings.wafTabRenew === true;
   settings.badgeApiKeys = normaliseKeyList(settings.badgeApiKeys);
   settings.selectedApiKeys = normaliseKeyList(settings.selectedApiKeys);
   settings.keyBudgets = normaliseKeyBudgets(settings.keyBudgets);
@@ -92,8 +95,22 @@ export async function getSnapshot() {
   const stored = await chrome.storage.local.get([STORAGE_KEYS.snapshot, STORAGE_KEYS.lastError]);
   return {
     snapshot: stored[STORAGE_KEYS.snapshot] || null,
-    lastError: stored[STORAGE_KEYS.lastError] || null,
+    lastError: usableError(stored[STORAGE_KEYS.lastError] || null),
   };
+}
+
+/**
+ * A WAF block is a transient state, not a fact about the account: once it is
+ * older than this it is dropped instead of being shown forever.
+ */
+export const WAF_ERROR_TTL_MS = 15 * 60 * 1000;
+
+/** Drops a stored WAF error that has outlived its usefulness. */
+function usableError(lastError) {
+  if (!lastError || lastError.kind !== 'waf') return lastError;
+  const at = Number(lastError.at) || 0;
+  if (at && Date.now() - at < WAF_ERROR_TTL_MS) return lastError;
+  return null;
 }
 
 export async function saveSnapshot(snapshot, lastError = null) {

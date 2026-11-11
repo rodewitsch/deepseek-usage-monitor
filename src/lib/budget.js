@@ -12,7 +12,9 @@ import { BUDGET_COLORS } from './constants.js';
  */
 
 const OFF = { status: 'off', budget: 0, spent: 0, percent: 0, remaining: null, color: BUDGET_COLORS.neutral };
-const SEVERITY = { over: 3, warn: 2, ok: 1, off: 0 };
+// `unknown` is deliberately the lowest severity: missing numbers must never
+// colour the badge or trigger an alert.
+const SEVERITY = { over: 3, warn: 2, ok: 1, unknown: 0.5, off: 0 };
 
 /**
  * Evaluates one spend/budget pair.
@@ -26,6 +28,18 @@ export function evaluateBudget(spent, settingsOrBudget, warnPercentMaybe) {
 }
 
 function evaluate(spent, budget, warnPercent) {
+  // An unknown figure must not read as "0% used": `null` propagates instead.
+  if (spent === null || spent === undefined) {
+    if (!(budget > 0)) return { ...OFF };
+    return {
+      status: 'unknown',
+      budget,
+      spent: null,
+      percent: 0,
+      remaining: null,
+      color: BUDGET_COLORS.neutral,
+    };
+  }
   const spentValue = Number(spent) || 0;
   if (!(budget > 0)) return { ...OFF, spent: spentValue };
 
@@ -47,7 +61,12 @@ function evaluate(spent, budget, warnPercent) {
 /** Cost spent today, restricted to the given key ids (empty list = all keys). */
 export function spentToday(usage, keyIds = []) {
   if (!usage) return 0;
-  if (!keyIds.length) return Number(usage.todayCost) || 0;
+  // `null` = unknown (the API could not be reached). Do not turn it into 0.
+  if (!keyIds.length) {
+    return usage.todayCost === null || usage.todayCost === undefined
+      ? null
+      : Number(usage.todayCost) || 0;
+  }
   return keyIds.reduce((total, id) => {
     const key = findKey(usage, id);
     return total + (Number(key?.todayCost) || 0);

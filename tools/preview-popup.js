@@ -74,6 +74,25 @@ const storage = {
   },
 };
 
+// `?waf` renders the state the bug report is about: the API is blocked, so
+// today's figure is unknown and the session needs a renewal.
+if (new URLSearchParams(location.search).has('waf')) {
+  storage.usageSnapshot = {
+    ...storage.usageSnapshot,
+    updatedAt: Date.now() - 2 * 3600 * 1000,
+    stale: true,
+    usage: {
+      ...storage.usageSnapshot.usage,
+      todayCost: null,
+      todayTokens: null,
+      todayUnknown: true,
+      stale: true,
+      keys: [],
+    },
+  };
+  storage.lastError = { message: 'Blocked by DeepSeek WAF', kind: 'waf', at: Date.now() };
+}
+
 const messages = JSON.parse(await (await fetch('/_locales/en/messages.json')).text());
 
 window.chrome = {
@@ -94,6 +113,7 @@ window.chrome = {
     openOptionsPage() {},
     getURL: (p) => `/${p}`,
   },
+  tabs: { create: async () => ({}) },
   downloads: { download: async () => {} },
 };
 

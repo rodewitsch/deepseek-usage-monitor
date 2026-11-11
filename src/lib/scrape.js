@@ -67,13 +67,40 @@ export async function refreshFromPage() {
     return { snapshot: previous.snapshot, lastError: null, skipped: result.reason };
   }
 
-  const page = result.data;
-  const snapshot = {
-    ...(previous.snapshot || {}),
-    updatedAt: page.capturedAt,
-    todayKey: previous.snapshot?.todayKey || null,
+  const snapshot = mergeScrapedSnapshot(result.data, previous.snapshot, {
     tokenSource: tokenInfo.source || 'page-scrape',
+  });
+
+  // Keep any existing error visible: a partial scrape must not hide the fact
+  // that the per-key figures could not be fetched. Only the API path decides
+  // when an error is resolved — see `refreshAndPaint()`.
+  await saveSnapshot(snapshot, previous.lastError);
+  return { snapshot, lastError: previous.lastError, tabId: result.tabId };
+}
+
+/**
+ * Folds a scraped page object into the stored snapshot.
+ *
+ * Shared by the service worker and the popup — the popup used to keep its own
+ * copy of this merge, which silently dropped `todayCost`/`todayTokens` and left
+ * the "Spent today" card at the zero written by a failed API refresh.
+ *
+ * `todayCost` is only present when the console renders a "today" row, so when
+ * it is missing the previous value is kept but flagged `todayUnknown`: the UI
+ * shows "—" instead of a number that may belong to another day.
+ */
+export function mergeScrapedSnapshot(page, previousSnapshot, { tokenSource = 'page-scrape' } = {}) {
+  const previousUsage = previousSnapshot?.usage || {};
+  const hasToday = Number.isFinite(Number(page.todayCost));
+  const hasTodayTokens = Number.isFinite(Number(page.todayTokens));
+
+  return {
+    ...(previousSnapshot || {}),
+    updatedAt: page.capturedAt,
+    todayKey: previousSnapshot?.todayKey || null,
+    tokenSource,
     scraped: true,
+    stale: false,
     balance: {
       currency: page.currency,
       total: page.balance,
@@ -82,19 +109,15 @@ export async function refreshFromPage() {
       isAvailable: page.balance > 0,
     },
     usage: {
-      ...(previous.snapshot?.usage || {}),
+      ...previousUsage,
       currency: page.windowCurrency || page.currency,
-      windowCost: page.windowCost ?? previous.snapshot?.usage?.windowCost ?? 0,
-      windowTokens: page.tokens ?? previous.snapshot?.usage?.windowTokens ?? 0,
-      todayCost: page.todayCost ?? previous.snapshot?.usage?.todayCost ?? 0,
-      todayTokens: page.todayTokens ?? previous.snapshot?.usage?.todayTokens ?? 0,
+      windowCost: page.windowCost ?? previousUsage.windowCost ?? 0,
+      windowTokens: page.tokens ?? previousUsage.windowTokens ?? 0,
+      todayCost: hasToday ? Number(page.todayCost) : (previousUsage.todayCost ?? null),
+      todayTokens: hasTodayTokens ? Number(page.todayTokens) : (previousUsage.todayTokens ?? null),
+      todayUnknown: !hasToday,
       requests: page.requests ?? null,
       source: 'page',
     },
   };
-
-  // Keep any existing error visible: a partial scrape must not hide the fact
-  // that the per-key figures could not be fetched.
-  await saveSnapshot(snapshot, previous.lastError);
-  return { snapshot, lastError: previous.lastError, tabId: result.tabId };
 }

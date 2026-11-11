@@ -44,6 +44,19 @@ export function computeBadge(snapshot, settings) {
       break;
   }
 
+  // "Unknown" is not "zero". A failed refresh used to paint a confident `0`,
+  // which reads as "you spent nothing today"; a dash says the opposite.
+  const isSpendToday = metric === 'todayCost' || metric === 'todayTokens';
+  if (isSpendToday && (value === null || value === undefined || snapshot?.usage?.todayUnknown)) {
+    return {
+      text: '—',
+      color: '#6b7280',
+      title: t('badgeTodayUnknown'),
+      value: null,
+      metric,
+    };
+  }
+
   const text = formatBadgeValue(value);
 
   let color = metric === 'balance' ? BUDGET_COLORS.balance : BUDGET_COLORS.neutral;

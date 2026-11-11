@@ -15,7 +15,7 @@ import {
 import { applyDocumentLanguage, localizeDocument, t } from '../lib/i18n.js';
 import { ensureCatalog } from '../lib/locales.js';
 import { modelLabel } from '../lib/models.js';
-import { scrapeFromPage } from '../lib/scrape.js';
+import { mergeScrapedSnapshot, scrapeFromPage } from '../lib/scrape.js';
 import { getKeyRegistry, getSettings, getSnapshot, saveSettings, saveSnapshot } from '../lib/settings.js';
 
 const el = (id) => document.getElementById(id);
@@ -63,6 +63,7 @@ const ui = {
   keyEmpty: el('key-empty'),
   openUsage: el('open-usage'),
   openOptions: el('open-options'),
+  renewSession: el('renew-session'),
   layout: el('layout'),
 };
 
@@ -70,6 +71,8 @@ let settings = null;
 /** Day-by-day ledger built from the API (`snapshot.ledger`) — never stored. */
 let history = null;
 let keyRegistry = null;
+/** Response of the last `dsum:refresh` round (null before the first one). */
+let lastRefresh = null;
 
 init();
 
@@ -85,6 +88,12 @@ async function init() {
   ui.refresh.addEventListener('click', () => refresh(true));
   ui.openOptions.addEventListener('click', () => chrome.runtime.openOptionsPage());
   ui.errorFix.addEventListener('click', () => chrome.runtime.openOptionsPage());
+  // The WAF token can only be renewed by a real page load on the origin, and
+  // only the user can decide to do that. `cookies.onChanged` in the service
+  // worker picks the new token up on its own, so no polling is needed here.
+  ui.renewSession.addEventListener('click', async () => {
+    await chrome.tabs.create({ url: USAGE_PAGE_URL, active: true }).catch(() => {});
+  });
   ui.exportCsv.addEventListener('click', () => exportHistory('csv'));
   ui.exportJson.addEventListener('click', () => exportHistory('json'));
 
@@ -118,10 +127,13 @@ async function init() {
   chrome.runtime.sendMessage({ type: 'dsum:status' }).catch(() => {});
 
   await render();
-  const { snapshot, lastError } = await getSnapshot();
-  const isStale = !snapshot?.updatedAt || Date.now() - snapshot.updatedAt > 5 * 60000;
+  const { snapshot } = await getSnapshot();
+  // A stale snapshot is obvious; a *fresh-looking* one can still be wrong (the
+  // WAF block keeps `updatedAt` moving through page scrapes), so the interval
+  // here is short enough that opening the popup always means a lookup.
+  const isStale = !snapshot?.updatedAt || Date.now() - snapshot.updatedAt > 60 * 1000;
   if (isStale) refresh(false);
-  else if (lastError) ui.refresh.classList.remove('is-busy');
+  else ui.refresh.classList.remove('is-busy');
 }
 
 /** Adds/removes one API key from the selection shared by chart and budget. */
@@ -142,8 +154,11 @@ async function refresh(interactive) {
 
     // 2. Per-day / per-key numbers only exist in the console API, so always
     //    ask the service worker for them (it reuses the scraped values when the
-    //    API is unavailable, and renews an expired WAF token if a tab exists).
-    await chrome.runtime.sendMessage({ type: 'dsum:refresh' });
+    //    API is unavailable, and renews an expired WAF token when allowed).
+    //    The response is the authoritative result — re-reading storage alone
+    //    would miss a WAF block that the worker resolved to "cached".
+    const result = await chrome.runtime.sendMessage({ type: 'dsum:refresh' }).catch(() => null);
+    lastRefresh = result || null;
   } catch {
     // Service worker may be asleep — it wakes up for the message anyway.
   } finally {
@@ -156,27 +171,9 @@ async function refresh(interactive) {
 /** Merges the scraped page numbers into the stored snapshot. */
 async function applyScrapedSnapshot(page) {
   const { snapshot } = await getSnapshot();
-  const next = {
-    ...(snapshot || {}),
-    updatedAt: page.capturedAt,
-    todayKey: snapshot?.todayKey || localDayKey(),
-    scraped: true,
-    balance: {
-      currency: page.currency,
-      total: page.balance,
-      toppedUp: page.toppedUp ?? 0,
-      granted: page.granted ?? 0,
-      isAvailable: page.balance > 0,
-    },
-    usage: {
-      ...(snapshot?.usage || {}),
-      currency: page.windowCurrency || page.currency,
-      windowCost: page.windowCost ?? snapshot?.usage?.windowCost ?? 0,
-      windowTokens: page.tokens ?? snapshot?.usage?.windowTokens ?? 0,
-      requests: page.requests ?? null,
-      source: 'page',
-    },
-  };
+  // Same merge the service worker uses — the popup used to have its own copy
+  // that silently dropped `todayCost`, leaving the card at $0.00.
+  const next = mergeScrapedSnapshot(page, snapshot);
   await saveSnapshot(next, null);
 }
 
@@ -500,12 +497,23 @@ function renderStatus(snapshot, lastError) {
   }
 
   if (!snapshot?.updatedAt) {
+    ui.renewSession.hidden = !isWaf;
     ui.updated.textContent = isWaf ? t('badgeNoData') : t('statusNoData');
     return;
   }
   const ago = formatRelativeTime(snapshot.updatedAt);
+  // A stored WAF block means "these numbers are older than they look" — the
+  // user can renew it with one click instead of waiting for a random visit.
+  // `cached` is the resolved form of the same situation (a page scrape filled
+  // in the numbers while the API stayed blocked).
+  const needsRenewal = isWaf || Boolean(lastRefresh?.cached);
+  ui.renewSession.hidden = !needsRenewal;
   if (isWaf) {
     ui.updated.textContent = t('statusStale', [ago]);
+    return;
+  }
+  if (snapshot.stale) {
+    ui.updated.textContent = t('statusLastKnown', [ago]);
     return;
   }
   const stale = snapshot.todayKey && snapshot.todayKey !== localDayKey();
@@ -577,8 +585,11 @@ function renderSummary(snapshot, selected) {
   }
 
   const sum = (field) => selected.reduce((total, key) => total + (Number(key[field]) || 0), 0);
-  const todayCost = selected.length ? sum('todayCost') : usage.todayCost;
-  const todayTokens = selected.length ? sum('todayTokens') : usage.todayTokens;
+  // `null` means "we do not know": a failed refresh used to write 0 here, which
+  // is indistinguishable from a day with no spending at all.
+  const unknown = usage.todayUnknown || usage.todayCost === null || usage.todayCost === undefined;
+  const todayCost = unknown ? null : selected.length ? sum('todayCost') : usage.todayCost;
+  const todayTokens = unknown ? null : selected.length ? sum('todayTokens') : usage.todayTokens;
 
   ui.balance.textContent = balance
     ? formatMoney(balance.total, balance.currency, { decimals: settings.showDecimals })
@@ -591,12 +602,17 @@ function renderSummary(snapshot, selected) {
     : t('balanceUnavailable');
 
   ui.todayCost.textContent = formatMoney(todayCost, usage.currency, { decimals: settings.showDecimals });
+  ui.todayCost.classList.toggle('is-unknown', unknown);
   const scope =
     selected.length === 1
       ? selected[0].name
       : selected.length > 1
         ? t('keysCount', [String(selected.length)])
         : '';
+  if (unknown) {
+    ui.todayTokens.textContent = t('todayUnknownHint');
+    return;
+  }
   const tokens = t('tokensCount', [formatTokens(todayTokens)]);
   ui.todayTokens.textContent = scope ? t('tokensScope', [tokens, scope]) : tokens;
 }
@@ -626,6 +642,7 @@ function renderBudgets(snapshot, currentSettings, selectedIds) {
 
   for (const row of rows) {
     const { budget } = row;
+    const unknown = budget.status === 'unknown';
 
     const wrapper = document.createElement('div');
     wrapper.className = 'budget';
@@ -638,7 +655,7 @@ function renderBudgets(snapshot, currentSettings, selectedIds) {
     const percent = document.createElement('span');
     percent.className = 'budget__percent';
     percent.style.color = budget.color;
-    percent.textContent = `${Math.round(budget.percent)}%`;
+    percent.textContent = unknown ? '—' : `${Math.round(budget.percent)}%`;
     head.append(label, percent);
 
     const track = document.createElement('div');
@@ -655,10 +672,15 @@ function renderBudgets(snapshot, currentSettings, selectedIds) {
 
     const detail = document.createElement('span');
     detail.className = 'budget__detail';
-    detail.textContent =
-      budget.status === 'over'
-        ? t('budgetSpentOver', [money(budget.spent), money(budget.remaining)])
-        : t('budgetSpentLeft', [money(budget.spent), money(budget.remaining), money(budget.budget)]);
+    if (unknown) {
+      // "$0.00 spent of $5.00" for a number we do not have is a lie.
+      detail.textContent = t('budgetUnknown', [money(budget.budget)]);
+    } else {
+      detail.textContent =
+        budget.status === 'over'
+          ? t('budgetSpentOver', [money(budget.spent), money(budget.remaining)])
+          : t('budgetSpentLeft', [money(budget.spent), money(budget.remaining), money(budget.budget)]);
+    }
 
     wrapper.append(head, track, detail);
     ui.budgetList.append(wrapper);

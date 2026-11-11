@@ -3,8 +3,32 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/), versioned with [SemVer](https://semver.org/).
 
-## [1.5.0](https://github.com/rodewitsch/deepseek-usage-monitor/compare/v1.4.1...v1.5.0) (2026-11-10)
+## [1.5.1](https://github.com/rodewitsch/deepseek-usage-monitor/compare/v1.5.0...v1.5.1) (2026-11-11)
 
+### Added
+
+* **settings:** optional automatic console-session renewal — briefly opens
+  `platform.deepseek.com` in a background tab when the WAF token expires, then
+  closes it. Off by default.
+* **popup:** a **Renew session** button in the status line when the session
+  needs a visit.
+
+### Fixed
+
+* **popup:** today's spend no longer drops to `$0.00` after a failed refresh —
+  an unknown figure is shown as `—`, and the badge shows `−` instead of `0`.
+* **refresh:** a resolved WAF block is now written back to storage, so the
+  popup stops claiming "cached data" for hours after the token was renewed.
+  A WAF error older than 15 minutes is ignored outright.
+* **popup:** the popup's own page scrape dropped `todayCost`, leaving the card
+  at the zero written by the failed API refresh; both paths now share one merge.
+* **popup:** opening the popup always asks the service worker for a refresh
+  (it used to skip it whenever the snapshot was under 5 minutes old, which is
+  exactly what a WAF block produces through page scrapes).
+* **settings:** the options page lays its controls out in aligned columns:
+  checkboxes share one column, hints sit under the control they describe.
+
+## [1.5.0](https://github.com/rodewitsch/deepseek-usage-monitor/compare/v1.4.1...v1.5.0) (2026-11-10)
 
 ### Added
 
@@ -117,4 +141,4 @@ Format based on [Keep a Changelog](https://keepachangelog.com/), versioned with 
 ### Security
 
 - The console session token is read from the browser (`localStorage.userToken` on `platform.deepseek.com`); no API key or password is stored or transmitted anywhere else.
-- The extension never opens tabs on its own and sends data only to `platform.deepseek.com`.
+- The extension never opens tabs on its own (unless *Renew the console session automatically* is enabled) and sends data only to `platform.deepseek.com`.

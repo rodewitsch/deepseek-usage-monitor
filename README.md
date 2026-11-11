@@ -83,12 +83,13 @@ once before the error is shown.
 Everything is stored in `chrome.storage.local` on this machine only; no third
 party receives any data.
 
-## WAF handling (no tabs, ever)
+## WAF handling
 
 The console is protected by an **AWS WAF token challenge**: without a valid
 `aws-waf-token` cookie the API answers `202 text/html` instead of JSON.
 
-The extension **never opens tabs** to deal with it. Measured behaviour:
+The extension does **not** open tabs unless you turn on *Renew the console
+session automatically* in the settings. Measured behaviour:
 
 | Request | Result |
 |---|---|
@@ -102,12 +103,16 @@ from that page's `document.cookie`). The extension therefore only **reads** the
 cookie state:
 
 * valid → everything refreshes on the normal alarm, fully automatic;
-* expired → the badge shows `−` and the tooltip says
-  *"DeepSeek WAF token expired. Open platform.deepseek.com once"*.
+* expired → today's figures turn into `−`, the status line says the cached data
+  needs a refresh, and a **Renew session** button opens the console once.
 
-In practice the token is fresh as long as the console is used occasionally; the
-only thing the extension cannot do on its own is renew a long-expired challenge,
-because that requires running DeepSeek's JS challenge on their page.
+Renewing a long-expired challenge requires running DeepSeek's JS challenge on
+their page, so it cannot be done from a request header. With *Renew the console
+session automatically* enabled, the extension opens `platform.deepseek.com` in
+a background tab for a few seconds when it hits a WAF block, waits for the new
+`aws-waf-token` cookie and closes the tab again — the refresh then continues on
+its own. The option is **off by default** because it is a visible browser
+action; without it, numbers update on the next manual visit.
 
 ## Endpoints used
 
@@ -216,7 +221,7 @@ account and for every selected key that has a budget.
 * `src/lib/badge.js` — decides the badge text/colour/tooltip.
 * `src/lib/budget.js` — account and per-key budget evaluation, notification keys.
 * `src/lib/status.js` — DeepSeek service status (status.deepseek.com) fetch + normalisation.
-* `src/lib/waf.js` — WAF cookie state (read-only, never opens tabs).
+* `src/lib/waf.js` — WAF cookie state and the opt-in token renewal.
 * `src/background.js` — alarms, badge painting, refresh orchestration.
 
 ## Troubleshooting

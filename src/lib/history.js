@@ -111,7 +111,12 @@ export function compareMonths(history, todayKey, { monthsAgo = 1 } = {}) {
 export function compareToday(usage, history, todayKey) {
   const yesterdayKey = shiftDayKey(todayKey, -1);
   const yesterday = history?.days?.[yesterdayKey]?.cost;
-  const todayCost = Number(usage?.todayCost) || 0;
+  // `null` = the API has not told us yet; comparing against it would claim a
+  // 100% drop for what is really a missing number.
+  const todayCost =
+    usage?.todayCost === null || usage?.todayCost === undefined || usage?.todayUnknown
+      ? null
+      : Number(usage.todayCost) || 0;
   const hasYesterday = Number.isFinite(yesterday);
 
   return {
@@ -119,9 +124,9 @@ export function compareToday(usage, history, todayKey) {
     yesterdayKey,
     todayCost,
     yesterday: hasYesterday ? Number(yesterday) : null,
-    delta: hasYesterday ? todayCost - Number(yesterday) : 0,
-    ratio: hasYesterday && yesterday > 0 ? todayCost / Number(yesterday) : 0,
-    comparable: hasYesterday && Number(yesterday) > 0,
+    delta: hasYesterday && todayCost !== null ? todayCost - Number(yesterday) : 0,
+    ratio: hasYesterday && yesterday > 0 && todayCost !== null ? todayCost / Number(yesterday) : 0,
+    comparable: hasYesterday && Number(yesterday) > 0 && todayCost !== null,
   };
 }
 

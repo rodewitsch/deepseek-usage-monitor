@@ -8,7 +8,6 @@
   "actionTitle": {
     "message": "DeepSeek Usage Monitor"
   },
-
   "popupTitle": {
     "message": "DeepSeek Usage Monitor"
   },
@@ -48,22 +47,29 @@
   "settings": {
     "message": "सेटिंग्स"
   },
-
   "modelsTitle": {
     "message": "मॉडल के अनुसार"
   },
   "modelMeta": {
     "message": "$tokens$ टोकन · खर्च का $percent$%",
     "placeholders": {
-      "tokens": { "content": "$1" },
-      "percent": { "content": "$2" }
+      "tokens": {
+        "content": "$1"
+      },
+      "percent": {
+        "content": "$2"
+      }
     }
   },
   "cacheNote": {
     "message": "प्रॉम्प्ट कैश: $rate$% हिट दर, $saved$ बचाए",
     "placeholders": {
-      "rate": { "content": "$1" },
-      "saved": { "content": "$2" }
+      "rate": {
+        "content": "$1"
+      },
+      "saved": {
+        "content": "$2"
+      }
     }
   },
   "forecastTitle": {
@@ -72,16 +78,19 @@
   "forecastRemaining": {
     "message": "लगभग $amount$ शेष",
     "placeholders": {
-      "amount": { "content": "$1" }
+      "amount": {
+        "content": "$1"
+      }
     }
   },
   "forecastVsAverage": {
     "message": "औसत दिन का $percent$",
     "placeholders": {
-      "percent": { "content": "$1" }
+      "percent": {
+        "content": "$1"
+      }
     }
   },
-
   "sectionCompareName": {
     "message": "तुलना और इतिहास"
   },
@@ -91,8 +100,12 @@
   "historyRange": {
     "message": "$from$ से · $days$ दिन दर्ज",
     "placeholders": {
-      "from": { "content": "$1$" },
-      "days": { "content": "$2$" }
+      "from": {
+        "content": "$1$"
+      },
+      "days": {
+        "content": "$2$"
+      }
     }
   },
   "compareToday": {
@@ -101,8 +114,12 @@
   "compareTodayNote": {
     "message": "$values$ ($change$)",
     "placeholders": {
-      "values": { "content": "$1$" },
-      "change": { "content": "$2$" }
+      "values": {
+        "content": "$1$"
+      },
+      "change": {
+        "content": "$2$"
+      }
     }
   },
   "compareMonth": {
@@ -111,9 +128,15 @@
   "compareMonthNote": {
     "message": "पहले $days$ दिनों में $values$ ($change$)",
     "placeholders": {
-      "values": { "content": "$1$" },
-      "days": { "content": "$2$" },
-      "change": { "content": "$3$" }
+      "values": {
+        "content": "$1$"
+      },
+      "days": {
+        "content": "$2$"
+      },
+      "change": {
+        "content": "$3$"
+      }
     }
   },
   "depletionTitle": {
@@ -125,8 +148,12 @@
   "depletionNote": {
     "message": "लगभग $days$ दिन बाकी, प्रतिदिन $perDay$",
     "placeholders": {
-      "days": { "content": "$1$" },
-      "perDay": { "content": "$2$" }
+      "days": {
+        "content": "$1$"
+      },
+      "perDay": {
+        "content": "$2$"
+      }
     }
   },
   "exportTitle": {
@@ -141,14 +168,16 @@
   "exportNote": {
     "message": "$days$ दिन का इतिहास",
     "placeholders": {
-      "days": { "content": "$1$" }
+      "days": {
+        "content": "$1$"
+      }
     }
   },
   "exportEmpty": {
     "message": "अभी कोई इतिहास नहीं"
   },
   "depletionWindow": {
-    "message": "औसत खर्च अवधि (दिन, 0 = पूरा इतिहास)"
+    "message": "औसत खर्च विंडो (दिन, 0 = सब)"
   },
   "showMonthComparison": {
     "message": "पॉपअप में मासिक तुलना दिखाएँ"
@@ -174,32 +203,39 @@
   "moveDown": {
     "message": "नीचे करें"
   },
-
   "statusNoData": {
     "message": "अभी कोई डेटा नहीं"
   },
   "statusUpdated": {
     "message": "$ago$ अपडेट हुआ",
     "placeholders": {
-      "ago": { "content": "$1" }
+      "ago": {
+        "content": "$1"
+      }
     }
   },
   "statusUpdatedInteractive": {
     "message": "$ago$ अपडेट हुआ",
     "placeholders": {
-      "ago": { "content": "$1" }
+      "ago": {
+        "content": "$1"
+      }
     }
   },
   "statusYesterday": {
     "message": "$ago$ · कल",
     "placeholders": {
-      "ago": { "content": "$1" }
+      "ago": {
+        "content": "$1"
+      }
     }
   },
   "statusStale": {
-    "message": "$ago$ का कैश डेटा — platform.deepseek.com खोलने पर अपडेट होगा",
+    "message": "$ago$ का कैश — सेशन रिन्यू करना होगा",
     "placeholders": {
-      "ago": { "content": "$1" }
+      "ago": {
+        "content": "$1"
+      }
     }
   },
   "signInPrompt": {
@@ -211,40 +247,55 @@
   "balancePaidBonus": {
     "message": "भुगतान $paid$ · बोनस $bonus$",
     "placeholders": {
-      "paid": { "content": "$1" },
-      "bonus": { "content": "$2" }
+      "paid": {
+        "content": "$1"
+      },
+      "bonus": {
+        "content": "$2"
+      }
     }
   },
   "tokensCount": {
     "message": "$count$ टोकन",
     "placeholders": {
-      "count": { "content": "$1" }
+      "count": {
+        "content": "$1"
+      }
     }
   },
   "tokensScope": {
     "message": "$tokens$ · $scope$",
     "placeholders": {
-      "tokens": { "content": "$1" },
-      "scope": { "content": "$2" }
+      "tokens": {
+        "content": "$1"
+      },
+      "scope": {
+        "content": "$2"
+      }
     }
   },
   "keysCount": {
     "message": "$count$ कुंजियाँ",
     "placeholders": {
-      "count": { "content": "$1" }
+      "count": {
+        "content": "$1"
+      }
     }
   },
   "keysCountSelected": {
     "message": "$count$ चुनी गईं",
     "placeholders": {
-      "count": { "content": "$1" }
+      "count": {
+        "content": "$1"
+      }
     }
   },
-
   "budgetDailyScope": {
     "message": "रोज़ाना बजट · $scope$",
     "placeholders": {
-      "scope": { "content": "$1" }
+      "scope": {
+        "content": "$1"
+      }
     }
   },
   "budgetAccount": {
@@ -253,7 +304,9 @@
   "budgetForSelection": {
     "message": "$name$ के लिए",
     "placeholders": {
-      "name": { "content": "$1" }
+      "name": {
+        "content": "$1"
+      }
     }
   },
   "budgetForSelectionFallback": {
@@ -262,46 +315,64 @@
   "budgetWarnMark": {
     "message": "चेतावनी सीमा $percent$%",
     "placeholders": {
-      "percent": { "content": "$1" }
+      "percent": {
+        "content": "$1"
+      }
     }
   },
   "budgetSpentLeft": {
     "message": "$spent$ खर्च · $budget$ में से $left$ शेष",
     "placeholders": {
-      "spent": { "content": "$1" },
-      "left": { "content": "$2" },
-      "budget": { "content": "$3" }
+      "spent": {
+        "content": "$1"
+      },
+      "left": {
+        "content": "$2"
+      },
+      "budget": {
+        "content": "$3"
+      }
     }
   },
   "budgetSpentOver": {
     "message": "$spent$ खर्च · $over$ अधिक",
     "placeholders": {
-      "spent": { "content": "$1" },
-      "over": { "content": "$2" }
+      "spent": {
+        "content": "$1"
+      },
+      "over": {
+        "content": "$2"
+      }
     }
   },
-
   "chartEmpty": {
     "message": "इस अवधि में कोई उपयोग नहीं"
   },
   "chartTotal": {
     "message": "$days$ दिन में $amount$",
     "placeholders": {
-      "amount": { "content": "$1" },
-      "days": { "content": "$2" }
+      "amount": {
+        "content": "$1"
+      },
+      "days": {
+        "content": "$2"
+      }
     }
   },
   "chartTooltipDay": {
     "message": "$date$: $amount$",
     "placeholders": {
-      "date": { "content": "$1" },
-      "amount": { "content": "$2" }
+      "date": {
+        "content": "$1"
+      },
+      "amount": {
+        "content": "$2"
+      }
     }
   },
   "chartSeriesAllKeys": {
     "message": "सभी कुंजियाँ"
   },
-
   "keyRemoveFromChart": {
     "message": "चार्ट से हटाने के लिए क्लिक करें"
   },
@@ -311,17 +382,22 @@
   "keyTodayMeta": {
     "message": "आज $today$",
     "placeholders": {
-      "today": { "content": "$1" }
+      "today": {
+        "content": "$1"
+      }
     }
   },
   "keyTodayMetaBudget": {
     "message": "आज $today$ / $budget$",
     "placeholders": {
-      "today": { "content": "$1" },
-      "budget": { "content": "$2" }
+      "today": {
+        "content": "$1"
+      },
+      "budget": {
+        "content": "$2"
+      }
     }
   },
-
   "optionsTitle": {
     "message": "DeepSeek Usage Monitor — सेटिंग्स"
   },
@@ -394,7 +470,9 @@
   "keyBudgetAria": {
     "message": "$name$ का रोज़ाना बजट",
     "placeholders": {
-      "name": { "content": "$1" }
+      "name": {
+        "content": "$1"
+      }
     }
   },
   "keyBudgetOff": {
@@ -433,14 +511,20 @@
   "previewClosestBudget": {
     "message": "निकटतम बजट का $percent$% ($status$)",
     "placeholders": {
-      "percent": { "content": "$1" },
-      "status": { "content": "$2" }
+      "percent": {
+        "content": "$1"
+      },
+      "status": {
+        "content": "$2"
+      }
     }
   },
   "sessionDetected": {
     "message": "सत्र मिला ($source$)।",
     "placeholders": {
-      "source": { "content": "$1" }
+      "source": {
+        "content": "$1"
+      }
     }
   },
   "sessionMissing": {
@@ -452,13 +536,14 @@
   "sourceCookie": {
     "message": "cookie $name$",
     "placeholders": {
-      "name": { "content": "$1" }
+      "name": {
+        "content": "$1"
+      }
     }
   },
   "sourcePage": {
     "message": "पेज स्टोरेज"
   },
-
   "badgeNoData": {
     "message": "DeepSeek उपयोग — कोई डेटा नहीं, रीफ़्रेश के लिए क्लिक करें"
   },
@@ -468,49 +553,75 @@
   "badgeTitle": {
     "message": "DeepSeek$scope$: $label$",
     "placeholders": {
-      "scope": { "content": "$1" },
-      "label": { "content": "$2" }
+      "scope": {
+        "content": "$1"
+      },
+      "label": {
+        "content": "$2"
+      }
     }
   },
   "badgeLabelBalance": {
     "message": "बैलेंस $amount$",
     "placeholders": {
-      "amount": { "content": "$1" }
+      "amount": {
+        "content": "$1"
+      }
     }
   },
   "badgeLabelPeriod": {
     "message": "$days$ दिन खर्च $amount$",
     "placeholders": {
-      "days": { "content": "$1" },
-      "amount": { "content": "$2" }
+      "days": {
+        "content": "$1"
+      },
+      "amount": {
+        "content": "$2"
+      }
     }
   },
   "badgeLabelTodayTokens": {
     "message": "आज $count$ टोकन",
     "placeholders": {
-      "count": { "content": "$1" }
+      "count": {
+        "content": "$1"
+      }
     }
   },
   "badgeLabelTodayCost": {
     "message": "आज $amount$",
     "placeholders": {
-      "amount": { "content": "$1" }
+      "amount": {
+        "content": "$1"
+      }
     }
   },
   "badgeScopeKey": {
     "message": " · $name$",
     "placeholders": {
-      "name": { "content": "$1" }
+      "name": {
+        "content": "$1"
+      }
     }
   },
   "budgetLine": {
     "message": "$scope$$percent$% · रोज़ाना बजट $amount$ ($state$, $left$)",
     "placeholders": {
-      "scope": { "content": "$1" },
-      "percent": { "content": "$2" },
-      "amount": { "content": "$3" },
-      "state": { "content": "$4" },
-      "left": { "content": "$5" }
+      "scope": {
+        "content": "$1"
+      },
+      "percent": {
+        "content": "$2"
+      },
+      "amount": {
+        "content": "$3"
+      },
+      "state": {
+        "content": "$4"
+      },
+      "left": {
+        "content": "$5"
+      }
     }
   },
   "budgetStateOver": {
@@ -525,52 +636,74 @@
   "budgetLeft": {
     "message": "$amount$ शेष",
     "placeholders": {
-      "amount": { "content": "$1" }
+      "amount": {
+        "content": "$1"
+      }
     }
   },
   "budgetOverBy": {
     "message": "$amount$ अधिक",
     "placeholders": {
-      "amount": { "content": "$1" }
+      "amount": {
+        "content": "$1"
+      }
     }
   },
-
   "notifyTitleOver": {
     "message": "रोज़ाना बजट पार हो गया$suffix$",
     "placeholders": {
-      "suffix": { "content": "$1" }
+      "suffix": {
+        "content": "$1"
+      }
     }
   },
   "notifyTitleWarn": {
     "message": "रोज़ाना बजट लगभग खत्म$suffix$",
     "placeholders": {
-      "suffix": { "content": "$1" }
+      "suffix": {
+        "content": "$1"
+      }
     }
   },
   "notifyForKey": {
     "message": " ($name$ के लिए)",
     "placeholders": {
-      "name": { "content": "$1" }
+      "name": {
+        "content": "$1"
+      }
     }
   },
   "notifyMessageOver": {
     "message": "आज $budget$ में से $spent$ खर्च ($percent$%)",
     "placeholders": {
-      "spent": { "content": "$1" },
-      "budget": { "content": "$2" },
-      "percent": { "content": "$3" }
+      "spent": {
+        "content": "$1"
+      },
+      "budget": {
+        "content": "$2"
+      },
+      "percent": {
+        "content": "$3"
+      }
     }
   },
   "notifyMessageWarn": {
     "message": "आज $budget$ में से $spent$ खर्च ($percent$%), $left$ शेष",
     "placeholders": {
-      "spent": { "content": "$1" },
-      "budget": { "content": "$2" },
-      "percent": { "content": "$3" },
-      "left": { "content": "$4" }
+      "spent": {
+        "content": "$1"
+      },
+      "budget": {
+        "content": "$2"
+      },
+      "percent": {
+        "content": "$3"
+      },
+      "left": {
+        "content": "$4"
+      }
     }
   },
-
   "openStatusPage": {
     "message": "Open the DeepSeek status page"
   },
@@ -616,8 +749,12 @@
   "notifyLowBalanceMessage": {
     "message": "Balance is $balance$ (below the $threshold$ threshold).",
     "placeholders": {
-      "balance": { "content": "$1" },
-      "threshold": { "content": "$2" }
+      "balance": {
+        "content": "$1"
+      },
+      "threshold": {
+        "content": "$2"
+      }
     }
   },
   "notifyPace": {
@@ -641,31 +778,51 @@
   "notifyPaceTitle": {
     "message": "आज बजट पार हो जाएगा$suffix$",
     "placeholders": {
-      "suffix": { "content": "$1$" }
+      "suffix": {
+        "content": "$1$"
+      }
     }
   },
   "notifyPaceMessage": {
     "message": "$budget$ में से $spent$ खर्च; इस गति से आधी रात तक लगभग $projected$ ($percent$%), ~$hours$ घंटे बाकी।",
     "placeholders": {
-      "spent": { "content": "$1$" },
-      "budget": { "content": "$2$" },
-      "projected": { "content": "$3$" },
-      "percent": { "content": "$4$" },
-      "hours": { "content": "$5$" }
+      "spent": {
+        "content": "$1$"
+      },
+      "budget": {
+        "content": "$2$"
+      },
+      "projected": {
+        "content": "$3$"
+      },
+      "percent": {
+        "content": "$4$"
+      },
+      "hours": {
+        "content": "$5$"
+      }
     }
   },
   "notifySpikeTitle": {
     "message": "खर्च में उछाल$suffix$",
     "placeholders": {
-      "suffix": { "content": "$1$" }
+      "suffix": {
+        "content": "$1$"
+      }
     }
   },
   "notifySpikeMessage": {
     "message": "आज $spent$ — हालिया दैनिक औसत $average$ का $ratio$।",
     "placeholders": {
-      "spent": { "content": "$1$" },
-      "ratio": { "content": "$2$" },
-      "average": { "content": "$3$" }
+      "spent": {
+        "content": "$1$"
+      },
+      "ratio": {
+        "content": "$2$"
+      },
+      "average": {
+        "content": "$3$"
+      }
     }
   },
   "notifyNewKeyTitle": {
@@ -674,7 +831,9 @@
   "notifyNewKeyMessage": {
     "message": "उपयोग में नई कुंजी “$name$” दिखी।",
     "placeholders": {
-      "name": { "content": "$1$" }
+      "name": {
+        "content": "$1$"
+      }
     }
   },
   "notifyInactiveKeyTitle": {
@@ -683,25 +842,62 @@
   "notifyInactiveKeyMessage": {
     "message": "“$name$” $days$ दिनों से उपयोग नहीं हुई।",
     "placeholders": {
-      "name": { "content": "$1$" },
-      "days": { "content": "$2$" }
+      "name": {
+        "content": "$1$"
+      },
+      "days": {
+        "content": "$2$"
+      }
     }
   },
   "keyIdleBadge": {
     "message": "निष्क्रिय $days$ दिन",
     "placeholders": {
-      "days": { "content": "$1$" }
+      "days": {
+        "content": "$1$"
+      }
     }
   },
   "keyIdleTitle": {
     "message": "$days$ दिनों से उपयोग नहीं हुई",
     "placeholders": {
-      "days": { "content": "$1$" }
+      "days": {
+        "content": "$1$"
+      }
     }
   },
-
-
   "errorNoSession": {
     "message": "कोई DeepSeek सत्र नहीं मिला। platform.deepseek.com खोलें और साइन इन करें।"
+  },
+  "statusLastKnown": {
+    "message": "$ago$ का अंतिम ज्ञात डेटा",
+    "placeholders": {
+      "ago": {
+        "content": "$1"
+      }
+    }
+  },
+  "todayUnknownHint": {
+    "message": "अभी उपलब्ध नहीं"
+  },
+  "badgeTodayUnknown": {
+    "message": "DeepSeek Usage — आज का खर्च अज्ञात, अपडेट के लिए क्लिक करें"
+  },
+  "wafTabRenew": {
+    "message": "कंसोल सेशन अपने आप रिन्यू करें"
+  },
+  "wafTabRenewHint": {
+    "message": "सेशन टोकन खत्म होने पर कुछ सेकंड के लिए platform.deepseek.com को बैकग्राउंड टैब में खोलता है और फिर बंद कर देता है। इसके बिना आंकड़े आपके कंसोल खोलने के बाद ही अपडेट होते हैं।"
+  },
+  "renewSession": {
+    "message": "सेशन रिन्यू करें"
+  },
+  "budgetUnknown": {
+    "message": "आज का खर्च अज्ञात · बजट $budget$",
+    "placeholders": {
+      "budget": {
+        "content": "$1"
+      }
+    }
   }
 }

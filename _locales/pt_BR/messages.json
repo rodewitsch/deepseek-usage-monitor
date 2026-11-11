@@ -8,7 +8,6 @@
   "actionTitle": {
     "message": "DeepSeek Usage Monitor"
   },
-
   "popupTitle": {
     "message": "DeepSeek Usage Monitor"
   },
@@ -48,22 +47,29 @@
   "settings": {
     "message": "Configurações"
   },
-
   "modelsTitle": {
     "message": "Por modelo"
   },
   "modelMeta": {
     "message": "$tokens$ tokens · $percent$% do gasto",
     "placeholders": {
-      "tokens": { "content": "$1" },
-      "percent": { "content": "$2" }
+      "tokens": {
+        "content": "$1"
+      },
+      "percent": {
+        "content": "$2"
+      }
     }
   },
   "cacheNote": {
     "message": "Cache de prompts: $rate$% de acertos, economizado $saved$",
     "placeholders": {
-      "rate": { "content": "$1" },
-      "saved": { "content": "$2" }
+      "rate": {
+        "content": "$1"
+      },
+      "saved": {
+        "content": "$2"
+      }
     }
   },
   "forecastTitle": {
@@ -72,16 +78,19 @@
   "forecastRemaining": {
     "message": "faltam cerca de $amount$",
     "placeholders": {
-      "amount": { "content": "$1" }
+      "amount": {
+        "content": "$1"
+      }
     }
   },
   "forecastVsAverage": {
     "message": "$percent$ de um dia médio",
     "placeholders": {
-      "percent": { "content": "$1" }
+      "percent": {
+        "content": "$1"
+      }
     }
   },
-
   "sectionCompareName": {
     "message": "Comparação e histórico"
   },
@@ -91,8 +100,12 @@
   "historyRange": {
     "message": "desde $from$ · $days$ dias registrados",
     "placeholders": {
-      "from": { "content": "$1$" },
-      "days": { "content": "$2$" }
+      "from": {
+        "content": "$1$"
+      },
+      "days": {
+        "content": "$2$"
+      }
     }
   },
   "compareToday": {
@@ -101,8 +114,12 @@
   "compareTodayNote": {
     "message": "$values$ ($change$)",
     "placeholders": {
-      "values": { "content": "$1$" },
-      "change": { "content": "$2$" }
+      "values": {
+        "content": "$1$"
+      },
+      "change": {
+        "content": "$2$"
+      }
     }
   },
   "compareMonth": {
@@ -111,9 +128,15 @@
   "compareMonthNote": {
     "message": "$values$ nos primeiros $days$ dias ($change$)",
     "placeholders": {
-      "values": { "content": "$1$" },
-      "days": { "content": "$2$" },
-      "change": { "content": "$3$" }
+      "values": {
+        "content": "$1$"
+      },
+      "days": {
+        "content": "$2$"
+      },
+      "change": {
+        "content": "$3$"
+      }
     }
   },
   "depletionTitle": {
@@ -125,8 +148,12 @@
   "depletionNote": {
     "message": "cerca de $days$ dias restantes a $perDay$ por dia",
     "placeholders": {
-      "days": { "content": "$1$" },
-      "perDay": { "content": "$2$" }
+      "days": {
+        "content": "$1$"
+      },
+      "perDay": {
+        "content": "$2$"
+      }
     }
   },
   "exportTitle": {
@@ -141,14 +168,16 @@
   "exportNote": {
     "message": "$days$ dias de histórico",
     "placeholders": {
-      "days": { "content": "$1$" }
+      "days": {
+        "content": "$1$"
+      }
     }
   },
   "exportEmpty": {
     "message": "Ainda sem histórico"
   },
   "depletionWindow": {
-    "message": "Período de gasto médio para a estimativa (dias, 0 = todo o histórico)"
+    "message": "Janela de gasto médio (dias, 0 = tudo)"
   },
   "showMonthComparison": {
     "message": "Mostrar a comparação mensal no popup"
@@ -174,32 +203,39 @@
   "moveDown": {
     "message": "Mover para baixo"
   },
-
   "statusNoData": {
     "message": "Sem dados ainda"
   },
   "statusUpdated": {
     "message": "Atualizado $ago$",
     "placeholders": {
-      "ago": { "content": "$1" }
+      "ago": {
+        "content": "$1"
+      }
     }
   },
   "statusUpdatedInteractive": {
     "message": "Atualizado $ago$",
     "placeholders": {
-      "ago": { "content": "$1" }
+      "ago": {
+        "content": "$1"
+      }
     }
   },
   "statusYesterday": {
     "message": "$ago$ · ontem",
     "placeholders": {
-      "ago": { "content": "$1" }
+      "ago": {
+        "content": "$1"
+      }
     }
   },
   "statusStale": {
-    "message": "Dados em cache de $ago$ — serão atualizados ao visitar platform.deepseek.com",
+    "message": "Dados em cache de $ago$ — a sessão precisa ser renovada",
     "placeholders": {
-      "ago": { "content": "$1" }
+      "ago": {
+        "content": "$1"
+      }
     }
   },
   "signInPrompt": {
@@ -211,40 +247,55 @@
   "balancePaidBonus": {
     "message": "pago $paid$ · bônus $bonus$",
     "placeholders": {
-      "paid": { "content": "$1" },
-      "bonus": { "content": "$2" }
+      "paid": {
+        "content": "$1"
+      },
+      "bonus": {
+        "content": "$2"
+      }
     }
   },
   "tokensCount": {
     "message": "$count$ tokens",
     "placeholders": {
-      "count": { "content": "$1" }
+      "count": {
+        "content": "$1"
+      }
     }
   },
   "tokensScope": {
     "message": "$tokens$ · $scope$",
     "placeholders": {
-      "tokens": { "content": "$1" },
-      "scope": { "content": "$2" }
+      "tokens": {
+        "content": "$1"
+      },
+      "scope": {
+        "content": "$2"
+      }
     }
   },
   "keysCount": {
     "message": "$count$ chaves",
     "placeholders": {
-      "count": { "content": "$1" }
+      "count": {
+        "content": "$1"
+      }
     }
   },
   "keysCountSelected": {
     "message": "$count$ selecionadas",
     "placeholders": {
-      "count": { "content": "$1" }
+      "count": {
+        "content": "$1"
+      }
     }
   },
-
   "budgetDailyScope": {
     "message": "Orçamento diário · $scope$",
     "placeholders": {
-      "scope": { "content": "$1" }
+      "scope": {
+        "content": "$1"
+      }
     }
   },
   "budgetAccount": {
@@ -253,7 +304,9 @@
   "budgetForSelection": {
     "message": "para $name$",
     "placeholders": {
-      "name": { "content": "$1" }
+      "name": {
+        "content": "$1"
+      }
     }
   },
   "budgetForSelectionFallback": {
@@ -262,46 +315,64 @@
   "budgetWarnMark": {
     "message": "Alerta em $percent$%",
     "placeholders": {
-      "percent": { "content": "$1" }
+      "percent": {
+        "content": "$1"
+      }
     }
   },
   "budgetSpentLeft": {
     "message": "$spent$ gastos · restam $left$ de $budget$",
     "placeholders": {
-      "spent": { "content": "$1" },
-      "left": { "content": "$2" },
-      "budget": { "content": "$3" }
+      "spent": {
+        "content": "$1"
+      },
+      "left": {
+        "content": "$2"
+      },
+      "budget": {
+        "content": "$3"
+      }
     }
   },
   "budgetSpentOver": {
     "message": "$spent$ gastos · excedeu em $over$",
     "placeholders": {
-      "spent": { "content": "$1" },
-      "over": { "content": "$2" }
+      "spent": {
+        "content": "$1"
+      },
+      "over": {
+        "content": "$2"
+      }
     }
   },
-
   "chartEmpty": {
     "message": "Nenhum uso neste período"
   },
   "chartTotal": {
     "message": "$amount$ em $days$ d",
     "placeholders": {
-      "amount": { "content": "$1" },
-      "days": { "content": "$2" }
+      "amount": {
+        "content": "$1"
+      },
+      "days": {
+        "content": "$2"
+      }
     }
   },
   "chartTooltipDay": {
     "message": "$date$: $amount$",
     "placeholders": {
-      "date": { "content": "$1" },
-      "amount": { "content": "$2" }
+      "date": {
+        "content": "$1"
+      },
+      "amount": {
+        "content": "$2"
+      }
     }
   },
   "chartSeriesAllKeys": {
     "message": "Todas as chaves"
   },
-
   "keyRemoveFromChart": {
     "message": "Clique para remover do gráfico"
   },
@@ -311,17 +382,22 @@
   "keyTodayMeta": {
     "message": "hoje $today$",
     "placeholders": {
-      "today": { "content": "$1" }
+      "today": {
+        "content": "$1"
+      }
     }
   },
   "keyTodayMetaBudget": {
     "message": "hoje $today$ / $budget$",
     "placeholders": {
-      "today": { "content": "$1" },
-      "budget": { "content": "$2" }
+      "today": {
+        "content": "$1"
+      },
+      "budget": {
+        "content": "$2"
+      }
     }
   },
-
   "optionsTitle": {
     "message": "DeepSeek Usage Monitor — Configurações"
   },
@@ -394,7 +470,9 @@
   "keyBudgetAria": {
     "message": "Orçamento diário de $name$",
     "placeholders": {
-      "name": { "content": "$1" }
+      "name": {
+        "content": "$1"
+      }
     }
   },
   "keyBudgetOff": {
@@ -433,14 +511,20 @@
   "previewClosestBudget": {
     "message": "$percent$% do orçamento mais próximo ($status$)",
     "placeholders": {
-      "percent": { "content": "$1" },
-      "status": { "content": "$2" }
+      "percent": {
+        "content": "$1"
+      },
+      "status": {
+        "content": "$2"
+      }
     }
   },
   "sessionDetected": {
     "message": "Sessão detectada ($source$).",
     "placeholders": {
-      "source": { "content": "$1" }
+      "source": {
+        "content": "$1"
+      }
     }
   },
   "sessionMissing": {
@@ -452,13 +536,14 @@
   "sourceCookie": {
     "message": "cookie $name$",
     "placeholders": {
-      "name": { "content": "$1" }
+      "name": {
+        "content": "$1"
+      }
     }
   },
   "sourcePage": {
     "message": "armazenamento da página"
   },
-
   "badgeNoData": {
     "message": "Uso do DeepSeek — sem dados, clique para atualizar"
   },
@@ -468,49 +553,75 @@
   "badgeTitle": {
     "message": "DeepSeek$scope$: $label$",
     "placeholders": {
-      "scope": { "content": "$1" },
-      "label": { "content": "$2" }
+      "scope": {
+        "content": "$1"
+      },
+      "label": {
+        "content": "$2"
+      }
     }
   },
   "badgeLabelBalance": {
     "message": "Saldo $amount$",
     "placeholders": {
-      "amount": { "content": "$1" }
+      "amount": {
+        "content": "$1"
+      }
     }
   },
   "badgeLabelPeriod": {
     "message": "$days$ d gastos $amount$",
     "placeholders": {
-      "days": { "content": "$1" },
-      "amount": { "content": "$2" }
+      "days": {
+        "content": "$1"
+      },
+      "amount": {
+        "content": "$2"
+      }
     }
   },
   "badgeLabelTodayTokens": {
     "message": "Hoje $count$ tokens",
     "placeholders": {
-      "count": { "content": "$1" }
+      "count": {
+        "content": "$1"
+      }
     }
   },
   "badgeLabelTodayCost": {
     "message": "Hoje $amount$",
     "placeholders": {
-      "amount": { "content": "$1" }
+      "amount": {
+        "content": "$1"
+      }
     }
   },
   "badgeScopeKey": {
     "message": " · $name$",
     "placeholders": {
-      "name": { "content": "$1" }
+      "name": {
+        "content": "$1"
+      }
     }
   },
   "budgetLine": {
     "message": "$scope$$percent$% do orçamento diário de $amount$ ($state$, $left$)",
     "placeholders": {
-      "scope": { "content": "$1" },
-      "percent": { "content": "$2" },
-      "amount": { "content": "$3" },
-      "state": { "content": "$4" },
-      "left": { "content": "$5" }
+      "scope": {
+        "content": "$1"
+      },
+      "percent": {
+        "content": "$2"
+      },
+      "amount": {
+        "content": "$3"
+      },
+      "state": {
+        "content": "$4"
+      },
+      "left": {
+        "content": "$5"
+      }
     }
   },
   "budgetStateOver": {
@@ -525,52 +636,74 @@
   "budgetLeft": {
     "message": "restam $amount$",
     "placeholders": {
-      "amount": { "content": "$1" }
+      "amount": {
+        "content": "$1"
+      }
     }
   },
   "budgetOverBy": {
     "message": "$amount$ excedidos",
     "placeholders": {
-      "amount": { "content": "$1" }
+      "amount": {
+        "content": "$1"
+      }
     }
   },
-
   "notifyTitleOver": {
     "message": "Orçamento diário excedido$suffix$",
     "placeholders": {
-      "suffix": { "content": "$1" }
+      "suffix": {
+        "content": "$1"
+      }
     }
   },
   "notifyTitleWarn": {
     "message": "Orçamento diário quase esgotado$suffix$",
     "placeholders": {
-      "suffix": { "content": "$1" }
+      "suffix": {
+        "content": "$1"
+      }
     }
   },
   "notifyForKey": {
     "message": " para $name$",
     "placeholders": {
-      "name": { "content": "$1" }
+      "name": {
+        "content": "$1"
+      }
     }
   },
   "notifyMessageOver": {
     "message": "Gastou $spent$ de $budget$ hoje ($percent$%)",
     "placeholders": {
-      "spent": { "content": "$1" },
-      "budget": { "content": "$2" },
-      "percent": { "content": "$3" }
+      "spent": {
+        "content": "$1"
+      },
+      "budget": {
+        "content": "$2"
+      },
+      "percent": {
+        "content": "$3"
+      }
     }
   },
   "notifyMessageWarn": {
     "message": "Gastou $spent$ de $budget$ hoje ($percent$%), restam $left$",
     "placeholders": {
-      "spent": { "content": "$1" },
-      "budget": { "content": "$2" },
-      "percent": { "content": "$3" },
-      "left": { "content": "$4" }
+      "spent": {
+        "content": "$1"
+      },
+      "budget": {
+        "content": "$2"
+      },
+      "percent": {
+        "content": "$3"
+      },
+      "left": {
+        "content": "$4"
+      }
     }
   },
-
   "openStatusPage": {
     "message": "Open the DeepSeek status page"
   },
@@ -616,8 +749,12 @@
   "notifyLowBalanceMessage": {
     "message": "Balance is $balance$ (below the $threshold$ threshold).",
     "placeholders": {
-      "balance": { "content": "$1" },
-      "threshold": { "content": "$2" }
+      "balance": {
+        "content": "$1"
+      },
+      "threshold": {
+        "content": "$2"
+      }
     }
   },
   "notifyPace": {
@@ -641,31 +778,51 @@
   "notifyPaceTitle": {
     "message": "O orçamento será ultrapassado hoje$suffix$",
     "placeholders": {
-      "suffix": { "content": "$1$" }
+      "suffix": {
+        "content": "$1$"
+      }
     }
   },
   "notifyPaceMessage": {
     "message": "Gasto $spent$ de $budget$; nesse ritmo cerca de $projected$ ($percent$%) à meia-noite, ~$hours$ h restantes.",
     "placeholders": {
-      "spent": { "content": "$1$" },
-      "budget": { "content": "$2$" },
-      "projected": { "content": "$3$" },
-      "percent": { "content": "$4$" },
-      "hours": { "content": "$5$" }
+      "spent": {
+        "content": "$1$"
+      },
+      "budget": {
+        "content": "$2$"
+      },
+      "projected": {
+        "content": "$3$"
+      },
+      "percent": {
+        "content": "$4$"
+      },
+      "hours": {
+        "content": "$5$"
+      }
     }
   },
   "notifySpikeTitle": {
     "message": "Pico de gasto$suffix$",
     "placeholders": {
-      "suffix": { "content": "$1$" }
+      "suffix": {
+        "content": "$1$"
+      }
     }
   },
   "notifySpikeMessage": {
     "message": "Hoje $spent$ — $ratio$ da média diária recente de $average$.",
     "placeholders": {
-      "spent": { "content": "$1$" },
-      "ratio": { "content": "$2$" },
-      "average": { "content": "$3$" }
+      "spent": {
+        "content": "$1$"
+      },
+      "ratio": {
+        "content": "$2$"
+      },
+      "average": {
+        "content": "$3$"
+      }
     }
   },
   "notifyNewKeyTitle": {
@@ -674,7 +831,9 @@
   "notifyNewKeyMessage": {
     "message": "A nova chave “$name$” apareceu no seu uso.",
     "placeholders": {
-      "name": { "content": "$1$" }
+      "name": {
+        "content": "$1$"
+      }
     }
   },
   "notifyInactiveKeyTitle": {
@@ -683,25 +842,62 @@
   "notifyInactiveKeyMessage": {
     "message": "“$name$” não é usada há $days$ dias.",
     "placeholders": {
-      "name": { "content": "$1$" },
-      "days": { "content": "$2$" }
+      "name": {
+        "content": "$1$"
+      },
+      "days": {
+        "content": "$2$"
+      }
     }
   },
   "keyIdleBadge": {
     "message": "inativa $days$ d",
     "placeholders": {
-      "days": { "content": "$1$" }
+      "days": {
+        "content": "$1$"
+      }
     }
   },
   "keyIdleTitle": {
     "message": "Sem uso há $days$ dias",
     "placeholders": {
-      "days": { "content": "$1$" }
+      "days": {
+        "content": "$1$"
+      }
     }
   },
-
-
   "errorNoSession": {
     "message": "Nenhuma sessão do DeepSeek encontrada. Abra platform.deepseek.com e entre na conta."
+  },
+  "statusLastKnown": {
+    "message": "Últimos dados conhecidos de $ago$",
+    "placeholders": {
+      "ago": {
+        "content": "$1"
+      }
+    }
+  },
+  "todayUnknownHint": {
+    "message": "indisponível no momento"
+  },
+  "badgeTodayUnknown": {
+    "message": "DeepSeek Usage — gasto de hoje desconhecido, clique para atualizar"
+  },
+  "wafTabRenew": {
+    "message": "Renovar a sessão do console automaticamente"
+  },
+  "wafTabRenewHint": {
+    "message": "Abre platform.deepseek.com em uma aba em segundo plano por alguns segundos quando o token de sessão expira e depois a fecha. Sem isso, os números só são atualizados após você acessar o console."
+  },
+  "renewSession": {
+    "message": "Renovar sessão"
+  },
+  "budgetUnknown": {
+    "message": "gasto de hoje desconhecido · orçamento $budget$",
+    "placeholders": {
+      "budget": {
+        "content": "$1"
+      }
+    }
   }
 }

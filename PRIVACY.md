@@ -28,7 +28,9 @@ explains exactly what the extension does with your data.
 
 The extension does **not** read your browsing history, page content on other
 sites, keystrokes, clipboard, files, or your DeepSeek password. It never opens
-tabs on its own.
+tabs on its own unless you enable *Renew the console session automatically*:
+that option briefly opens `platform.deepseek.com` in a background tab when the
+session token expires, and closes it again right away.
 
 ## Network requests
 
