@@ -3,7 +3,6 @@ const path = require('path');
 const terser = require('terser');
 const csso = require('csso');
 const { minify: minifyHtml } = require('html-minifier-terser');
-const archiver = require('archiver');
 
 const ROOT_DIR = path.resolve(__dirname, '..');
 const DIST_DIR = path.join(ROOT_DIR, 'dist');
@@ -111,9 +110,13 @@ async function main() {
   const zipName = `deepseek-usage-monitor-v${version}.zip`;
   const zipPath = path.join(ROOT_DIR, zipName);
 
+  // archiver 8 is ESM-only and exports the `ZipArchive` class instead of a
+  // factory function, so it is imported dynamically from this CommonJS script.
+  const { ZipArchive } = await import('archiver');
+
   await new Promise((resolve, reject) => {
     const output = fs.createWriteStream(zipPath);
-    const archive = archiver('zip', { zlib: { level: 9 } });
+    const archive = new ZipArchive({ zlib: { level: 9 } });
 
     output.on('close', () => {
       console.log(`   ✓ ${zipName}  (${(archive.pointer() / 1024).toFixed(1)} KB)`);
