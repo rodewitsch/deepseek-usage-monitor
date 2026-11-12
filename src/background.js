@@ -2,7 +2,7 @@ import { alertNoticeKey, detectSpikes, forecastBudgetBreach, trackKeys } from '.
 import { computeBadge } from './lib/badge.js';
 import { budgetNoticeKey, evaluateBudgets } from './lib/budget.js';
 import { STORAGE_KEYS, WAF_COOKIE_NAMES } from './lib/constants.js';
-import { localDayKey, normaliseNotificationText } from './lib/format.js';
+import { isHostOrSubdomain, localDayKey, normaliseNotificationText, urlPathname } from './lib/format.js';
 import { t } from './lib/i18n.js';
 import { ensureCatalog } from './lib/locales.js';
 import { refreshUsage } from './lib/refresh.js';
@@ -58,7 +58,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   // feed straight back into `refreshAndPaint()`, which may open another one.
   if (consumedRenewTab(tabId)) return;
   if (changeInfo.status !== 'complete') return;
-  if (!tab?.url?.includes('platform.deepseek.com')) return;
+  if (!isHostOrSubdomain(tab?.url, 'deepseek.com')) return;
   clearTimeout(tabRefreshTimer);
   // Let the React app render before scraping.
   tabRefreshTimer = setTimeout(() => {
@@ -84,7 +84,7 @@ chrome.storage.onChanged.addListener(async (changes, area) => {
  */
 let wafRenewTimer = null;
 chrome.cookies.onChanged.addListener(({ cookie, removed }) => {
-  if (removed || !cookie?.domain?.includes('deepseek.com')) return;
+  if (removed || !cookieMatchesDomain(cookie?.domain, 'deepseek.com')) return;
   if (!WAF_COOKIE_NAMES.includes(cookie.name)) return;
 
   clearTimeout(wafRenewTimer);
@@ -92,6 +92,19 @@ chrome.cookies.onChanged.addListener(({ cookie, removed }) => {
     void refreshAndPaint();
   }, 2000);
 });
+
+/**
+ * Cookie `domain` is not a URL (it starts with a dot for wildcard cookies),
+ * so compare it label-by-label instead of using `String#includes`.
+ * `.deepseek.com` and `deepseek.com` both match; `.notdeepseek.com` does not.
+ */
+function cookieMatchesDomain(domain, base) {
+  if (typeof domain !== 'string' || !domain) return false;
+  const host = domain.replace(/^\./, '').toLowerCase();
+  const target = String(base || '').toLowerCase();
+  if (!host || !target) return false;
+  return host === target || host.endsWith(`.${target}`);
+}
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message?.type === 'dsum:refresh') {
@@ -184,7 +197,7 @@ async function refreshAndPaint({ forceToken = false } = {}) {
 async function reloadConsoleTab() {
   try {
     const tabs = await chrome.tabs.query({ url: 'https://platform.deepseek.com/*' });
-    const tab = tabs.find((entry) => entry.url?.includes('/usage')) || tabs[0];
+    const tab = tabs.find((entry) => urlPathname(entry.url)?.startsWith('/usage')) || tabs[0];
     if (!tab?.id) return false;
     await chrome.tabs.reload(tab.id, { bypassCache: false });
     return true;

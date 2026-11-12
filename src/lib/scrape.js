@@ -1,5 +1,6 @@
 import { getSnapshot, getTokenInfo, saveSnapshot } from './settings.js';
 import { PLATFORM_ORIGIN } from './constants.js';
+import { urlPathname } from './format.js';
 
 /**
  * Reads the console numbers from an already-open `platform.deepseek.com` tab.
@@ -27,7 +28,7 @@ export async function scrapeFromPage() {
 }
 
 function rank(tab) {
-  if (tab?.url?.includes('/usage')) return 2;
+  if (urlPathname(tab?.url)?.startsWith('/usage')) return 2;
   return 1;
 }
 

@@ -2,6 +2,42 @@
 
 export const CURRENCY_SYMBOL = { USD: '$', CNY: '¥', EUR: '€' };
 
+/**
+ * Parses a URL and returns its hostname, or `null` when it is not a URL.
+ * Never hashes/parses untrusted strings by hand: substring checks like
+ * `url.includes('deepseek.com')` also match `evil.example/?deepseek.com`.
+ */
+export function urlHostname(value) {
+  if (typeof value !== 'string' || !value) return null;
+  try {
+    const host = new URL(value).hostname.toLowerCase();
+    return host || null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * True when `value` is a real URL on `domain` or one of its subdomains.
+ * Exact hostname comparison, so `platform.deepseek.com.evil.tld` fails.
+ */
+export function isHostOrSubdomain(value, domain) {
+  const host = urlHostname(value);
+  const base = String(domain || '').toLowerCase();
+  if (!host || !base) return false;
+  return host === base || host.endsWith(`.${base}`);
+}
+
+/** Parses a URL and returns its pathname (`/usage`), or `null` when invalid. */
+export function urlPathname(value) {
+  if (typeof value !== 'string' || !value) return null;
+  try {
+    return new URL(value).pathname;
+  } catch {
+    return null;
+  }
+}
+
 export function currencySymbol(currency) {
   return CURRENCY_SYMBOL[currency] || (currency ? `${currency} ` : '');
 }
